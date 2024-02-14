@@ -25,8 +25,8 @@ class _SignInScreenState extends State<SignInScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 helloWelcomeBack,
@@ -122,14 +122,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 108,
+                    width: 108.5,
                     child: Divider(
                       color: ProjectColors.midBlack.withOpacity(0.4),
                     ),
                   ),
                   Text(orContinueWith),
                   SizedBox(
-                    width: 108,
+                    width: 108.5,
                     child: Divider(
                       color: ProjectColors.midBlack.withOpacity(0.4),
                     ),
@@ -150,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget accountButton() {
     return Container(
       height: 53,
-      width: 189,
+      width: 388,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(

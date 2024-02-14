@@ -53,12 +53,15 @@ class ReusableTextField extends StatelessWidget {
               width: 0,
               color: ProjectColors.mainGray,
             ),
-            gapPadding: 0,
           ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(7),
-          //   // borderSide: const BorderSide(width: 1.5, color: Colors.grey),
-          // ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(7),
+            borderSide: const BorderSide(
+              width: 0,
+              color: ProjectColors.mainGray,
+            ),
+            // borderSide: const BorderSide(width: 1.5, color: Colors.grey),
+          ),
           fillColor: ProjectColors.mainGray,
           filled: true,
         ),

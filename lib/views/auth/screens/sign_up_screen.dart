@@ -26,11 +26,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      // resizeToAvoidBottomInset: true,
+      extendBody: true,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // clipBehavior: Clip.none,
+
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 createAnAccount,
@@ -174,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget accountButton() {
     return Container(
       height: 53,
-      width: 189,
+      width: 388,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
