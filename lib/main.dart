@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
+import 'package:socialscan/views/settings/screens/settings_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7F1F9A)),
         useMaterial3: false,
       ),
-      home: const SignUpScreen(),
+      home: const SettingScreen(),
+      // home: const SignUpScreen(),
     );
   }
 }
