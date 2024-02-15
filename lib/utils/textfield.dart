@@ -9,15 +9,17 @@ class ReusableTextField extends StatelessWidget {
   final Widget? iconButton;
   final VoidCallback onTap;
   final dynamic controller;
-  const ReusableTextField(
-      {Key? key,
-      required this.hintText,
-      this.controller,
-      required this.onTap,
-      this.validator,
-      this.obscure,
-      this.iconButton})
-      : super(key: key);
+  final TextInputType textInputType;
+  const ReusableTextField({
+    Key? key,
+    required this.hintText,
+    this.controller,
+    required this.onTap,
+    this.validator,
+    this.obscure,
+    this.iconButton,
+    required this.textInputType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,13 @@ class ReusableTextField extends StatelessWidget {
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        keyboardType: TextInputType.visiblePassword,
+        keyboardType: textInputType,
         controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
           // labelText: 'i3dn3kdnk3dn',
-          suffixIcon: iconButton!,
+          suffixIcon: iconButton ?? iconButton,
           hintStyle: GoogleFonts.montserrat(
             fontSize: 14.0,
             fontWeight: FontWeight.w500,
@@ -46,7 +48,7 @@ class ReusableTextField extends StatelessWidget {
           ),
 
           labelStyle: const TextStyle(fontSize: 16.0, color: Colors.grey),
-          contentPadding: const EdgeInsets.only(top: 5, left: 10),
+          contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(7),
             borderSide: const BorderSide(
