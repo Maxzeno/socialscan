@@ -16,6 +16,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final reTypePasswordController = TextEditingController();
@@ -46,17 +48,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 40,
               ),
-              ReusableTextField(
-                controller: emailController,
-                hintText: 'Email',
-                obscure: false,
-                onTap: () {},
-                iconButton: const SizedBox(),
+              Row(
+                children: [
+                  Expanded(
+                    child: ReusableTextField(
+                      textInputType: TextInputType.name,
+                      controller: firstNameController,
+                      hintText: 'First Name',
+                      obscure: false,
+                      onTap: () {},
+                      iconButton: null,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ReusableTextField(
+                      textInputType: TextInputType.name,
+                      controller: lastNameController,
+                      hintText: 'Last Name',
+                      obscure: false,
+                      onTap: () {},
+                      iconButton: null,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 18,
               ),
               ReusableTextField(
+                textInputType: TextInputType.emailAddress,
+                controller: emailController,
+                hintText: 'Email',
+                obscure: false,
+                onTap: () {},
+                iconButton: null,
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              ReusableTextField(
+                textInputType: TextInputType.visiblePassword,
                 controller: passwordController,
                 hintText: 'Password',
                 obscure: _obscure,
@@ -82,6 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 18,
               ),
               ReusableTextField(
+                textInputType: TextInputType.visiblePassword,
                 controller: reTypePasswordController,
                 hintText: reTypePassword,
                 obscure: _obscureText,

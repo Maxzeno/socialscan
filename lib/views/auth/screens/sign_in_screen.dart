@@ -39,6 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 40,
               ),
               ReusableTextField(
+                textInputType: TextInputType.emailAddress,
                 controller: emailController,
                 hintText: 'Email',
                 obscure: false,
@@ -49,6 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 18,
               ),
               ReusableTextField(
+                textInputType: TextInputType.visiblePassword,
                 controller: passwordController,
                 hintText: 'Password',
                 obscure: _obscure,
