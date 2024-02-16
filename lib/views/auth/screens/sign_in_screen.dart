@@ -39,21 +39,21 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 40,
               ),
               ReusableTextField(
-                textInputType: TextInputType.emailAddress,
                 controller: emailController,
                 hintText: 'Email',
                 obscure: false,
                 onTap: () {},
                 iconButton: const SizedBox(),
+                textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(
                 height: 18,
               ),
               ReusableTextField(
-                textInputType: TextInputType.visiblePassword,
                 controller: passwordController,
                 hintText: 'Password',
                 obscure: _obscure,
+                textInputType: TextInputType.visiblePassword,
                 iconButton: InkWell(
                   onTap: () {
                     setState(() {
@@ -124,14 +124,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 108.5,
+                    width: 108,
                     child: Divider(
                       color: ProjectColors.midBlack.withOpacity(0.4),
                     ),
                   ),
                   Text(orContinueWith),
                   SizedBox(
-                    width: 108.5,
+                    width: 108,
                     child: Divider(
                       color: ProjectColors.midBlack.withOpacity(0.4),
                     ),
