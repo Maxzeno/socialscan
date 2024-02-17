@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // clipBehavior: Clip.none,
 
             // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 createAnAccount,
                 style: GoogleFonts.montserrat(

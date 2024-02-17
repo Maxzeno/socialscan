@@ -3,22 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
 class ReusableTextField extends StatelessWidget {
-  final String hintText;
+  final String? hintText;
   final dynamic validator;
   final bool? obscure;
   final Widget? iconButton;
   final VoidCallback onTap;
   final dynamic controller;
-  final TextInputType textInputType;
+  final String? initialValue;
+  final TextInputType? textInputType;
   const ReusableTextField({
     Key? key,
-    required this.hintText,
+    this.hintText,
     this.controller,
     required this.onTap,
     this.validator,
     this.obscure,
     this.iconButton,
-    required this.textInputType,
+    this.initialValue,
+    this.textInputType,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,9 @@ class ReusableTextField extends StatelessWidget {
       width: 388,
       height: 53,
       child: TextFormField(
+        initialValue: initialValue,
+        style: const TextStyle(color: Colors.black, fontSize: 14),
+
         onTap: onTap,
         validator: validator,
         obscureText: obscure!,
