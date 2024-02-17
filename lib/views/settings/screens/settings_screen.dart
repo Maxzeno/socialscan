@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/views/profile/screens/profile_screen.dart';
 import 'package:socialscan/views/settings/widgets/option_tile.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -156,6 +158,14 @@ class _SettingScreenState extends State<SettingScreen> {
               height: 24,
               width: 24,
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
+            },
           ),
           const Divider(),
           OptionTile(
