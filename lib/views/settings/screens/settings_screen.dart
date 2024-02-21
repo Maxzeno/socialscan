@@ -8,6 +8,8 @@ import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/profile/screens/profile_screen.dart';
 import 'package:socialscan/views/settings/widgets/option_tile.dart';
 
+import 'change_password_screen.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
@@ -175,6 +177,14 @@ class _SettingScreenState extends State<SettingScreen> {
               height: 24,
               width: 24,
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const ChangePasswordScreen(),
+                ),
+              );
+            },
           ),
           const Divider(
             thickness: 0.8,
