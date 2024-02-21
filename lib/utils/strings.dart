@@ -28,3 +28,7 @@ String profileImage =
     'https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais';
 String save = 'Save';
 String fullStack = 'Full-stack Engineer';
+String enterCurrentPassword = 'Enter Current Password';
+String enterNewPassword = 'Enter new password';
+String reEnterPassword = 'Re-enter password';
+String helloTest = 'Hello Test';
