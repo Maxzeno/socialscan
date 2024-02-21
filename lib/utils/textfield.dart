@@ -11,6 +11,7 @@ class ReusableTextField extends StatelessWidget {
   final dynamic controller;
   final String? initialValue;
   final TextInputType? textInputType;
+  final double? textSize;
   const ReusableTextField({
     Key? key,
     this.hintText,
@@ -21,6 +22,7 @@ class ReusableTextField extends StatelessWidget {
     this.iconButton,
     this.initialValue,
     this.textInputType,
+    this.textSize,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,11 @@ class ReusableTextField extends StatelessWidget {
       height: 53,
       child: TextFormField(
         initialValue: initialValue,
-        style: const TextStyle(color: Colors.black, fontSize: 14),
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: textSize ?? 14,
+          letterSpacing: 0.5,
+        ),
 
         onTap: onTap,
         validator: validator,

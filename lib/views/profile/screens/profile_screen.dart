@@ -23,9 +23,14 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading: const Icon(
-          Icons.arrow_back_outlined,
-          color: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_outlined,
+            color: Colors.black,
+          ),
         ),
       ),
       body: SafeArea(

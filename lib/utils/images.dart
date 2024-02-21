@@ -5,3 +5,4 @@ String googleIcon = '$imagePath/google_icon.png';
 String iconPath = 'assets/svg_icons';
 String forwardIcon = '$iconPath/forward.svg';
 String editIcon = '$iconPath/edit.svg';
+String lockIcon = '$iconPath/lock_icon.svg';
