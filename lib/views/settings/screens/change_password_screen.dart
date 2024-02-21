@@ -64,7 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 60,
                 ),
                 textTile(enterCurrentPassword),
                 const SizedBox(
