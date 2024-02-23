@@ -210,7 +210,33 @@ class FrostedGlassBox extends StatelessWidget {
               ),
             ),
             // Child widget
-            Center(child: theChild),
+            Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                theChild,
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  davidRay,
+                  style: GoogleFonts.montserrat(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+                Text(
+                  fullStack,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: ProjectColors.midBlack.withOpacity(0.5)),
+                ),
+              ],
+            )),
           ],
         ),
       ),
