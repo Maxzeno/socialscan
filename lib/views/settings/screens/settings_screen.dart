@@ -30,7 +30,9 @@ class _SettingScreenState extends State<SettingScreen> {
         elevation: 0.0,
         leading: IconButton(
           // constraints: BoxConstraints(),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(
             Icons.arrow_back_outlined,
             color: ProjectColors.midBlack,

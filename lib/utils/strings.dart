@@ -23,6 +23,7 @@ String whileConnecting = 'While Connecting';
 String sharePhoneNumber = 'Share phone number';
 String shareEmail = 'Share email';
 String davidRay = 'David Ray';
+String helloDavid = 'Hello David';
 String profileEmail = 'davidray@gmail.com';
 String profileImage =
     'https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.1700460183.1708041600&semt=ais';
@@ -32,3 +33,8 @@ String enterCurrentPassword = 'Enter Current Password';
 String enterNewPassword = 'Enter new password';
 String reEnterPassword = 'Re-enter password';
 String helloTest = 'Hello Test';
+String home = 'Home';
+String network = 'Network';
+String today = 'Today';
+String yesterday = 'Yesterday';
+String month = 'January 16';
