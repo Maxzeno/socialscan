@@ -39,6 +39,8 @@ dependencies:
   flutter_svg: ^2.0.9
   intl_phone_field: ^3.2.0
   fl_country_code_picker: ^0.1.9+1
+  dotted_border: ^2.1.0
+
 
 
 

@@ -6,9 +6,15 @@ class ButtonTile extends StatelessWidget {
   final String text;
   final double boxRadius;
   final double? width;
+  final Widget? icon;
 
-  const ButtonTile(
-      {super.key, required this.text, required this.boxRadius, this.width});
+  const ButtonTile({
+    Key? key,
+    required this.text,
+    required this.boxRadius,
+    this.width,
+    this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +26,22 @@ class ButtonTile extends StatelessWidget {
         color: ProjectColors.mainPurple,
       ),
       child: Center(
-        child: Text(
-          text,
-          style: GoogleFonts.montserrat(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              icon!,
+              const SizedBox(width: 10),
+            ],
+            Text(
+              text,
+              style: GoogleFonts.montserrat(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
