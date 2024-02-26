@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: ProjectColors.tabBgColor,
+        color: ProjectColors.tabBgColor.withOpacity(0.6),
         borderRadius: BorderRadius.circular(94),
       ),
       child: TabBar(
@@ -216,7 +216,15 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 55,
           ),
-          ButtonTile(text: save, boxRadius: 8),
+          ButtonTile(
+            text: connect,
+            boxRadius: 8,
+            icon: SvgPicture.asset(
+              connectIcon,
+              height: 24,
+              width: 24,
+            ),
+          ),
         ],
       ),
     );
@@ -249,8 +257,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: ProjectColors.midBlack.withOpacity(0.1),
                     child: SvgPicture.asset(
                       addIcon,
-                      height: 18,
-                      width: 18,
+                      height: 22,
+                      width: 22,
                       color: ProjectColors.midBlack,
                     ),
                   ),

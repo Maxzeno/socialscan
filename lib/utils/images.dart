@@ -18,3 +18,4 @@ String linkedInIcon = '$iconPath/linkedin_icon.svg';
 String twitterIcon = '$iconPath/twitter_icon.svg';
 String addIcon = '$iconPath/add_icon.svg';
 String whatsAppIcon = '$iconPath/whatsapp_icon.svg';
+String connectIcon = '$iconPath/connect_icon.svg';

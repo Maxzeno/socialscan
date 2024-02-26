@@ -27,6 +27,7 @@ String mySocials = 'My socials';
 String profession = 'Profession';
 String phone = 'Phone';
 String addNew = 'Add New';
+String connect = 'Connect';
 String general = 'General';
 String profile = 'Profile';
 String changePassword = 'Change Password';
