@@ -57,9 +57,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      child: countryCode != null
-                          ? countryCode!.flagImage(fit: BoxFit.fill, width: 19)
-                          : null,
+                      child: countryCode?.flagImage(fit: BoxFit.fill, width: 19),
                     ),
                   ),
                   const SizedBox(

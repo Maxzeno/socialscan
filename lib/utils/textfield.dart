@@ -12,6 +12,7 @@ class ReusableTextField extends StatelessWidget {
   final String? initialValue;
   final TextInputType? textInputType;
   final double? textSize;
+  final double? width;
   const ReusableTextField({
     Key? key,
     this.hintText,
@@ -23,13 +24,14 @@ class ReusableTextField extends StatelessWidget {
     this.initialValue,
     this.textInputType,
     this.textSize,
+    this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // final keyBoardProvider = Provider.of<KeyboardProvider>(context);
     return SizedBox(
-      width: 388,
+      width: width ?? 388,
       height: 53,
       child: TextFormField(
         initialValue: initialValue,
