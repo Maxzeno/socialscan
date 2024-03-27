@@ -1,5 +1,5 @@
 String imagePath = 'assets';
-String googleIcon = '$imagePath/google_icon.png';
+String googleIcon = '$imagePath/images/google_icon.png';
 
 /// svg icons.....
 String iconPath = 'assets/svg_icons';
