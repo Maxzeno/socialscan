@@ -32,6 +32,7 @@ String general = 'General';
 String profile = 'Profile';
 String changePassword = 'Change Password';
 String theme = 'Theme';
+String addNewSocial = 'Add New Social';
 String whileConnecting = 'While Connecting';
 String sharePhoneNumber = 'Share phone number';
 String shareEmail = 'Share email';
