@@ -1,5 +1,6 @@
 String imagePath = 'assets';
 String googleIcon = '$imagePath/images/google_icon.png';
+String socialIcon = '$imagePath/images/sslogo_purple.png';
 
 /// svg icons.....
 String iconPath = 'assets/svg_icons';
@@ -20,3 +21,4 @@ String addIcon = '$iconPath/add_icon.svg';
 String whatsAppIcon = '$iconPath/whatsapp_icon.svg';
 String connectIcon = '$iconPath/connect_icon.svg';
 String downArrowIcon = '$iconPath/down_arrow.svg';
+String shareIcon = '$iconPath/share_icon.svg';
