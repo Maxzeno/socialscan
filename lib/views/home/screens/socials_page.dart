@@ -19,50 +19,61 @@ class _SocialsPageState extends State<SocialsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          TextTileWidget(
-            text: mySocials,
-            size: 16,
-            icon: SizedBox(
-              height: 20,
-              width: 20,
-              child: Checkbox(
-                value: isChecked,
-                activeColor: ProjectColors.mainPurple,
-                side: const BorderSide(width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextTileWidget(
+              text: mySocials,
+              size: 16,
+              icon: SizedBox(
+                height: 20,
+                width: 20,
+                child: Checkbox(
+                  value: isChecked,
+                  activeColor: ProjectColors.mainPurple,
+                  side: const BorderSide(width: 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  onChanged: (val) {
+                    setState(() {
+                      isChecked = !isChecked;
+                    });
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
                 ),
-                onChanged: (val) {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
               ),
             ),
-          ),
-          const SizedBox(
-            height: 14,
-          ),
-          const SocialListsWidget(),
-          const SizedBox(
-            height: 55,
-          ),
-          ButtonTile(
-            text: connect,
-            boxRadius: 8,
-            icon: SvgPicture.asset(
-              connectIcon,
-              height: 24,
-              width: 24,
+            const SizedBox(
+              height: 14,
             ),
-          ),
-        ],
+            const SocialListsWidget(),
+            const SizedBox(
+              height: 55,
+            ),
+            ButtonTile(
+              text: connect,
+              boxRadius: 8,
+              icon: SvgPicture.asset(
+                connectIcon,
+                height: 24,
+                width: 24,
+              ),
+            ),
+          ],
+        ),
       ),
+      // bottomNavigationBar: ButtonTile(
+      //   text: connect,
+      //   boxRadius: 8,
+      //   icon: SvgPicture.asset(
+      //     connectIcon,
+      //     height: 24,
+      //     width: 24,
+      //   ),
+      // ),
     );
   }
 }
