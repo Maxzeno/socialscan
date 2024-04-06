@@ -37,9 +37,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
+  pretty_qr_code: ^3.2.1
+  url_launcher: ^6.2.5
+
   intl_phone_field: ^3.2.0
   fl_country_code_picker: ^0.1.9+1
   dotted_border: ^2.1.0
+  mobile_scanner: ^4.0.1
 
 
 
@@ -70,6 +74,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/images/
     - assets/svg_icons/
   #   - images/a_dot_ham.jpeg
 
