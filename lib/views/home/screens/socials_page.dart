@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
@@ -51,15 +48,6 @@ class _SocialsPageState extends State<SocialsPage> {
           const SocialListsWidget(),
           const SizedBox(
             height: 55,
-          ),
-          ButtonTile(
-            text: connect,
-            boxRadius: 8,
-            icon: SvgPicture.asset(
-              connectIcon,
-              height: 24,
-              width: 24,
-            ),
           ),
         ],
       ),

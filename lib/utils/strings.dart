@@ -1,8 +1,3 @@
-import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/utils/images.dart';
-
-import '../models/social_link_model.dart';
-
 String createAnAccount = 'Create\nan Account';
 String email = 'Email';
 String password = 'Password';
@@ -28,6 +23,7 @@ String profession = 'Profession';
 String phone = 'Phone';
 String addNew = 'Add New';
 String connect = 'Connect';
+String scan = 'Scan';
 String general = 'General';
 String profile = 'Profile';
 String changePassword = 'Change Password';
@@ -54,35 +50,5 @@ String yesterday = 'Yesterday';
 String month = 'January 16';
 
 ///testing lists ...
-final List<SocialLinkModel> socialLinks = [
-  SocialLinkModel(
-    text: faceBook,
-    imagePath: faceBookIcon,
-    conColor: ProjectColors.fb,
-    iconColor: ProjectColors.fb.withOpacity(0.5),
-  ),
-  SocialLinkModel(
-    text: instagram,
-    imagePath: instagramIcon,
-    conColor: ProjectColors.ig,
-    iconColor: ProjectColors.ig.withOpacity(0.5),
-  ),
-  SocialLinkModel(
-    text: whatsApp,
-    imagePath: whatsAppIcon,
-    conColor: ProjectColors.wsa,
-    iconColor: ProjectColors.wsa.withOpacity(0.5),
-  ),
-  SocialLinkModel(
-    text: twitter,
-    imagePath: twitterIcon,
-    conColor: ProjectColors.x,
-    iconColor: ProjectColors.x.withOpacity(0.5),
-  ),
-  SocialLinkModel(
-    text: linkedin,
-    imagePath: linkedInIcon,
-    conColor: ProjectColors.li,
-    iconColor: ProjectColors.li.withOpacity(0.5),
-  ),
-];
+// List<SocialLinkModel> selectedItems = [];
+// final List<SocialLinkModel> socialLinks = [];
