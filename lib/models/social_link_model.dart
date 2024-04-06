@@ -1,14 +1,18 @@
 import 'dart:ui';
 
 class SocialLinkModel {
+  final int? id;
   final String text;
-  final String imagePath;
-  final Color conColor;
-  final Color iconColor;
-  const SocialLinkModel({
+  final String? imagePath;
+  final Color? conColor;
+  final Color? iconColor;
+  String linkUrl;
+  SocialLinkModel({
     required this.text,
-    required this.imagePath,
-    required this.conColor,
-    required this.iconColor,
+    this.imagePath,
+    this.conColor,
+    this.iconColor,
+    this.linkUrl = '',
+    this.id,
   });
 }
