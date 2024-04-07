@@ -28,7 +28,7 @@ class ButtonTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 53,
+        height: 54,
         width: width ?? 388,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(boxRadius),

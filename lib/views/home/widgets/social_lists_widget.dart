@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
+import 'package:socialscan/utils/lists/added_socials_list.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/views/home/screens/qr_code_screen.dart';
@@ -15,7 +16,8 @@ import '../screens/edit_social_screen.dart';
 import '../screens/scan_qr_code.dart';
 
 class SocialListsWidget extends StatefulWidget {
-  const SocialListsWidget({super.key});
+  final bool isAllMediasChecked;
+  const SocialListsWidget({super.key, required this.isAllMediasChecked});
 
   @override
   State<SocialListsWidget> createState() => _SocialListsWidgetState();
@@ -72,12 +74,15 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
   List<String> extractLinkUrls(List<SocialLinkModel> socialLinks) {
     List<String> linkUrls = [];
     for (var socialLink in socialLinks) {
-      linkUrls.add(socialLink.linkUrl ?? ''); // Add link URL to the list
+      linkUrls.add(socialLink.linkUrl); // Add link URL to the list
     }
     return linkUrls;
   }
 
-  List<SocialLinkModel> selectedItems = [];
+
+
+  bool _isSocialChecked = false;
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -95,9 +100,9 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
             mainAxisSpacing: 20,
           ),
           shrinkWrap: true,
-          itemCount: selectedItems.length + 1,
+          itemCount: addedSocialsList.length + 1,
           itemBuilder: (context, index) {
-            if (index == selectedItems.length) {
+            if (index == addedSocialsList.length) {
               return GestureDetector(
                 onTap: () {
                   // print(MediaQuery.of(context).size.height);
@@ -188,11 +193,13 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                                         return DropdownMenuItem<
                                             SocialLinkModel>(
                                           value: value,
+                                          enabled:
+                                              !addedSocialsList.contains(value),
                                           child: value != null
                                               ? Text(
-                                                  value!.text,
+                                                  value.text,
                                                   style: TextStyle(
-                                                    color: selectedItems
+                                                    color: addedSocialsList
                                                             .contains(value)
                                                         ? Colors.grey
                                                         : Colors.black,
@@ -200,8 +207,6 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                                                 )
                                               : const Text(
                                                   'Select Social Media'),
-                                          enabled:
-                                              !selectedItems.contains(value),
                                         );
                                       }).toList(),
                                       icon: SvgPicture.asset(
@@ -241,13 +246,13 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                                       setState(() {
                                         final link = selectedSocialMedia!
                                             .linkUrl = linkController.text;
-                                        selectedItems.add(selectedSocialMedia!);
+                                        addedSocialsList.add(selectedSocialMedia!);
                                         // dropdownItems.remove(selectedSocialMedia);
                                       });
                                       print(
                                           'Added =====> $selectedSocialMedia');
                                       print(
-                                          'Added Lists =====> $selectedItems');
+                                          'Added Lists =====> $addedSocialsList.');
                                       Navigator.pop(context);
                                     }),
                               ],
@@ -294,14 +299,14 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                 ),
               );
             }
-            final data = selectedItems[index];
+            final data = addedSocialsList[index];
             print('data =====> $data');
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(
+                    builder: (_) => EditSocialDetailsScreen(
                       socialColor: data.conColor!,
                       socialText: data.text,
                       icon: data.imagePath,
@@ -318,6 +323,12 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                 socialIconColor: data.iconColor!,
                 conColor: data.conColor!,
                 socialText: data.text,
+                isSocialChecked: _isSocialChecked,
+                onSelected: (value) {
+                  setState(() {
+                    _isSocialChecked = !_isSocialChecked;
+                  });
+                },
               ),
             );
           },
@@ -325,52 +336,93 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
         const SizedBox(
           height: 55,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ButtonTile(
-              width: 130,
-              text: connect,
-              boxRadius: 25,
-              icon: const Icon(
-                Icons.qr_code,
-                color: Colors.white,
-              ),
-              onTap: () {
-                List<String> allLinks = extractLinkUrls(socialLinks);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => QrCodeScreen(
-                      qrData: allLinks,
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: [
+        // ButtonTile(
+        //   width: 130,
+        //   text: connect,
+        //   boxRadius: 25,
+        //   icon: const Icon(
+        //     Icons.qr_code,
+        //     color: Colors.white,
+        //   ),
+        //   onTap: () {
+        //     List<String> allLinks = extractLinkUrls(socialLinks);
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (_) => QrCodeScreen(
+        //           qrData: allLinks,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
+        //     const SizedBox(
+        //       width: 20,
+        //     ),
+        //     ButtonTile(
+        //       width: 140,
+        //       text: scan,
+        //       boxRadius: 25,
+        //       icon: SvgPicture.asset(
+        //         connectIcon,
+        //         height: 24,
+        //         width: 24,
+        //       ),
+        //       onTap: () {
+        //         List<String> allLinks = extractLinkUrls(socialLinks);
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (_) => const ScanQrCode(),
+        //           ),
+        //         );
+        //       },
+        //     ),
+        //   ],
+        // ),
+
+        _isSocialChecked || widget.isAllMediasChecked
+            ? ButtonTile(
+                width: double.infinity,
+                text: connect,
+                boxRadius: 8,
+                icon: const Icon(
+                  Icons.qr_code,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  List<String> allLinks = extractLinkUrls(socialLinks);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => QrCodeScreen(
+                        qrData: allLinks,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            ButtonTile(
-              width: 140,
-              text: scan,
-              boxRadius: 25,
-              icon: SvgPicture.asset(
-                connectIcon,
-                height: 24,
-                width: 24,
+                  );
+                },
+              )
+            : ButtonTile(
+          width: double.infinity,
+          text: "Scan QR Code",
+          boxRadius: 8,
+          icon: SvgPicture.asset(
+            connectIcon,
+            height: 24,
+            width: 24,
+          ),
+          onTap: () {
+            List<String> allLinks = extractLinkUrls(socialLinks);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ScanQrCode(),
               ),
-              onTap: () {
-                List<String> allLinks = extractLinkUrls(socialLinks);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ScanQrCode(),
-                  ),
-                );
-              },
-            ),
-          ],
+            );
+          },
         ),
       ],
     );
