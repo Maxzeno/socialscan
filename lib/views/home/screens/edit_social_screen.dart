@@ -6,12 +6,12 @@ import 'package:socialscan/utils/colors.dart';
 
 import '../../../utils/textfield.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditSocialDetailsScreen extends StatelessWidget {
   final Color socialColor;
   final String socialText;
   final dynamic icon;
   final String linkUrl;
-  const EditProfileScreen(
+  const EditSocialDetailsScreen(
       {super.key,
       required this.socialColor,
       required this.socialText,

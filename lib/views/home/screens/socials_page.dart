@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socialscan/utils/colors.dart';
+import 'package:socialscan/utils/lists/added_socials_list.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
@@ -22,30 +23,53 @@ class _SocialsPageState extends State<SocialsPage> {
           TextTileWidget(
             text: mySocials,
             size: 16,
+            // icon: addedSocialsList.isEmpty
+            //     ? const SizedBox()
+            //     : SizedBox(
+            //         height: 20,
+            //         width: 20,
+            //         child: Checkbox(
+            //           value: isChecked,
+            //           activeColor: ProjectColors.mainPurple,
+            //           side: const BorderSide(width: 1),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(5),
+            //           ),
+            //           onChanged: (val) {
+            //             setState(() {
+            //               isChecked = !isChecked;
+            //             });
+            //           },
+            //           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //           visualDensity: VisualDensity.compact,
+            //         ),
+            //       ),
             icon: SizedBox(
-              height: 20,
-              width: 20,
-              child: Checkbox(
-                value: isChecked,
-                activeColor: ProjectColors.mainPurple,
-                side: const BorderSide(width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                onChanged: (val) {
-                  setState(() {
-                    isChecked = !isChecked;
-                  });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-            ),
+                    height: 20,
+                    width: 20,
+                    child: Checkbox(
+                      value: isChecked,
+                      activeColor: ProjectColors.mainPurple,
+                      side: const BorderSide(width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          isChecked = !isChecked;
+                        });
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
           ),
           const SizedBox(
             height: 14,
           ),
-          const SocialListsWidget(),
+          SocialListsWidget(
+            isAllMediasChecked: isChecked,
+          ),
           const SizedBox(
             height: 55,
           ),
