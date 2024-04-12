@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
+    // final nameController = TextEditingController();
     return Scaffold(
       backgroundColor: Colors.white,
       extendBody: true,

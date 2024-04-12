@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/utils/lists/added_socials_list.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';

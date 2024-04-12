@@ -1,14 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/lists/added_socials_list.dart';
+import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/strings.dart';
-import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/views/home/screens/qr_code_screen.dart';
+import 'package:socialscan/views/home/widgets/add_new_social_widget.dart';
 import 'package:socialscan/views/home/widgets/social_media_tile.dart';
 
 import '../../../utils/button.dart';
@@ -24,7 +24,6 @@ class SocialListsWidget extends StatefulWidget {
 }
 
 class _SocialListsWidgetState extends State<SocialListsWidget> {
-  SocialLinkModel? selectedSocialMedia;
   TextEditingController linkController = TextEditingController();
 
   bool isVisible = false;
@@ -79,9 +78,37 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
     return linkUrls;
   }
 
-
-
   bool _isSocialChecked = false;
+
+
+void addSocial(SocialLinkModel newItem) {
+    setState(() {
+      addedSocialsList.add(newItem);
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    linkController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,145 +145,13 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                       builder: (context) {
                         return StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState1) {
-                          return Container(
-                            height: screenHeight * 0.45,
-                            width: screenWidth,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: screenHeight / 40,
-                              vertical: screenHeight / 35,
-                            ),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      print('Clike');
-                                    },
-                                    child: const Icon(
-                                      Icons.close_rounded,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  addNewSocial,
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 35,
-                                ),
-                                Container(
-                                  width: 338,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 19),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFECECEC),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Center(
-                                    child: DropdownButton<SocialLinkModel>(
-                                      isExpanded: true,
-                                      underline: const SizedBox(),
-                                      value: selectedSocialMedia,
-                                      hint: const Text(
-                                        'Select social Media',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black38,
-                                        ),
-                                      ),
-                                      onChanged: (newValue) {
-                                        setState1(() {
-                                          selectedSocialMedia = newValue;
-                                          print(
-                                              'Selected ===> $selectedSocialMedia');
-                                        });
-                                      },
-                                      items: dropdownItems.map<
-                                              DropdownMenuItem<
-                                                  SocialLinkModel>>(
-                                          (SocialLinkModel? value) {
-                                        return DropdownMenuItem<
-                                            SocialLinkModel>(
-                                          value: value,
-                                          enabled:
-                                              !addedSocialsList.contains(value),
-                                          child: value != null
-                                              ? Text(
-                                                  value.text,
-                                                  style: TextStyle(
-                                                    color: addedSocialsList
-                                                            .contains(value)
-                                                        ? Colors.grey
-                                                        : Colors.black,
-                                                  ),
-                                                )
-                                              : const Text(
-                                                  'Select Social Media'),
-                                        );
-                                      }).toList(),
-                                      icon: SvgPicture.asset(
-                                        downArrowIcon,
-                                        height: 7,
-                                        width: 13,
-                                        color: ProjectColors.midBlack,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 18,
-                                ),
-                                ReusableTextField(
-                                  controller: linkController,
-                                  onTap: () {},
-                                  hintText: 'Paste Link',
-                                  width: 338,
-                                  obscure: false,
-                                  iconButton: const InkWell(
-                                    child: Icon(
-                                      Icons.paste_rounded,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                ButtonTile(
-                                    text: 'Add',
-                                    boxRadius: 10,
-                                    width: 338,
-                                    onTap: () {
-                                      setState(() {
-                                        final link = selectedSocialMedia!
-                                            .linkUrl = linkController.text;
-                                        addedSocialsList.add(selectedSocialMedia!);
-                                        // dropdownItems.remove(selectedSocialMedia);
-                                      });
-                                      print(
-                                          'Added =====> $selectedSocialMedia');
-                                      print(
-                                          'Added Lists =====> $addedSocialsList.');
-                                      Navigator.pop(context);
-                                    }),
-                              ],
-                            ),
+                          return AddNewSocialWidget(
+                            screenHeight: screenHeight,
+                            screenWidth: screenWidth,
+                            dropdownItems: dropdownItems,
+                            linkController: linkController,
+                            setState1: setState1,
+                            addSocial: addSocial,
                           );
                         });
                       });
@@ -279,7 +174,10 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                             addIcon,
                             height: 22,
                             width: 22,
-                            color: ProjectColors.midBlack,
+                            colorFilter: const ColorFilter.mode(
+                              ProjectColors.midBlack,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -317,6 +215,17 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
               },
               onLongPress: () {
                 print('CLicked');
+                setState(() {
+                  _isSocialChecked = !_isSocialChecked;
+                });
+                selectedSocialsToSendList.add(SocialLinkModel(
+                  text: data.text,
+                  imagePath: data.imagePath,
+                  conColor: data.conColor,
+                  iconColor: data.iconColor,
+                  id: index,
+                  linkUrl: data.linkUrl,
+                ));
               },
               child: SocialMediaTile(
                 socialImage: data.imagePath!,
@@ -328,6 +237,31 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                   setState(() {
                     _isSocialChecked = !_isSocialChecked;
                   });
+                  if (_isSocialChecked == true) {
+                    selectedSocialsToSendList.add(
+                      SocialLinkModel(
+                        text: data.text,
+                        imagePath: data.imagePath,
+                        conColor: data.conColor,
+                        iconColor: data.iconColor,
+                        id: index,
+                        linkUrl: data.linkUrl,
+                      ),
+                    );
+                    print("Social added: $selectedSocialsToSendList");
+                  } else {
+                    selectedSocialsToSendList.remove(
+                      SocialLinkModel(
+                        text: data.text,
+                        imagePath: data.imagePath,
+                        conColor: data.conColor,
+                        iconColor: data.iconColor,
+                        id: index,
+                        linkUrl: data.linkUrl,
+                      ),
+                    );
+                    print("Social removed: $selectedSocialsToSendList");
+                  }
                 },
               ),
             );
@@ -384,7 +318,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
         //   ],
         // ),
 
-        _isSocialChecked || widget.isAllMediasChecked
+        selectedSocialsToSendList.isNotEmpty
             ? ButtonTile(
                 width: double.infinity,
                 text: connect,
@@ -394,7 +328,9 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                   color: Colors.white,
                 ),
                 onTap: () {
-                  List<String> allLinks = extractLinkUrls(socialLinks);
+                  // List<String> allLinks = extractLinkUrls(socialLinks);
+                  List<String> allLinks =
+                      extractLinkUrls(selectedSocialsToSendList);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -406,24 +342,24 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                 },
               )
             : ButtonTile(
-          width: double.infinity,
-          text: "Scan QR Code",
-          boxRadius: 8,
-          icon: SvgPicture.asset(
-            connectIcon,
-            height: 24,
-            width: 24,
-          ),
-          onTap: () {
-            List<String> allLinks = extractLinkUrls(socialLinks);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ScanQrCode(),
+                width: double.infinity,
+                text: "Scan QR Code",
+                boxRadius: 8,
+                icon: SvgPicture.asset(
+                  connectIcon,
+                  height: 24,
+                  width: 24,
+                ),
+                onTap: () {
+                  List<String> allLinks = extractLinkUrls(socialLinks);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ScanQrCode(),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ],
     );
   }
