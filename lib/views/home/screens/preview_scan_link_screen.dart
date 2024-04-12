@@ -6,21 +6,27 @@ class PreviewScanLinkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Text('Links'),
-          ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final results = data[index];
-              return ListTile(
-                title: const Text('Random'),
-                subtitle: Text(results),
-              );
-            },
-          )
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Links'),
+              ListView.builder(
+                itemCount: data.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final results = data[index];
+                  return ListTile(
+                    title: const Text('Random'),
+                    subtitle: Text(results),
+                  );
+                },
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

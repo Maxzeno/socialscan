@@ -44,6 +44,8 @@ dependencies:
   fl_country_code_picker: ^0.1.9+1
   dotted_border: ^2.1.0
   mobile_scanner: ^4.0.1
+  flutter_image_compress: ^2.2.0
+  path_provider: ^2.1.3
 
 
 

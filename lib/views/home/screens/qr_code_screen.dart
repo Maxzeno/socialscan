@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +8,8 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../utils/images.dart';
 import '../widgets/horizontal_dot_tile.dart';
@@ -97,7 +102,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                'scan QR with recipient device to connect.',
+                'Scan QR with recipient device to connect.',
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -105,15 +110,68 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 4.5,
-            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height / 4.5,
+            // ),
+            const Spacer(),
             ButtonTile(
               text: 'Share',
               textColor: Colors.black,
               boxRadius: 35,
               icon: SvgPicture.asset(shareIcon),
               color: const Color(0xFFECECEC),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ButtonTile(
+              width: double.infinity,
+              text: "Download",
+              boxRadius: 35,
+              icon: const Icon(
+                Icons.download,
+                color: Colors.white,
+              ),
+              onTap: () async {
+                final qrCode = QrCode.fromData(
+                  data: generateMultiLinkURI(widget.qrData!),
+                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                );
+
+                final qrImage = QrImage(qrCode);
+                final qrImageBytes = await qrImage.toImageAsBytes(
+                  size: 512,
+                  format: ImageByteFormat.png,
+                  decoration: PrettyQrDecoration(
+                    image: PrettyQrDecorationImage(
+                      padding: const EdgeInsets.all(10),
+                      image: AssetImage(socialIcon),
+                    ),
+                  ),
+                );
+
+                // Get the temporary directory of the device.
+                final directory = await getTemporaryDirectory();
+
+                // Create a file in the temporary directory.
+                final File file = File('${directory.path}/qr_code.png');
+
+                // Compress the image and write it to the file.
+                final compressedImage =
+                    await FlutterImageCompress.compressWithList(
+                  qrImageBytes!.buffer.asUint8List(),
+                  minWidth: 512,
+                  minHeight: 512,
+                  quality: 88,
+                );
+                await file.writeAsBytes(compressedImage, flush: true);
+
+                // The image file is now saved in the device's temporary directory.
+                print('Image saved at ${file.path}');
+              },
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 18,
             ),
           ],
         ),

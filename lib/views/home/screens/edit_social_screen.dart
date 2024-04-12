@@ -143,11 +143,11 @@ class EditSocialDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 110,
                 ),
-                ButtonTile(
+                const ButtonTile(
                   text: 'Save',
                   boxRadius: 8,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Center(

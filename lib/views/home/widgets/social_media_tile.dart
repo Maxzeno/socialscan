@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
-class SocialMediaTile extends StatelessWidget {
+class SocialMediaTile extends StatefulWidget {
   final String socialText;
   final String socialImage;
   final Color socialIconColor;
@@ -11,12 +11,28 @@ class SocialMediaTile extends StatelessWidget {
   final bool isSocialChecked;
   final void Function(bool?) onSelected;
 
-  const SocialMediaTile(
-      {super.key,
-      required this.socialImage,
-      required this.socialIconColor,
-      required this.conColor,
-      required this.socialText, required this.isSocialChecked, required this.onSelected,});
+  const SocialMediaTile({
+    Key? key,
+    required this.socialImage,
+    required this.socialIconColor,
+    required this.conColor,
+    required this.socialText,
+    required this.isSocialChecked,
+    required this.onSelected,
+  }) : super(key: key);
+
+  @override
+  State<SocialMediaTile> createState() => _SocialMediaTileState();
+}
+
+class _SocialMediaTileState extends State<SocialMediaTile> {
+  bool _isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = widget.isSocialChecked;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +42,7 @@ class SocialMediaTile extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: conColor.withOpacity(0.1),
+        color: widget.conColor.withOpacity(0.1),
       ),
       child: Stack(
         children: [
@@ -39,19 +55,18 @@ class SocialMediaTile extends StatelessWidget {
                 width: 53,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: socialIconColor,
+                  color: widget.socialIconColor,
                   border: Border.all(width: 1, color: Colors.white),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 12,
-                      // blurStyle: BlurStyle.outer,
-                      color: socialIconColor,
+                      color: widget.socialIconColor,
                     ),
                   ],
                 ),
                 child: Center(
                   child: SvgPicture.asset(
-                    socialImage,
+                    widget.socialImage,
                     height: 25,
                     width: 25,
                   ),
@@ -61,7 +76,7 @@ class SocialMediaTile extends StatelessWidget {
                 height: 14,
               ),
               Text(
-                socialText,
+                widget.socialText,
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -76,8 +91,13 @@ class SocialMediaTile extends StatelessWidget {
             child: Transform.scale(
               scale: 1.11,
               child: Checkbox.adaptive(
-                value: isSocialChecked,
-                onChanged: onSelected,
+                value: _isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isChecked = value!;
+                    widget.onSelected(value);
+                  });
+                },
                 activeColor: ProjectColors.mainPurple,
                 checkColor: Colors.white,
                 side: const BorderSide(color: ProjectColors.midBlack),
