@@ -80,28 +80,11 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
 
   bool _isSocialChecked = false;
 
-
-void addSocial(SocialLinkModel newItem) {
+  void addSocial(SocialLinkModel newItem) {
     setState(() {
       addedSocialsList.add(newItem);
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   void dispose() {
@@ -155,6 +138,7 @@ void addSocial(SocialLinkModel newItem) {
                           );
                         });
                       });
+                  print('linkController ====> ${linkController.text}');
                 },
                 child: DottedBorder(
                   borderType: BorderType.RRect,
@@ -198,7 +182,9 @@ void addSocial(SocialLinkModel newItem) {
               );
             }
             final data = addedSocialsList[index];
+            // final link = data.linkUrl[0];
             print('data =====> $data');
+            // print('link =====> $link');
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -317,7 +303,6 @@ void addSocial(SocialLinkModel newItem) {
         //     ),
         //   ],
         // ),
-
         selectedSocialsToSendList.isNotEmpty
             ? ButtonTile(
                 width: double.infinity,
@@ -331,6 +316,8 @@ void addSocial(SocialLinkModel newItem) {
                   // List<String> allLinks = extractLinkUrls(socialLinks);
                   List<String> allLinks =
                       extractLinkUrls(selectedSocialsToSendList);
+
+                  print('all Links ====> $allLinks');
                   Navigator.push(
                     context,
                     MaterialPageRoute(
