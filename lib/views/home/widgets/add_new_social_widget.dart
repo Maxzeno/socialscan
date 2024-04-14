@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/button.dart';
@@ -161,7 +160,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               text: 'Add',
               boxRadius: 10,
               width: 338,
-              onTap: () async{
+              onTap: () async {
                 // setState(() {
                 //   final link = selectedSocialMedia!.linkUrl =
                 //       widget.linkController.text;
@@ -174,10 +173,12 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
                 // setState(() {
 
                 // });
-
+                final link =
+                    selectedSocialMedia!.linkUrl = widget.linkController.text;
                 widget.addSocial(selectedSocialMedia!);
+                print('Added link =====> $link.');
+                widget.linkController.clear();
                 Navigator.pop(context);
-                
               }),
         ],
       ),

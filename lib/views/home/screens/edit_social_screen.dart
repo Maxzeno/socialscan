@@ -20,6 +20,7 @@ class EditSocialDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('this link ====> $linkUrl');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
