@@ -4,8 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
+import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/added_socials_list.dart';
+import 'package:socialscan/utils/lists/hex_color_list.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
+import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/screens/qr_code_screen.dart';
 import 'package:socialscan/views/home/widgets/add_new_social_widget.dart';
@@ -24,48 +27,61 @@ class SocialListsWidget extends StatefulWidget {
 }
 
 class _SocialListsWidgetState extends State<SocialListsWidget> {
+  addSocial(SocialLinkModel? newItem) async {
+    try {
+      final message = await FirebaseService().addSocialLink(newItem!);
+      print(message);
+      if (message == 'Social link added successfully!') {
+        setState(() {
+          addedSocialsList.add(newItem);
+        });
+      } else if (message == 'Social link already exists!') {
+        infoSnackBar(context, 'Social Media already exists!',
+            const Duration(milliseconds: 700), Colors.red);
+      } else {
+        print('Failed to add social link.');
+      }
+    } catch (error) {
+      print('Error adding social link: $error');
+    }
+  }
+
   TextEditingController linkController = TextEditingController();
 
-  bool isVisible = false;
   List<SocialLinkModel> socialLinks = [
     SocialLinkModel(
       text: faceBook,
       imagePath: faceBookIcon,
-      conColor: ProjectColors.fb,
-      iconColor: ProjectColors.fb.withOpacity(0.5),
-      id: 0,
+      conColor: fbConColor,
+      iconColor: fbIconColor,
       linkUrl: '',
     ),
     SocialLinkModel(
       text: instagram,
       imagePath: instagramIcon,
-      conColor: ProjectColors.ig,
-      iconColor: ProjectColors.ig.withOpacity(0.5),
-      id: 1,
+      conColor: igConColor,
+      iconColor: igIconColor,
       linkUrl: '',
     ),
     SocialLinkModel(
       text: whatsApp,
       imagePath: whatsAppIcon,
-      conColor: ProjectColors.wsa,
-      iconColor: ProjectColors.wsa.withOpacity(0.5),
-      id: 2,
+      conColor: wsaConColor,
+      iconColor: wsaIconColor,
       linkUrl: '',
     ),
     SocialLinkModel(
       text: twitter,
       imagePath: twitterIcon,
-      conColor: ProjectColors.x,
-      iconColor: ProjectColors.x.withOpacity(0.5),
-      id: 3,
+      conColor: xConColor,
+      iconColor: xIconColor,
       linkUrl: '',
     ),
     SocialLinkModel(
       text: linkedin,
       imagePath: linkedInIcon,
-      conColor: ProjectColors.li,
-      iconColor: ProjectColors.li.withOpacity(0.5),
-      id: 4,
+      conColor: liConColor,
+      iconColor: liIconColor,
       linkUrl: '',
     ),
   ];
@@ -79,12 +95,6 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
   }
 
   bool _isSocialChecked = false;
-
-  void addSocial(SocialLinkModel newItem) {
-    setState(() {
-      addedSocialsList.add(newItem);
-    });
-  }
 
   @override
   void dispose() {
@@ -101,156 +111,173 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
 
     return Column(
       children: [
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300,
-            childAspectRatio: 2.3 / 2.1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          shrinkWrap: true,
-          itemCount: addedSocialsList.length + 1,
-          itemBuilder: (context, index) {
-            if (index == addedSocialsList.length) {
-              return GestureDetector(
-                onTap: () {
-                  // print(MediaQuery.of(context).size.height);
+        StreamBuilder<List<SocialLinkModel>>(
+          stream: FirebaseService().getAllSocialMediaLinks(),
+          builder: (context, AsyncSnapshot<List<SocialLinkModel>> snapshot) {
+            if (snapshot.hasData) {
+              final results = snapshot.data! ?? [];
+              print('Results ===> $results');
+              // addedSocialsList = results
+              //     .map((e) => SocialLinkModel.fromJson(e.data()))
+              //     .toList();
 
-                  showBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                      ),
-                      context: context,
-                      builder: (context) {
-                        return StatefulBuilder(builder:
-                            (BuildContext context, StateSetter setState1) {
-                          return AddNewSocialWidget(
-                            screenHeight: screenHeight,
-                            screenWidth: screenWidth,
-                            dropdownItems: dropdownItems,
-                            linkController: linkController,
-                            setState1: setState1,
-                            addSocial: addSocial,
-                          );
-                        });
-                      });
-                  print('linkController ====> ${linkController.text}');
-                },
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(8),
-                  strokeWidth: 1.5,
-                  dashPattern: const [8, 8],
-                  color: ProjectColors.midBlack.withOpacity(0.3),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 33,
-                          backgroundColor:
-                              ProjectColors.midBlack.withOpacity(0.1),
-                          child: SvgPicture.asset(
-                            addIcon,
-                            height: 22,
-                            width: 22,
-                            colorFilter: const ColorFilter.mode(
-                              ProjectColors.midBlack,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          addNew,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: ProjectColors.midBlack.withOpacity(0.5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              return GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 2.3 / 2.1,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
                 ),
-              );
-            }
-            final data = addedSocialsList[index];
-            // final link = data.linkUrl[0];
-            print('data =====> $data');
-            // print('link =====> $link');
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditSocialDetailsScreen(
-                      socialColor: data.conColor!,
-                      socialText: data.text,
-                      icon: data.imagePath,
-                      linkUrl: data.linkUrl,
-                    ),
-                  ),
-                );
-              },
-              onLongPress: () {
-                print('CLicked');
-                setState(() {
-                  _isSocialChecked = !_isSocialChecked;
-                });
-                selectedSocialsToSendList.add(SocialLinkModel(
-                  text: data.text,
-                  imagePath: data.imagePath,
-                  conColor: data.conColor,
-                  iconColor: data.iconColor,
-                  id: index,
-                  linkUrl: data.linkUrl,
-                ));
-              },
-              child: SocialMediaTile(
-                socialImage: data.imagePath!,
-                socialIconColor: data.iconColor!,
-                conColor: data.conColor!,
-                socialText: data.text,
-                isSocialChecked: _isSocialChecked,
-                onSelected: (value) {
-                  setState(() {
-                    _isSocialChecked = !_isSocialChecked;
-                  });
-                  if (_isSocialChecked == true) {
-                    selectedSocialsToSendList.add(
-                      SocialLinkModel(
-                        text: data.text,
-                        imagePath: data.imagePath,
-                        conColor: data.conColor,
-                        iconColor: data.iconColor,
-                        id: index,
-                        linkUrl: data.linkUrl,
+                shrinkWrap: true,
+                itemCount: results.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == results.length) {
+                    return GestureDetector(
+                      onTap: () {
+                        // print(MediaQuery.of(context).size.height);
+
+                        showBottomSheet(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                              ),
+                            ),
+                            context: context,
+                            builder: (context) {
+                              return StatefulBuilder(builder:
+                                  (BuildContext context,
+                                      StateSetter setState1) {
+                                return AddNewSocialWidget(
+                                  screenHeight: screenHeight,
+                                  screenWidth: screenWidth,
+                                  dropdownItems: dropdownItems,
+                                  linkController: linkController,
+                                  setState1: setState1,
+                                  addSocial: addSocial,
+                                );
+                              });
+                            });
+                        print('linkController ====> ${linkController.text}');
+                      },
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(8),
+                        strokeWidth: 1.5,
+                        dashPattern: const [8, 8],
+                        color: ProjectColors.midBlack.withOpacity(0.3),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 33,
+                                backgroundColor:
+                                    ProjectColors.midBlack.withOpacity(0.1),
+                                child: SvgPicture.asset(
+                                  addIcon,
+                                  height: 22,
+                                  width: 22,
+                                  colorFilter: const ColorFilter.mode(
+                                    ProjectColors.midBlack,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                addNew,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color:
+                                      ProjectColors.midBlack.withOpacity(0.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     );
-                    print("Social added: $selectedSocialsToSendList");
-                  } else {
-                    selectedSocialsToSendList.remove(
-                      SocialLinkModel(
-                        text: data.text,
-                        imagePath: data.imagePath,
-                        conColor: data.conColor,
-                        iconColor: data.iconColor,
-                        id: index,
-                        linkUrl: data.linkUrl,
-                      ),
-                    );
-                    print("Social removed: $selectedSocialsToSendList");
                   }
+                  final data = results[index];
+                  // final link = data.linkUrl[0];
+                  print('data =====> $data');
+                  // print('link =====> $link');
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditSocialDetailsScreen(
+                            socialColor: data.conColor!,
+                            socialText: data.text,
+                            icon: data.imagePath,
+                            linkUrl: data.linkUrl,
+                          ),
+                        ),
+                      );
+                    },
+                    onLongPress: () {
+                      print('CLicked');
+                      setState(() {
+                        _isSocialChecked = !_isSocialChecked;
+                      });
+                      selectedSocialsToSendList.add(SocialLinkModel(
+                        text: data.text,
+                        imagePath: data.imagePath,
+                        conColor: data.conColor,
+                        iconColor: data.iconColor,
+                        // id: index,
+                        linkUrl: data.linkUrl,
+                      ));
+                    },
+                    child: SocialMediaTile(
+                      socialImage: data.imagePath!,
+                      socialIconColor: data.iconColor!,
+                      conColor: data.conColor!,
+                      socialText: data.text,
+                      isSocialChecked: _isSocialChecked,
+                      onSelected: (value) {
+                        setState(() {
+                          _isSocialChecked = !_isSocialChecked;
+                        });
+                        if (_isSocialChecked == true) {
+                          selectedSocialsToSendList.add(
+                            SocialLinkModel(
+                              text: data.text,
+                              imagePath: data.imagePath,
+                              conColor: data.conColor,
+                              iconColor: data.iconColor,
+                              // id: index,
+                              linkUrl: data.linkUrl,
+                            ),
+                          );
+                          print("Social added: $selectedSocialsToSendList");
+                        } else {
+                          selectedSocialsToSendList.remove(
+                            SocialLinkModel(
+                              text: data.text,
+                              imagePath: data.imagePath,
+                              conColor: data.conColor,
+                              iconColor: data.iconColor,
+                              // id: index,
+                              linkUrl: data.linkUrl,
+                            ),
+                          );
+                          print("Social removed: $selectedSocialsToSendList");
+                        }
+                      },
+                    ),
+                  );
                 },
-              ),
-            );
+              );
+            } else {
+              return const SizedBox();
+            }
           },
         ),
         const SizedBox(
