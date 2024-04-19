@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 ReusableTextField(
                   textInputType: TextInputType.name,
-                  controller: userProvider.bio,
+                  controller: userProvider.profession,
                   hintText: 'Profession',
                   obscure: false,
                   onTap: () {},
