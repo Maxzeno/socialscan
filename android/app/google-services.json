@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920432635822",
+    "project_id": "socialscan-11151",
+    "storage_bucket": "socialscan-11151.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920432635822:android:8d6c357d8c8417f4a6a23f",
+        "android_client_info": {
+          "package_name": "com.example.socialscan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHHymIgCj1fUAe_aBf0Jpp62pYsrOuppw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
