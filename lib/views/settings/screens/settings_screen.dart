@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/profile/screens/profile_screen.dart';
 import 'package:socialscan/views/settings/widgets/option_tile.dart';
 
@@ -22,6 +24,7 @@ class _SettingScreenState extends State<SettingScreen> {
   bool isChecked1 = false;
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,7 +68,7 @@ class _SettingScreenState extends State<SettingScreen> {
               const SizedBox(
                 height: 8,
               ),
-              generalOptions(),
+              generalOptions(userProvider),
               const SizedBox(
                 height: 35,
               ),
@@ -143,7 +146,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget generalOptions() {
+  Widget generalOptions(UserProvider userProvider) {
     return Container(
       // height: 221,
       width: double.infinity,
@@ -198,6 +201,18 @@ class _SettingScreenState extends State<SettingScreen> {
               height: 24,
               width: 24,
             ),
+          ),
+          const Divider(
+            thickness: 0.8,
+          ),
+          OptionTile(
+            text: 'Log Out',
+            icon: const Icon(
+              Icons.exit_to_app,
+            ),
+            onTap: () {
+              userProvider.signOut(context);
+            },
           ),
         ],
       ),

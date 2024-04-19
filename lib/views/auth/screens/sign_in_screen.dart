@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 
 import '../../../utils/colors.dart';
+import '../../../view_model/user_provider.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -15,11 +17,11 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
   bool _obscure = true;
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -39,7 +41,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 40,
               ),
               ReusableTextField(
-                controller: emailController,
+                controller: userProvider.emailController,
                 hintText: 'Email',
                 obscure: false,
                 onTap: () {},
@@ -50,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 18,
               ),
               ReusableTextField(
-                controller: passwordController,
+                controller: userProvider.passwordController,
                 hintText: 'Password',
                 obscure: _obscure,
                 textInputType: TextInputType.visiblePassword,
@@ -87,6 +89,10 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               ButtonTile(
                 text: login,
+                loading: userProvider.isLoading,
+                onTap: () {
+                  userProvider.signIn(context);
+                },
                 boxRadius: 8,
               ),
               const SizedBox(

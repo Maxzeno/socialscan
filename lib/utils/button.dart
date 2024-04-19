@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
@@ -10,6 +11,7 @@ class ButtonTile extends StatelessWidget {
   final double? width;
   final Widget? icon;
   final Color? color;
+  final bool? loading;
   final VoidCallback? onTap;
 
   const ButtonTile({
@@ -21,6 +23,7 @@ class ButtonTile extends StatelessWidget {
     this.textColor,
     this.color,
     this.onTap,
+    this.loading,
   }) : super(key: key);
 
   @override
@@ -42,17 +45,30 @@ class ButtonTile extends StatelessWidget {
                 icon!,
                 const SizedBox(width: 10),
               ],
-              Text(
-                text,
-                style: GoogleFonts.montserrat(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: textColor ?? Colors.white,
-                ),
-              ),
+              loading == true
+                  ? _buildLoadingIndicator()
+                  : Text(
+                      text,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: textColor ?? Colors.white,
+                      ),
+                    ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return const SizedBox(
+      width: 55.0,
+      height: 24.0,
+      child: SpinKitThreeBounce(
+        color: Colors.white,
+        size: 24.0,
       ),
     );
   }

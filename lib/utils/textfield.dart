@@ -14,6 +14,7 @@ class ReusableTextField extends StatelessWidget {
   final double? textSize;
   final double? width;
   final double? height;
+  final void Function(String? p1)? onSaved;
   const ReusableTextField(
       {Key? key,
       this.hintText,
@@ -26,7 +27,8 @@ class ReusableTextField extends StatelessWidget {
       this.textInputType,
       this.textSize,
       this.width,
-      this.height})
+      this.height,
+      this.onSaved})
       : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class ReusableTextField extends StatelessWidget {
     // final keyBoardProvider = Provider.of<KeyboardProvider>(context);
     return SizedBox(
       width: width ?? 388,
-      height: height ?? 53,
+      // height: height ?? 53,
       child: TextFormField(
         initialValue: initialValue,
         style: TextStyle(
@@ -43,8 +45,6 @@ class ReusableTextField extends StatelessWidget {
           letterSpacing: 0.5,
         ),
 
-        onTap: onTap,
-        validator: validator,
         obscureText: obscure!,
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -77,11 +77,30 @@ class ReusableTextField extends StatelessWidget {
               width: 0,
               color: ProjectColors.mainGray,
             ),
+
             // borderSide: const BorderSide(width: 1.5, color: Colors.grey),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(7),
+            borderSide: const BorderSide(
+              width: 0,
+              color: ProjectColors.mainGray,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(7),
+            borderSide: const BorderSide(
+              width: 0,
+              color: ProjectColors.mainGray,
+            ),
           ),
           fillColor: ProjectColors.mainGray,
           filled: true,
         ),
+        onTap: onTap,
+        validator: validator,
+        // onSaved: onSaved,
+        onChanged: onSaved,
 
         // onChanged: (text) {
         //   keyBoardProvider.setKeyboardOpen(text.isNotEmpty);

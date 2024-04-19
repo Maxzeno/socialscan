@@ -9,15 +9,15 @@ class FrostedGlassBox extends StatelessWidget {
   const FrostedGlassBox({
     Key? key,
     required this.theChild,
-    required this.image,
     this.title,
+    required this.background,
     required this.subTitle,
   }) : super(key: key);
 
   final Widget theChild;
   final String? title;
   final String subTitle;
-  final String image;
+  final dynamic background;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +35,7 @@ class FrostedGlassBox extends StatelessWidget {
                 sigmaX: 4.0,
                 sigmaY: 4.0,
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(image),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              child: background,
             ),
             // Gradient effect
             Container(
