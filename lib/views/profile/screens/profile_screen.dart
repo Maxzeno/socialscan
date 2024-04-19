@@ -125,20 +125,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     background: Center(
-                        child: userModel.image.isNotEmpty &&
-                                    userProvider.image == null ||
-                                userProvider.image!.isEmpty
-                            ? Image.network(
-                                userModel.image,
-                                height: double.infinity,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              )
-                            : Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                color: ProjectColors.mainPurple,
-                              )),
+                      child: userModel.image != null &&
+                              userModel.image.isNotEmpty &&
+                              (userProvider.image == null ||
+                                  userProvider.image!.isEmpty)
+                          ? Image.network(
+                              userModel.image,
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : userProvider.image != null &&
+                                  userProvider.image!.isNotEmpty
+                              ? Image.memory(
+                                  userProvider.image!,
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  color: ProjectColors.mainPurple,
+                                ),
+                    ),
                   ),
                   const SizedBox(
                     height: 30,
