@@ -20,7 +20,6 @@ class UserProvider extends ChangeNotifier {
   TextEditingController retypePasswordController = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController profession = TextEditingController();
-  TextEditingController bio = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
   final FirebaseService _authService = FirebaseService();
@@ -146,7 +145,8 @@ class UserProvider extends ChangeNotifier {
           MaterialPageRoute(builder: (context) => const SignInScreen()),
           (route) => false);
 
-      infoSnackBar(context, 'Sign-Out successful', const Duration(milliseconds: 400));
+      infoSnackBar(
+          context, 'Sign-Out successful', const Duration(milliseconds: 400));
     } catch (e) {
       print('Failed to sign out: $e');
     }
