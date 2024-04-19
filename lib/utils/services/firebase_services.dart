@@ -54,15 +54,12 @@ class FirebaseService {
           _firestore.collection('users').doc(currentUser.uid);
       DocumentSnapshot userDoc = await userDocRef.get();
 
-      // Check if the user document exists
       if (!userDoc.exists) {
         return 'User document does not exist.';
       }
 
-      // Get the current social media links list
       List<dynamic> socialLinksData = List.from(userDoc['socialMediaLink']);
 
-      // Check if the new social media link already exists in the list
       bool linkExists = socialLinksData.any((linkData) =>
           SocialLinkModel.fromJson(linkData).text == newSocialLink.text);
 
@@ -70,10 +67,8 @@ class FirebaseService {
         return 'Social link already exists!';
       }
 
-      // Add the new social media link to the list
       socialLinksData.add(newSocialLink.toJson());
 
-      // Update the social link list in the user data
       await userDocRef.update({'socialMediaLink': socialLinksData});
       return 'Social link added successfully!';
     } catch (error) {
@@ -127,12 +122,10 @@ class FirebaseService {
       User? currentUser = auth.currentUser;
       if (currentUser == null) {
         print('For get social link =====> User not logged in.');
-        // Return an empty stream if the user is not logged in
         return Stream.value([]);
       }
 
       print('Getting data from Firebase'); // Indicate start of data fetching
-      // Assuming 'users' is the collection where user data is stored
       return FirebaseFirestore.instance
           .collection('users')
           .doc(currentUser.uid)
@@ -152,9 +145,7 @@ class FirebaseService {
         return socialLinks;
       });
     } catch (error) {
-      // Handle errors here
       print('Error fetching social media links: $error');
-      // Return an empty stream in case of error
       return Stream.value([]);
     }
   }
