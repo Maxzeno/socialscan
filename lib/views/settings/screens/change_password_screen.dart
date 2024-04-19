@@ -20,10 +20,13 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool _obscure = false;
   bool _obscure1 = false;
+  bool _obscure2 = false;
   final _formKey = GlobalKey<FormState>();
-  String _enterPassword = '';
-  String _enterNewPassword = '';
-  String _retypePassword = '';
+
+  final _enterPasswordController = TextEditingController();
+  final _enterNewPasswordController = TextEditingController();
+  final _retypePasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,14 +85,30 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ReusableTextField(
                     // controller: nameController,
                     // initialValue: helloTest,
+                    controller: _enterPasswordController,
                     textSize: 16,
                     obscure: true,
-                    iconButton: null,
+                    iconButton: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _obscure2 = !_obscure2;
+                        });
+                      },
+                      child: _obscure2
+                          ? const Icon(
+                              Icons.visibility_off_outlined,
+                              size: 15,
+                            )
+                          : const Icon(
+                              Icons.visibility_outlined,
+                              size: 15,
+                            ),
+                    ),
                     onTap: () {},
-                    onSaved: (value) {
-                      _enterPassword = value!;
-                      print('Enter password =====> $_enterPassword');
-                    },
+                    // onSaved: (value) {
+                    //   _enterPassword = value!;
+                    //   print('Enter password =====> $_enterPassword');
+                    // },
                   ),
                   const SizedBox(
                     height: 25,
@@ -101,6 +120,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ReusableTextField(
                     // controller: nameController,
                     // initialValue: helloTest,
+                    controller: _enterNewPasswordController,
+
                     obscure: _obscure,
                     iconButton: InkWell(
                       onTap: () {
@@ -128,12 +149,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       }
                       return null;
                     },
-                    onSaved: (value) {
-                      print('onSaved callback called!');
-                      _enterNewPassword = value!;
-                      print(
-                          'enterNewPassword: $enterNewPassword'); // Check the value of enterNewPassword
-                    },
+                    // onSaved: (value) {
+                    //   print('onSaved callback called!');
+                    //   _enterNewPassword = value!;
+                    //   print(
+                    //       'enterNewPassword: $enterNewPassword'); // Check the value of enterNewPassword
+                    // },
                     onTap: () {},
                   ),
                   const SizedBox(
@@ -146,6 +167,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ReusableTextField(
                     // controller: nameController,
                     // initialValue: helloTest,
+                    controller: _retypePasswordController,
+
                     obscure: _obscure1,
                     iconButton: InkWell(
                       onTap: () {
@@ -165,20 +188,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
 
                     validator: (value) {
-                      print(
-                          'enterNewPassword: $_enterNewPassword'); // Check the value of enterNewPassword
-                      print('retypePassword: $_retypePassword');
+                      // print(
+                      //     'enterNewPassword: $_enterNewPassword'); // Check the value of enterNewPassword
+                      // print('retypePassword: $_retypePassword');
                       if (value == null || value.isEmpty) {
                         return 'Please retype your password';
                       }
-                      if (value != _enterNewPassword) {
+                      if (value != _enterNewPasswordController.text) {
                         return 'Passwords do not match';
                       }
                       return null;
                     },
-                    onSaved: (value) {
-                      _retypePassword = value!;
-                    },
+                    // onSaved: (value) {
+                    //   _retypePassword = value!;
+                    // },
 
                     onTap: () {},
                   ),
@@ -190,13 +213,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          print('Enter password =====> $_enterPassword');
-
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             FirebaseService()
                 .updatePassword(
-                  password: _enterNewPassword,
+                  password: _enterNewPasswordController.text,
                 )
                 .then(
                   (value) => infoSnackBar(
@@ -205,9 +226,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       const Duration(milliseconds: 400),
                       Colors.green),
                 );
-            _enterPassword = '';
-            _enterNewPassword = '';
-            _retypePassword = '';
+            _enterPasswordController.clear();
+            _enterNewPasswordController.clear();
+            _retypePasswordController.clear();
           }
         },
         child: Container(

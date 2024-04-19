@@ -125,9 +125,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     background: Center(
-                        child: userModel.image.isNotEmpty &&
-                                    userProvider.image == null ||
-                                userProvider.image!.isEmpty
+                        child: userModel.image != null &&
+                                userModel.image.isNotEmpty &&
+                                (userProvider.image == null ||
+                                    userProvider.image!.isEmpty)
                             ? Image.network(
                                 userModel.image,
                                 height: double.infinity,

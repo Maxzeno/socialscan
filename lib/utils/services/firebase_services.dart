@@ -82,30 +82,73 @@ class FirebaseService {
     }
   }
 
+  // Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
+  //   try {
+  //     User? currentUser = auth.currentUser;
+  //     if (currentUser == null) {
+  //       print(' For get social link =====> User not logged in.');
+  //     }
+  //     print('getting data from Firebase'); // Indicate start of data fetching
+  //     // Assuming 'users' is the collection where user data is stored
+  //     return FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(currentUser!.uid)
+  //         .snapshots()
+  //         .map((querySnapshot) {
+  //       final socialLinks = querySnapshot
+  //           .data()!
+  //           .where((doc) => doc['socialMediaLink'] != null) // Check for null
+  //           .expand((doc) {
+  //             print(
+  //                 'Document data: ${doc.data()}'); // Print entire document data (optional)
+  //             final socialLinkList =
+  //                 doc['socialMediaLink'] as List; // Cast to List
+  //             for (var socialLinkData in socialLinkList) {
+  //               print(
+  //                   'Social Link: $socialLinkData'); // Print each social link object
+  //             }
+  //             return socialLinkList;
+  //           })
+  //           .map((socialLinkData) => SocialLinkModel.fromJson(socialLinkData))
+  //           .toList();
+  //       print('Results ====> $socialLinks'); // Print the final socialLinks list
+  //       return socialLinks;
+  //     });
+  //   } catch (error) {
+  //     // Handle errors here
+  //     print('Error fetching social media links: $error');
+  //     // Return an empty stream in case of error
+  //     return Stream.value([]);
+  //   }
+  // }
+
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
-      print('getting data from Firebase'); // Indicate start of data fetching
+      User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        print('For get social link =====> User not logged in.');
+        // Return an empty stream if the user is not logged in
+        return Stream.value([]);
+      }
+
+      print('Getting data from Firebase'); // Indicate start of data fetching
       // Assuming 'users' is the collection where user data is stored
       return FirebaseFirestore.instance
           .collection('users')
+          .doc(currentUser.uid)
           .snapshots()
-          .map((querySnapshot) {
-        final socialLinks = querySnapshot.docs
-            .where((doc) => doc['socialMediaLink'] != null) // Check for null
-            .expand((doc) {
-              print(
-                  'Document data: ${doc.data()}'); // Print entire document data (optional)
-              final socialLinkList =
-                  doc['socialMediaLink'] as List; // Cast to List
-              for (var socialLinkData in socialLinkList) {
-                print(
-                    'Social Link: $socialLinkData'); // Print each social link object
-              }
-              return socialLinkList;
-            })
-            .map((socialLinkData) => SocialLinkModel.fromJson(socialLinkData))
-            .toList();
-        print('Results ====> $socialLinks'); // Print the final socialLinks list
+          .map((docSnapshot) {
+        final socialLinksData = docSnapshot['socialMediaLink'] ?? [];
+        print('Social Links Data: $socialLinksData'); // Print social links data
+
+        final socialLinks = <SocialLinkModel>[];
+        for (var socialLinkData in socialLinksData) {
+          print('Social Link Data: $socialLinkData'); // Print social link data
+          final socialLinkModel = SocialLinkModel.fromJson(socialLinkData);
+          socialLinks.add(socialLinkModel);
+        }
+
+        print('Social Links: $socialLinks'); // Print social links
         return socialLinks;
       });
     } catch (error) {
@@ -122,6 +165,20 @@ class FirebaseService {
     String res = 'Some error occurred';
     try {
       User? currentUser = auth.currentUser;
+
+      if (currentUser == null) {
+        return 'User not logged in';
+      }
+      var cred = EmailAuthProvider.credential(
+          email: currentUser.email!, password: password);
+      await currentUser.reauthenticateWithCredential(cred).then((value) {
+        currentUser.updatePassword(password);
+      }).catchError((error) {
+        print(' checking password ${error.toString()}');
+      });
+      print(' new password $cred');
+      print(' email ${currentUser.email}');
+
       await _firestore.collection('users').doc(currentUser!.uid).update({
         'password': password,
       });
