@@ -115,7 +115,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
           stream: FirebaseService().getAllSocialMediaLinks(),
           builder: (context, AsyncSnapshot<List<SocialLinkModel>> snapshot) {
             if (snapshot.hasData) {
-              final results = snapshot.data! ?? [];
+              final results = snapshot.data!;
               print('Results ===> $results');
               // addedSocialsList = results
               //     .map((e) => SocialLinkModel.fromJson(e.data()))
@@ -149,6 +149,8 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                               return StatefulBuilder(builder:
                                   (BuildContext context,
                                       StateSetter setState1) {
+                                        print('Screen Height: $screenHeight');
+                                        print('Screen Width: $screenWidth');
                                 return AddNewSocialWidget(
                                   screenHeight: screenHeight,
                                   screenWidth: screenWidth,
@@ -223,17 +225,17 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                     },
                     onLongPress: () {
                       print('CLicked');
-                      setState(() {
-                        _isSocialChecked = !_isSocialChecked;
-                      });
-                      selectedSocialsToSendList.add(SocialLinkModel(
-                        text: data.text,
-                        imagePath: data.imagePath,
-                        conColor: data.conColor,
-                        iconColor: data.iconColor,
-                        // id: index,
-                        linkUrl: data.linkUrl,
-                      ));
+                      // setState(() {
+                      //   _isSocialChecked = !_isSocialChecked;
+                      // });
+                      // selectedSocialsToSendList.add(SocialLinkModel(
+                      //   text: data.text,
+                      //   imagePath: data.imagePath,
+                      //   conColor: data.conColor,
+                      //   iconColor: data.iconColor,
+                      //   // id: index,
+                      //   linkUrl: data.linkUrl,
+                      // ));
                     },
                     child: SocialMediaTile(
                       socialImage: data.imagePath!,
@@ -243,7 +245,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                       isSocialChecked: _isSocialChecked,
                       onSelected: (value) {
                         setState(() {
-                          _isSocialChecked = !_isSocialChecked;
+                          _isSocialChecked = value!;
                         });
                         if (_isSocialChecked == true) {
                           selectedSocialsToSendList.add(
@@ -258,16 +260,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                           );
                           print("Social added: $selectedSocialsToSendList");
                         } else {
-                          selectedSocialsToSendList.remove(
-                            SocialLinkModel(
-                              text: data.text,
-                              imagePath: data.imagePath,
-                              conColor: data.conColor,
-                              iconColor: data.iconColor,
-                              // id: index,
-                              linkUrl: data.linkUrl,
-                            ),
-                          );
+                          selectedSocialsToSendList.removeAt(index);
                           print("Social removed: $selectedSocialsToSendList");
                         }
                       },
@@ -365,7 +358,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                   width: 24,
                 ),
                 onTap: () {
-                  List<String> allLinks = extractLinkUrls(socialLinks);
+                  // List<String> allLinks = extractLinkUrls(socialLinks);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

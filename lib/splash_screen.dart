@@ -6,7 +6,7 @@ import 'package:flutter_animator/flutter_animator.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
-import 'package:socialscan/views/home/screens/home_sceen.dart';
+import 'package:socialscan/views/home/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

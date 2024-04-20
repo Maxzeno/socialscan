@@ -10,7 +10,7 @@ import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
 
 import '../models/user_model.dart';
-import '../views/home/screens/home_sceen.dart';
+import '../views/home/screens/home_screen.dart';
 
 class UserProvider extends ChangeNotifier {
   TextEditingController firstName = TextEditingController();

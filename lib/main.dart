@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/splash_screen.dart';
+import 'package:socialscan/view_model/number_provider.dart';
 import 'package:socialscan/view_model/user_provider.dart';
 
 void main() async {
@@ -17,8 +18,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NumberProvider(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Social Scan',
         debugShowCheckedModeBanner: false,

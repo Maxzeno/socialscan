@@ -25,6 +25,9 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -68,7 +71,10 @@ class _SettingScreenState extends State<SettingScreen> {
               const SizedBox(
                 height: 8,
               ),
-              generalOptions(userProvider),
+              GeneralOptions(
+                context: context,
+                userProvider: userProvider,
+              ),
               const SizedBox(
                 height: 35,
               ),
@@ -146,7 +152,25 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget generalOptions(UserProvider userProvider) {
+  // Widget generalOptions(UserProvider userProvider) {
+  //   return ;
+  // }
+}
+
+class GeneralOptions extends StatelessWidget {
+  const GeneralOptions({
+    super.key,
+    required this.context,
+    required this.userProvider,
+  });
+
+  final BuildContext context;
+  final UserProvider userProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       // height: 221,
       width: double.infinity,
@@ -209,9 +233,143 @@ class _SettingScreenState extends State<SettingScreen> {
             text: 'Log Out',
             icon: const Icon(
               Icons.exit_to_app,
+              size: 20,
+              color: Colors.red,
             ),
             onTap: () {
-              userProvider.signOut(context);
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                builder: (context) {
+                  return Container(
+                    // decoration: const BoxDecoration(
+                    //   color: Colors.white,
+                    //   borderRadius: BorderRadius.only(
+                    //     topLeft: Radius.circular(20),
+                    //     topRight: Radius.circular(20),
+                    //   ),
+                    // ),
+                    height: screenHeight * 0.48,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenHeight / 40,
+                      vertical: screenHeight / 35,
+                    ),
+                    child: Column(
+                      children: [
+                        const Expanded(
+                          child: Center(
+                            child: Text(
+                              "?",
+                              style: TextStyle(
+                                fontSize: 66,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            const Text(
+                              "Logout?",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.01,
+                            ),
+                            Text(
+                              "Are you sure you want to logout?",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.02,
+                            ),
+                            SizedBox(
+                              height: 54,
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                  ),
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(
+                                      width: 1,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  userProvider.signOut(context);
+                                },
+                                child: const Text(
+                                  'Yes, Logout',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.015,
+                            ),
+                            SizedBox(
+                              height: 54,
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                  ),
+                                  side: MaterialStateProperty.all(
+                                    BorderSide(
+                                      width: 1,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'No, Cancel',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             },
           ),
         ],
