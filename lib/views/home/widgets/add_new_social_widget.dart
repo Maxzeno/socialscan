@@ -36,7 +36,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.screenHeight * 0.45,
+      height: widget.screenHeight * 0.46,
       width: widget.screenWidth,
       padding: EdgeInsets.symmetric(
         horizontal: widget.screenHeight / 40,
@@ -63,8 +63,9 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
+           SizedBox(
+            // height: 20,
+            height: widget.screenHeight * 0.027,
           ),
           Text(
             addNewSocial,
@@ -73,11 +74,12 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(
-            height: 35,
+           SizedBox(
+            height: widget.screenHeight * 0.046,
           ),
           Container(
-            width: 338,
+            // width: 338,
+            width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 19),
             decoration: BoxDecoration(
               color: const Color(0xFFECECEC),
@@ -129,14 +131,15 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 18,
+          SizedBox(
+            height: widget.screenHeight * 0.024,
           ),
           ReusableTextField(
             controller: widget.linkController,
             onTap: () {},
             hintText: 'Paste Link',
-            width: 338,
+            // width: 338,
+            width: double.infinity,
             obscure: false,
             iconButton: InkWell(
               onTap: () async {
@@ -153,8 +156,8 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 30,
+          SizedBox(
+            height: widget.screenHeight * 0.040,
           ),
           ButtonTile(
               text: 'Add',

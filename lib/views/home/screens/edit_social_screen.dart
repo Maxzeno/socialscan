@@ -73,15 +73,15 @@ class EditSocialDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 40,
                 ),
-                Text(
-                  'Select Social Media',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black38,
-                  ),
-                ),
-                const SizedBox(height: 5),
+                // Text(
+                //   'Social Media',
+                //   style: GoogleFonts.montserrat(
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w500,
+                //     color: Colors.black38,
+                //   ),
+                // ),
+                // const SizedBox(height: 5),
                 Container(
                   height: 53,
                   width: double.infinity,
@@ -151,18 +151,35 @@ class EditSocialDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                Center(
-                  child: TextButton(
+                SizedBox(
+                  height: 54,
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      side: MaterialStateProperty.all(
+                        const BorderSide(
+                          width: 1,
+                          color: ProjectColors.mainPurple,
+                        ),
+                      ),
+                    ),
                     onPressed: () {},
                     child: const Text(
                       'Delete',
                       style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: ProjectColors.mainPurple,
+                        color: ProjectColors.mainPurple,
                       ),
                     ),
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
               ],
             ),
           ),

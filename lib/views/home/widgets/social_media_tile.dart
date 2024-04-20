@@ -28,11 +28,11 @@ class SocialMediaTile extends StatefulWidget {
 class _SocialMediaTileState extends State<SocialMediaTile> {
   bool _isChecked = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _isChecked = widget.isSocialChecked;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _isChecked = widget.isSocialChecked;
+  // }
 
   @override
   Widget build(BuildContext context) {

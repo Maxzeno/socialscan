@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:socialscan/views/home/screens/preview_scan_link_screen.dart';
@@ -20,9 +19,9 @@ class _ScanQrCodeState extends State<ScanQrCode> {
     super.initState();
 
     _mobileScannerController = MobileScannerController(
-            detectionSpeed: DetectionSpeed.noDuplicates,
-            returnImage: true,
-          );
+      detectionSpeed: DetectionSpeed.noDuplicates,
+      returnImage: true,
+    );
   }
 
   @override
@@ -31,7 +30,6 @@ class _ScanQrCodeState extends State<ScanQrCode> {
 
     _mobileScannerController.dispose();
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +42,18 @@ class _ScanQrCodeState extends State<ScanQrCode> {
             // final Uint8List? image = capture.image;
             for (final barcode in barcodes) {
               print("Barcode found! ${barcode.rawValue}");
-              setState(() {
-                extractedLinks = barcode.rawValue?.split('|') ?? [];
-              });
+                extractedLinks = barcode.rawValue?.split(';') ?? [];
               if (capture.image != null) {
-                for (var link in extractedLinks) {
+                // for (var link in extractedLinks) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => PreviewScanLinkScreen(
-                              data: link,
-                            )),
+                      builder: (_) => PreviewScanLinkScreen(
+                        data: extractedLinks,
+                      ),
+                    ),
                   );
-                }
+                // }
                 // showDialog(
                 //   context: context,
                 //   builder: (context) {
@@ -85,7 +82,6 @@ class _ScanQrCodeState extends State<ScanQrCode> {
             }
           },
         ),
-
         QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
       ],
     );

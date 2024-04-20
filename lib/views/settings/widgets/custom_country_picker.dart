@@ -42,7 +42,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
       height: 50,
       child: TextFormField(
         keyboardType: TextInputType.number,
-        initialValue: widget.initialValue ?? '',
+        initialValue: widget.initialValue,
         textInputAction: TextInputAction.done,
         style: GoogleFonts.montserrat(
           fontSize: 14,
