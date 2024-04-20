@@ -56,14 +56,14 @@ class UserModel {
     var documentSnapShot = snapshot.data() as Map<String, dynamic>;
     print('User Document snapshot==========>$documentSnapShot<========');
     return UserModel(
-      firstName: documentSnapShot['firstName'],
-      lastName: documentSnapShot['lastName'],
-      phoneNumber: documentSnapShot['phoneNumber'],
-      password: documentSnapShot['password'],
-      email: documentSnapShot['email'],
-      profession: documentSnapShot['profession'],
-      id: documentSnapShot['id'],
-      image: documentSnapShot['image'],
+      firstName: documentSnapShot['firstName'] ?? '',
+      lastName: documentSnapShot['lastName'] ?? '',
+      phoneNumber: documentSnapShot['phoneNumber'] ?? '',
+      password: documentSnapShot['password'] ?? '',
+      email: documentSnapShot['email'] ?? '',
+      profession: documentSnapShot['profession'] ?? '',
+      id: documentSnapShot['id'] ?? '',
+      image: documentSnapShot['image'] ?? '',
       socialMediaLink: (documentSnapShot['socialMediaLink'] as List<dynamic>?)
               ?.map((linkJson) => SocialLinkModel.fromJson(linkJson))
               .toList() ??
