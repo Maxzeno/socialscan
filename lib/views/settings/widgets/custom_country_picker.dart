@@ -4,10 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
 class CustomCountryField extends StatefulWidget {
-  final String initialValue;
+  final String? initialValue;
+  CountryCode? countryCode;
+  final dynamic controller;
+  final VoidCallback? onTap;
+
   final dynamic onSave;
-  const CustomCountryField(
-      {super.key, required this.initialValue, this.onSave});
+  CustomCountryField({
+    super.key,
+    this.initialValue,
+    this.onSave,
+    this.countryCode,
+    this.controller,
+    this.onTap,
+  });
 
   @override
   State<CustomCountryField> createState() => _CustomCountryFieldState();
@@ -15,7 +25,6 @@ class CustomCountryField extends StatefulWidget {
 
 class _CustomCountryFieldState extends State<CustomCountryField> {
   final countryPicker = const FlCountryCodePicker();
-  CountryCode? countryCode;
 
   // void _setCountryCodeFromInitialValue() {
   //   if (widget.initialValue.isNotEmpty) {
@@ -42,6 +51,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
       height: 50,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        controller: widget.controller,
         initialValue: widget.initialValue,
         textInputAction: TextInputAction.done,
         style: GoogleFonts.montserrat(
@@ -52,16 +62,23 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
         onSaved: widget.onSave,
         decoration: InputDecoration(
           border: InputBorder.none,
+          hintText: 'Enter Phone number',
+          hintStyle: GoogleFonts.montserrat(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.black38,
+          ),
           contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
           prefixIcon: GestureDetector(
-            onTap: () async {
-              final code = await countryPicker.showPicker(context: context);
-              setState(() {
-                countryCode = code;
-              });
-            },
+            onTap: widget.onTap,
+            // onTap: () async {
+            //   final code = await countryPicker.showPicker(context: context);
+            //   setState(() {
+            //     widget.countryCode = code;
+            //   });
+            // },
             child: Container(
-              width: 75,
+              width: 85,
               margin: const EdgeInsets.symmetric(
                 horizontal: 19,
                 vertical: 10,
@@ -82,15 +99,15 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      child:
-                          countryCode?.flagImage(fit: BoxFit.fill, width: 19),
+                      child: widget.countryCode
+                          ?.flagImage(fit: BoxFit.fill, width: 19),
                     ),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    countryCode?.dialCode ?? "+1",
+                    widget.countryCode?.dialCode ?? "+1",
                     style: GoogleFonts.montserrat(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

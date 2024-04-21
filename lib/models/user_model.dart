@@ -6,7 +6,7 @@ class UserModel {
   final String image;
   final String firstName;
   final String lastName;
-  final dynamic phoneNumber;
+  final String phoneNumber;
   final String email;
   String? password;
   final String? profession;
@@ -29,6 +29,7 @@ class UserModel {
     data['lastName'] = lastName;
     data['email'] = email;
     data['password'] = password;
+    data['phoneNumber'] = phoneNumber;
     data['profession'] = profession;
     data['id'] = id;
     data['image'] = image;

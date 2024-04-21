@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
@@ -18,14 +19,17 @@ class UserProvider extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController retypePasswordController = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   TextEditingController profession = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
   final FirebaseService _authService = FirebaseService();
+  final countryPicker = const FlCountryCodePicker();
 
   UserModel? _userModel;
   Uint8List? image;
+
+  CountryCode? countryCode;
 
   bool isLoading = false;
   bool _isSignedIn = false;
@@ -79,13 +83,14 @@ class UserProvider extends ChangeNotifier {
 
       await Future.delayed(const Duration(seconds: 2));
       String res = await _authService.createUser(
-          email: emailController.text,
-          firstName: firstName.text,
-          lastName: lastName.text,
-          password: passwordController.text,
-          profession: profession.text,
-          context: context,
-          phoneNumber: phoneNumber.text);
+        email: emailController.text,
+        firstName: firstName.text,
+        lastName: lastName.text,
+        password: passwordController.text,
+        profession: profession.text,
+        context: context,
+        phoneNumber: '${countryCode!.dialCode}-${phoneNumberController.text}',
+      );
 
       isLoading = false;
       notifyListeners();
@@ -103,7 +108,11 @@ class UserProvider extends ChangeNotifier {
     passwordController.clear();
     firstName.clear();
     lastName.clear();
-    phoneNumber.clear();
+    phoneNumberController.clear();
+    profession.clear();
+    retypePasswordController.clear();
+    countryCode = null;
+
     notifyListeners();
   }
 
@@ -150,5 +159,13 @@ class UserProvider extends ChangeNotifier {
     } catch (e) {
       print('Failed to sign out: $e');
     }
+  }
+
+  selectCountryCode(BuildContext context) async {
+    final code = await countryPicker.showPicker(context: context);
+    if (code != null) {
+      countryCode = code;
+    }
+    notifyListeners();
   }
 }

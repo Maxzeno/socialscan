@@ -9,7 +9,6 @@ import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/user_provider.dart';
-import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
 
 import '../../../models/user_model.dart';
 import '../../../utils/frosted_glass_box.dart';
@@ -125,8 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     background: Center(
-                      child: userModel.image != null &&
-                              userModel.image.isNotEmpty &&
+                      child: userModel.image.isNotEmpty &&
                               (userProvider.image == null ||
                                   userProvider.image!.isEmpty)
                           ? Image.network(
@@ -192,12 +190,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  CustomCountryField(
+                  ReusableTextField(
+                    // controller: nameController,
                     initialValue: userModel.phoneNumber,
-                    onSave: (val) {
+                    obscure: false,
+                    iconButton: null,
+                    onSaved: (val) {
                       phoneNumber = val!;
                     },
+                    onTap: () {},
                   ),
+
                   const SizedBox(
                     height: 25,
                   ),

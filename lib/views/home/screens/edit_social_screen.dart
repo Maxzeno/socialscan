@@ -3,24 +3,38 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
+import 'package:socialscan/utils/info_snackbar.dart';
+import 'package:socialscan/utils/services/firebase_services.dart';
 
 import '../../../utils/textfield.dart';
 
-class EditSocialDetailsScreen extends StatelessWidget {
+class EditSocialDetailsScreen extends StatefulWidget {
   final Color socialColor;
   final String socialText;
   final dynamic icon;
   final String linkUrl;
-  const EditSocialDetailsScreen(
-      {super.key,
-      required this.socialColor,
-      required this.socialText,
-      this.icon,
-      required this.linkUrl});
+  final String id;
+  const EditSocialDetailsScreen({
+    super.key,
+    required this.socialColor,
+    required this.socialText,
+    this.icon,
+    required this.linkUrl,
+    required this.id,
+  });
 
   @override
+  State<EditSocialDetailsScreen> createState() =>
+      _EditSocialDetailsScreenState();
+}
+
+String link = '';
+
+class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
-    print('this link ====> $linkUrl');
+    print('this link ====> ${widget.linkUrl}');
+    print('this id ====> ${widget.id}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -50,25 +64,25 @@ class EditSocialDetailsScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 1, color: Colors.white),
-                      color: socialColor,
+                      color: widget.socialColor,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 10,
                           // blurStyle: BlurStyle.outer,
-                          color: socialColor,
+                          color: widget.socialColor,
                         ),
                       ],
                     ),
                     child: Center(
                       child: SvgPicture.asset(
-                        icon,
+                        widget.icon,
                         height: 60,
                         width: 60,
                       ),
                     ),
                   ),
-                  text: socialText,
-                  color: socialColor.withOpacity(0.1),
+                  text: widget.socialText,
+                  color: widget.socialColor.withOpacity(0.1),
                 ),
                 const SizedBox(
                   height: 40,
@@ -93,10 +107,10 @@ class EditSocialDetailsScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: socialColor,
+                        backgroundColor: widget.socialColor,
                         radius: 16,
                         child: SvgPicture.asset(
-                          icon,
+                          widget.icon,
                           height: 20,
                           width: 20,
                         ),
@@ -105,7 +119,7 @@ class EditSocialDetailsScreen extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        socialText,
+                        widget.socialText,
                         style: GoogleFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -127,10 +141,9 @@ class EditSocialDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 ReusableTextField(
-                  // controller: linkController,
                   onTap: () {},
                   hintText: 'Paste Link',
-                  initialValue: linkUrl,
+                  initialValue: widget.linkUrl,
                   width: double.infinity,
                   obscure: false,
                   iconButton: const InkWell(
@@ -140,11 +153,25 @@ class EditSocialDetailsScreen extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
+                  onSaved: (value) {
+                    link = value!;
+                  },
                 ),
                 const SizedBox(
                   height: 110,
                 ),
-                const ButtonTile(
+                ButtonTile(
+                  onTap: () {
+                    FirebaseService().editSocialLink(widget.id, link).then(
+                          (value) => infoSnackBar(
+                              context,
+                              'Social Updated Successful',
+                              const Duration(milliseconds: 400),
+                              Colors.green),
+                        );
+                    link = '';
+                    setState(() {});
+                  },
                   text: 'Save',
                   boxRadius: 8,
                 ),
@@ -168,7 +195,20 @@ class EditSocialDetailsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      FirebaseService()
+                          .deleteSocialLink(
+                            widget.id,
+                          )
+                          .then(
+                            (value) => infoSnackBar(
+                                context,
+                                'Deleted Social Successful',
+                                const Duration(milliseconds: 300),
+                                Colors.green),
+                          );
+                      Navigator.pop(context);
+                    },
                     child: const Text(
                       'Delete',
                       style: TextStyle(

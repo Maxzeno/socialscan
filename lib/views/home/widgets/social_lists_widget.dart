@@ -50,6 +50,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
 
   List<SocialLinkModel> socialLinks = [
     SocialLinkModel(
+      id: newLinkId,
       text: faceBook,
       imagePath: faceBookIcon,
       conColor: fbConColor,
@@ -57,6 +58,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
       linkUrl: '',
     ),
     SocialLinkModel(
+      id: newLinkId,
       text: instagram,
       imagePath: instagramIcon,
       conColor: igConColor,
@@ -64,6 +66,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
       linkUrl: '',
     ),
     SocialLinkModel(
+      id: newLinkId,
       text: whatsApp,
       imagePath: whatsAppIcon,
       conColor: wsaConColor,
@@ -71,6 +74,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
       linkUrl: '',
     ),
     SocialLinkModel(
+      id: newLinkId,
       text: twitter,
       imagePath: twitterIcon,
       conColor: xConColor,
@@ -78,6 +82,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
       linkUrl: '',
     ),
     SocialLinkModel(
+      id: newLinkId,
       text: linkedin,
       imagePath: linkedInIcon,
       conColor: liConColor,
@@ -149,8 +154,8 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                               return StatefulBuilder(builder:
                                   (BuildContext context,
                                       StateSetter setState1) {
-                                        print('Screen Height: $screenHeight');
-                                        print('Screen Width: $screenWidth');
+                                print('Screen Height: $screenHeight');
+                                print('Screen Width: $screenWidth');
                                 return AddNewSocialWidget(
                                   screenHeight: screenHeight,
                                   screenWidth: screenWidth,
@@ -215,6 +220,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => EditSocialDetailsScreen(
+                            id: data.id!,
                             socialColor: data.conColor!,
                             socialText: data.text,
                             icon: data.imagePath,
