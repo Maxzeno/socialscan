@@ -5,6 +5,8 @@ String colorToHex(Color color) {
   return color.value.toRadixString(16);
 }
 
+final String newLinkId = DateTime.now().millisecondsSinceEpoch.toString();
+
 const fbConColor = ProjectColors.fb;
 final fbIconColor = fbConColor.withOpacity(0.5);
 

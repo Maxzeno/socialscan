@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: BounceIn(
+        child: HeartBeat(
           preferences: const AnimationPreferences(
             duration: Duration(seconds: 2),
             autoPlay: AnimationPlayStates.Loop,

@@ -17,59 +17,33 @@ class FirebaseService {
 
   var user = auth.currentUser;
 
-  // Future<String> addSocialLink(SocialLinkModel newSocialLink) async {
-  //   try {
-  //     User? currentUser = auth.currentUser;
-  //     if (currentUser == null) {
-  //       return 'User not logged in.';
-  //     }
-  //     DocumentReference userDocRef =
-  //         _firestore.collection('users').doc(currentUser.uid);
-  //     DocumentSnapshot userDoc = await userDocRef.get();
-  //
-  //     // Check if the user document exists
-  //     if (!userDoc.exists) {
-  //       return 'User document does not exist.';
-  //     }
-  //
-  //     // Update the social link list in the user data
-  //     List<Map<String, dynamic>> socialLinksData =
-  //         List.from(userDoc['socialMediaLink']);
-  //     socialLinksData.add(newSocialLink.toJson());
-  //     await userDocRef.update({'socialMediaLink': socialLinksData});
-  //     return 'Social link added successfully!';
-  //   } catch (error) {
-  //     print("Error adding social link: $error");
-  //     return 'Error adding social link: $error';
-  //   }
-  // }
-
   Future<String> addSocialLink(SocialLinkModel newSocialLink) async {
     try {
       User? currentUser = auth.currentUser;
       if (currentUser == null) {
         return 'User not logged in.';
       }
-      DocumentReference userDocRef =
-          _firestore.collection('users').doc(currentUser.uid);
-      DocumentSnapshot userDoc = await userDocRef.get();
 
-      if (!userDoc.exists) {
-        return 'User document does not exist.';
-      }
+      CollectionReference socialLinksRef = _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('socialMediaLinks');
 
-      List<dynamic> socialLinksData = List.from(userDoc['socialMediaLink']);
+      // Check if the social media link already exists
+      QuerySnapshot snapshot = await socialLinksRef
+          .where('text', isEqualTo: newSocialLink.text)
+          .get();
 
-      bool linkExists = socialLinksData.any((linkData) =>
-          SocialLinkModel.fromJson(linkData).text == newSocialLink.text);
-
-      if (linkExists) {
+      if (snapshot.docs.isNotEmpty) {
+        print('it exits');
         return 'Social link already exists!';
       }
 
-      socialLinksData.add(newSocialLink.toJson());
+      String newLinkId = DateTime.now().millisecondsSinceEpoch.toString();
+      newSocialLink.id = newLinkId;
 
-      await userDocRef.update({'socialMediaLink': socialLinksData});
+      await socialLinksRef.doc(newLinkId).set(newSocialLink.toJson());
+
       return 'Social link added successfully!';
     } catch (error) {
       print("Error adding social link: $error");
@@ -77,45 +51,48 @@ class FirebaseService {
     }
   }
 
-  // Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
-  //   try {
-  //     User? currentUser = auth.currentUser;
-  //     if (currentUser == null) {
-  //       print(' For get social link =====> User not logged in.');
-  //     }
-  //     print('getting data from Firebase'); // Indicate start of data fetching
-  //     // Assuming 'users' is the collection where user data is stored
-  //     return FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(currentUser!.uid)
-  //         .snapshots()
-  //         .map((querySnapshot) {
-  //       final socialLinks = querySnapshot
-  //           .data()!
-  //           .where((doc) => doc['socialMediaLink'] != null) // Check for null
-  //           .expand((doc) {
-  //             print(
-  //                 'Document data: ${doc.data()}'); // Print entire document data (optional)
-  //             final socialLinkList =
-  //                 doc['socialMediaLink'] as List; // Cast to List
-  //             for (var socialLinkData in socialLinkList) {
-  //               print(
-  //                   'Social Link: $socialLinkData'); // Print each social link object
-  //             }
-  //             return socialLinkList;
-  //           })
-  //           .map((socialLinkData) => SocialLinkModel.fromJson(socialLinkData))
-  //           .toList();
-  //       print('Results ====> $socialLinks'); // Print the final socialLinks list
-  //       return socialLinks;
-  //     });
-  //   } catch (error) {
-  //     // Handle errors here
-  //     print('Error fetching social media links: $error');
-  //     // Return an empty stream in case of error
-  //     return Stream.value([]);
-  //   }
-  // }
+  Future<String> editSocialLink(String socialLinkId, String newLinkUrl) async {
+    try {
+      User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        return 'User not logged in.';
+      }
+
+      CollectionReference socialLinksRef = _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('socialMediaLinks');
+
+      // Update the link URL of the specified social media link
+      await socialLinksRef.doc(socialLinkId).update({'linkUrl': newLinkUrl});
+
+      return 'Social link updated successfully!';
+    } catch (error) {
+      print("Error editing social link: $error");
+      return 'Error editing social link: $error';
+    }
+  }
+
+  Future<String> deleteSocialLink(String socialLinkId) async {
+    try {
+      User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        return 'User not logged in.';
+      }
+
+      CollectionReference socialLinksRef = _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('socialMediaLinks');
+
+      await socialLinksRef.doc(socialLinkId).delete();
+
+      return 'Social link deleted successfully!';
+    } catch (error) {
+      print("Error deleting social link: $error");
+      return 'Error deleting social link: $error';
+    }
+  }
 
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
@@ -126,21 +103,19 @@ class FirebaseService {
       }
 
       print('Getting data from Firebase'); // Indicate start of data fetching
-      return FirebaseFirestore.instance
+      CollectionReference socialLinksRef = _firestore
           .collection('users')
           .doc(currentUser.uid)
-          .snapshots()
-          .map((docSnapshot) {
-        final socialLinksData = docSnapshot['socialMediaLink'] ?? [];
-        print('Social Links Data: $socialLinksData'); // Print social links data
+          .collection('socialMediaLinks');
 
-        final socialLinks = <SocialLinkModel>[];
-        for (var socialLinkData in socialLinksData) {
-          print('Social Link Data: $socialLinkData'); // Print social link data
+      return socialLinksRef.snapshots().map((querySnapshot) {
+        final List<SocialLinkModel> socialLinks = [];
+        for (var doc in querySnapshot.docs) {
+          final socialLinkData = doc.data()
+              as Map<String, dynamic>; // Cast to Map<String, dynamic>
           final socialLinkModel = SocialLinkModel.fromJson(socialLinkData);
           socialLinks.add(socialLinkModel);
         }
-
         print('Social Links: $socialLinks'); // Print social links
         return socialLinks;
       });
@@ -170,7 +145,7 @@ class FirebaseService {
       print(' new password $cred');
       print(' email ${currentUser.email}');
 
-      await _firestore.collection('users').doc(currentUser!.uid).update({
+      await _firestore.collection('users').doc(currentUser.uid).update({
         'password': password,
       });
 
@@ -310,7 +285,7 @@ class FirebaseService {
           password.isNotEmpty ||
           profession.isNotEmpty) {
         UserCredential userCredential = await auth
-            .createUserWithEmailAndPassword(email: email, password: password!);
+            .createUserWithEmailAndPassword(email: email, password: password);
 
         UserModel userModel = UserModel(
           id: userCredential.user!.uid,

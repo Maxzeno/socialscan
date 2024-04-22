@@ -9,6 +9,7 @@ import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
+import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -108,9 +109,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Expanded(
                       child: ReusableTextField(
-                        textInputType: TextInputType.number,
-                        controller: userProvider.phoneNumber,
-                        hintText: 'Phone number',
+                        textInputType: TextInputType.name,
+                        controller: userProvider.profession,
+                        hintText: 'Profession',
                         obscure: false,
                         onTap: () {},
                         iconButton: null,
@@ -121,13 +122,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                ReusableTextField(
-                  textInputType: TextInputType.name,
-                  controller: userProvider.profession,
-                  hintText: 'Profession',
-                  obscure: false,
-                  onTap: () {},
-                  iconButton: null,
+                CustomCountryField(
+                  controller: userProvider.phoneNumberController,
+                  countryCode: userProvider.countryCode,
+                  onTap: () {
+                    userProvider.selectCountryCode(context);
+                  },
                 ),
                 const SizedBox(
                   height: 18,
@@ -213,7 +213,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ButtonTile(
                   text: create,
                   onTap: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate() &&
+                        userProvider.countryCode != null) {
                       userProvider.registerAccount(context);
                       print('Registration successful!');
                     }

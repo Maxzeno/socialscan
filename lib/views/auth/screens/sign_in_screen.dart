@@ -5,6 +5,7 @@ import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
+import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
 
 import '../../../utils/colors.dart';
 import '../../../view_model/user_provider.dart';
@@ -111,7 +112,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpScreen()));
                     },
                     child: Text(
                       signUp,
