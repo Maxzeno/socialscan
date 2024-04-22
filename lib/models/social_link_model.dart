@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class SocialLinkModel {
+  String? id;
   final String text;
   final String? imagePath;
   final Color? conColor;
@@ -9,6 +10,7 @@ class SocialLinkModel {
   SocialLinkModel({
     required this.text,
     this.imagePath,
+    this.id,
     this.conColor,
     this.iconColor,
     this.linkUrl = '',
@@ -18,10 +20,10 @@ class SocialLinkModel {
     return {
       'text': text,
       'imagePath': imagePath,
-      'conColor':
-          conColor?.toHex(), // Check for nullability
+      'conColor': conColor?.toHex(), // Check for nullability
       'iconColor': iconColor?.toHex(), // Check for nullability
       'linkUrl': linkUrl,
+      'id': id,
     };
   }
 
@@ -39,6 +41,7 @@ class SocialLinkModel {
                   0xFF000000)
           : null,
       linkUrl: json['linkUrl'],
+      id: json['id'],
     );
   }
 }
