@@ -197,17 +197,24 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                     ),
                     onPressed: () {
                       FirebaseService()
-                          .deleteSocialLink(
-                            widget.id,
-                          )
-                          .then(
-                            (value) => infoSnackBar(
-                                context,
-                                'Deleted Social Successful',
-                                const Duration(milliseconds: 300),
-                                Colors.green),
-                          );
-                      Navigator.pop(context);
+                          .deleteSocialLink(widget.id)
+                          .then((value) {
+                        infoSnackBar(
+                          context,
+                          'Deleted Social Successful',
+                          const Duration(milliseconds: 200),
+                          Colors.green,
+                        );
+                        Navigator.pop(context);
+                      }).catchError((error) {
+                        print('Error deleting social link: $error');
+                        infoSnackBar(
+                          context,
+                          'Error deleting social link',
+                          const Duration(milliseconds: 200),
+                          Colors.red,
+                        );
+                      });
                     },
                     child: const Text(
                       'Delete',

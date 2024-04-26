@@ -32,6 +32,7 @@ class AddNewSocialWidget extends StatefulWidget {
 
 class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
   SocialLinkModel? selectedSocialMedia;
+  List<String> checkTextList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               ),
             ),
           ),
-           SizedBox(
+          SizedBox(
             // height: 20,
             height: widget.screenHeight * 0.027,
           ),
@@ -74,7 +75,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               fontWeight: FontWeight.w600,
             ),
           ),
-           SizedBox(
+          SizedBox(
             height: widget.screenHeight * 0.046,
           ),
           Container(
@@ -104,23 +105,29 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
                   });
                 },
                 items: widget.dropdownItems
+                    .where((SocialLinkModel value) {
+                      final matchingIndex = addedSocialsList.indexWhere(
+                          (socialLink) => socialLink.text == value.text);
+                      return matchingIndex < 0;
+                    })
                     .map<DropdownMenuItem<SocialLinkModel>>(
-                        (SocialLinkModel? value) {
-                  return DropdownMenuItem<SocialLinkModel>(
-                    value: value,
-                    enabled: !addedSocialsList.contains(value),
-                    child: value != null
-                        ? Text(
-                            value.text,
-                            style: TextStyle(
-                              color: addedSocialsList.contains(value)
-                                  ? Colors.grey
-                                  : Colors.black,
-                            ),
-                          )
-                        : const Text('Select Social Media'),
-                  );
-                }).toList(),
+                      (SocialLinkModel value) =>
+                          DropdownMenuItem<SocialLinkModel>(
+                        value: value,
+                        enabled: true,
+                        child: value != null
+                            ? Text(
+                                value.text,
+                                style: TextStyle(
+                                  color: addedSocialsList.contains(value)
+                                      ? Colors.grey
+                                      : Colors.black,
+                                ),
+                              )
+                            : const Text('Select Social Media'),
+                      ),
+                    )
+                    .toList(),
                 icon: SvgPicture.asset(
                   downArrowIcon,
                   height: 7,

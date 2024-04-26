@@ -121,10 +121,10 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
           builder: (context, AsyncSnapshot<List<SocialLinkModel>> snapshot) {
             if (snapshot.hasData) {
               final results = snapshot.data!;
-              print('Results ===> $results');
-              // addedSocialsList = results
-              //     .map((e) => SocialLinkModel.fromJson(e.data()))
-              //     .toList();
+
+              addedSocialsList = results
+                  .map((e) => SocialLinkModel.fromJson(e.toJson()))
+                  .toList();
 
               return GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -135,9 +135,11 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                   mainAxisSpacing: 20,
                 ),
                 shrinkWrap: true,
-                itemCount: results.length + 1,
+                itemCount: addedSocialsList.length < socialLinks.length
+                    ? addedSocialsList.length + 1
+                    : addedSocialsList.length,
                 itemBuilder: (context, index) {
-                  if (index == results.length) {
+                  if (index == addedSocialsList.length) {
                     return GestureDetector(
                       onTap: () {
                         // print(MediaQuery.of(context).size.height);
@@ -210,7 +212,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                       ),
                     );
                   }
-                  final data = results[index];
+                  final data = addedSocialsList[index];
                   // final link = data.linkUrl[0];
                   print('data =====> $data');
                   // print('link =====> $link');

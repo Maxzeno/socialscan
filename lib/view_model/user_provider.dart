@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/pick_image.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
 
 import '../models/user_model.dart';
-import '../views/home/screens/home_screen.dart';
 
 class UserProvider extends ChangeNotifier {
   TextEditingController firstName = TextEditingController();
@@ -133,7 +133,7 @@ class UserProvider extends ChangeNotifier {
       if (res == 'Successful') {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const BottomNav()),
             (route) => false);
         log('Login successful');
       }
