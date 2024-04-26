@@ -169,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  textTile(profession),
+                  textTile('Profession'),
                   const SizedBox(
                     height: 5,
                   ),
@@ -204,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  textTile(email),
+                  textTile('Email'),
                   const SizedBox(
                     height: 5,
                   ),
