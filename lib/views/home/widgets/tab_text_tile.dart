@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TabTextTile extends StatelessWidget {
   final String iconPath;
@@ -31,7 +30,7 @@ class TabTextTile extends StatelessWidget {
             ),
             Text(
               text,
-              style: GoogleFonts.montserrat(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),

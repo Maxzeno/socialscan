@@ -1,0 +1,1 @@
+int selectedCount = 0;

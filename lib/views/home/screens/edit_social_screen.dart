@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
@@ -89,7 +88,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                 ),
                 // Text(
                 //   'Social Media',
-                //   style: GoogleFonts.montserrat(
+                //   style: TextStyle(
                 //     fontSize: 14,
                 //     fontWeight: FontWeight.w500,
                 //     color: Colors.black38,
@@ -120,7 +119,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                       ),
                       Text(
                         widget.socialText,
-                        style: GoogleFonts.montserrat(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -131,9 +130,9 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                Text(
+                const Text(
                   'Link',
-                  style: GoogleFonts.montserrat(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: Colors.black38,
@@ -284,7 +283,7 @@ class BackgroundBox extends StatelessWidget {
                   ),
                   Text(
                     text,
-                    style: GoogleFonts.montserrat(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/splash_screen.dart';
 import 'package:socialscan/view_model/number_provider.dart';
@@ -32,9 +31,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
-          textTheme: GoogleFonts.montserratTextTheme(
-            Theme.of(context).textTheme,
-          ),
+          // textTheme: TextStyleTextTheme(
+          //   Theme.of(context).textTheme,
+          // ),
+          fontFamily: 'Montserrat',
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7F1F9A)),
           useMaterial3: false,
         ),

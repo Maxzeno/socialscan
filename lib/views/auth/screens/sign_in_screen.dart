@@ -33,7 +33,7 @@ class _SignInScreenState extends State<SignInScreen> {
             children: [
               Text(
                 helloWelcomeBack,
-                style: GoogleFonts.montserrat(
+                style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.w600,
                 ),
@@ -103,7 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   Text(
                     dontHaveAnAccount,
-                    style: GoogleFonts.montserrat(
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
@@ -119,7 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                     child: Text(
                       signUp,
-                      style: GoogleFonts.montserrat(
+                      style: TextStyle(
                         fontSize: 14,
                         color: ProjectColors.mainPurple.withOpacity(0.6),
                       ),

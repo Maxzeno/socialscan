@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/view_model/user_provider.dart';
-import 'package:socialscan/views/profile/screens/profile_screen.dart';
+import 'package:socialscan/views/profile/screens/edit_profile_screen.dart';
 import 'package:socialscan/views/settings/widgets/option_tile.dart';
 
 import 'change_password_screen.dart';
@@ -31,66 +30,54 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leadingWidth: 40,
+        toolbarHeight: 70,
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading: IconButton(
-          // constraints: BoxConstraints(),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_outlined,
-            color: ProjectColors.midBlack,
-          ),
-        ),
         title: Text(
           settings,
-          style: GoogleFonts.montserrat(
-            fontSize: 19,
+          style: const TextStyle(
+            fontSize: 22,
             fontWeight: FontWeight.w600,
             color: ProjectColors.midBlack,
           ),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 20,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              general,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
-              Text(
-                general,
-                style: GoogleFonts.montserrat(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GeneralOptions(
+              context: context,
+              userProvider: userProvider,
+            ),
+            const SizedBox(
+              height: 35,
+            ),
+            Text(
+              whileConnecting,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              GeneralOptions(
-                context: context,
-                userProvider: userProvider,
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              Text(
-                whileConnecting,
-                style: GoogleFonts.montserrat(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              whileConnectingOption(),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            whileConnectingOption(),
+          ],
         ),
       ),
     );
@@ -183,7 +170,7 @@ class GeneralOptions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           OptionTile(
-            text: profile,
+            text: "Edit Profile",
             icon: SvgPicture.asset(
               forwardIcon,
               height: 24,
@@ -193,7 +180,7 @@ class GeneralOptions extends StatelessWidget {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => const ProfileScreen(),
+                  builder: (context) => const EditProfileScreen(),
                 ),
               );
             },

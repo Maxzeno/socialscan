@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
-import 'package:socialscan/views/profile/screens/profile_screen.dart';
+import 'package:socialscan/views/home/screens/network_page.dart';
+import 'package:socialscan/views/settings/screens/settings_screen.dart';
 
 import 'views/home/screens/home_screen.dart';
 
@@ -17,13 +18,15 @@ class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
   List pages = [
     const HomeScreen(),
-    const ProfileScreen(),
+    // const ProfileScreen(),
+    const NetworkPage(),
+    const SettingScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: pages.length,
       child: WillPopScope(
         onWillPop: () async {
           if (_currentIndex > 0) {
@@ -35,6 +38,7 @@ class _BottomNavState extends State<BottomNav> {
         child: Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar: Container(
+            height: 66,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               gradient: const LinearGradient(
@@ -55,7 +59,7 @@ class _BottomNavState extends State<BottomNav> {
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
               selectedItemColor: ProjectColors.mainPurple,
-              unselectedItemColor: Colors.white,
+              unselectedItemColor: ProjectColors.midBlack,
               onTap: (index) {
                 print('Index is : $index');
                 if (mounted) {
@@ -64,31 +68,44 @@ class _BottomNavState extends State<BottomNav> {
                   });
                 }
               },
-              backgroundColor: const Color(0xFF000034),
+              backgroundColor: ProjectColors.mainGray,
               // activeColor: Colors.grey,
               // height: 55,
               items: [
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     _currentIndex == 0 ? homeIconFill : homeIcon,
-                    height: 24,
-                    width: 24,
-                    color: _currentIndex == 0
-                        ? ProjectColors.mainPurple
-                        : Colors.white,
+                    height: 20,
+                    width: 20,
+                    // color: _currentIndex == 0
+                    //     ? ProjectColors.mainPurple
+                    //     : ProjectColors.midBlack,
                   ),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      _currentIndex == 1 ? networkIconFill : networkIcon,
-                      height: 24,
-                      width: 24,
-                      color: _currentIndex == 1
-                          ? ProjectColors.mainPurple
-                          : Colors.white,
-                    ),
-                    label: 'Profile'),
+                  icon: SvgPicture.asset(
+                    _currentIndex == 1 ? networkIconFill : networkIcon,
+                    height: 20,
+                    width: 20,
+                    // color: _currentIndex == 0
+                    //     ? ProjectColors.mainPurple
+                    //     : ProjectColors.midBlack,
+                  ),
+                  label: 'Network',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    // _currentIndex == 1 ? networkIconFill : networkIcon,
+                    settingsIcon,
+                    height: 20,
+                    width: 20,
+                    color: _currentIndex == 2
+                        ? ProjectColors.mainPurple
+                        : ProjectColors.midBlack,
+                  ),
+                  label: 'Settings',
+                ),
               ],
             ),
           ),

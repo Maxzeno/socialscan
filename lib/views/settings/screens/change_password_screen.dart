@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
@@ -246,7 +245,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget textTile(String text) {
     return Text(
       text,
-      style: GoogleFonts.montserrat(
+      style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: ProjectColors.midBlack.withOpacity(0.4),
@@ -299,7 +298,7 @@ class BackgroundBox extends StatelessWidget {
                   ),
                   Text(
                     changePassword,
-                    style: GoogleFonts.montserrat(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
