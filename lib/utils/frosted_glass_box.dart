@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
@@ -68,7 +67,7 @@ class FrostedGlassBox extends StatelessWidget {
                   if (title != null)
                     Text(
                       title!,
-                      style: GoogleFonts.montserrat(
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -78,7 +77,7 @@ class FrostedGlassBox extends StatelessWidget {
                   ),
                   Text(
                     subTitle,
-                    style: GoogleFonts.montserrat(
+                    style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: ProjectColors.midBlack.withOpacity(0.5)),

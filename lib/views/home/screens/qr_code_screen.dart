@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
@@ -76,9 +75,9 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
             color: Colors.black,
           ),
         ),
-        title: Text(
+        title: const Text(
           'QR Code',
-          style: GoogleFonts.montserrat(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -113,11 +112,11 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
             const SizedBox(
               height: 27,
             ),
-            Align(
+            const Align(
               alignment: Alignment.center,
               child: Text(
                 'Scan QR with recipient device to connect.',
-                style: GoogleFonts.montserrat(
+                style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
                   color: ProjectColors.mainPurple,
@@ -134,38 +133,40 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
               boxRadius: 35,
               icon: SvgPicture.asset(shareIcon),
               color: const Color(0xFFECECEC),
-              onTap: () async{
+              onTap: () async {
                 final qrCode = QrCode.fromData(
-                    data: generateMultiLinkURI(widget.qrData!),
-                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                  );
+                  data: generateMultiLinkURI(widget.qrData!),
+                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                );
 
-                  final qrImage = QrImage(qrCode);
-                  final qrImageBytes = await qrImage.toImageAsBytes(
-                    size: 512,
-                    format: ImageByteFormat.png,
-                    decoration: PrettyQrDecoration(
-                      background: Colors.white,
-                      image: PrettyQrDecorationImage(
-                        padding: const EdgeInsets.all(10),
-                        image: AssetImage(socialIcon),
-                      ),
+                final qrImage = QrImage(qrCode);
+                final qrImageBytes = await qrImage.toImageAsBytes(
+                  size: 512,
+                  format: ImageByteFormat.png,
+                  decoration: PrettyQrDecoration(
+                    background: Colors.white,
+                    image: PrettyQrDecorationImage(
+                      padding: const EdgeInsets.all(10),
+                      image: AssetImage(socialIcon),
                     ),
-                  );
+                  ),
+                );
 
+                // Compress the image and write it to the file.
+                final compressedImage =
+                    await FlutterImageCompress.compressWithList(
+                  qrImageBytes!.buffer.asUint8List(),
+                  minWidth: 512,
+                  minHeight: 512,
+                  quality: 88,
+                );
 
-                  // Compress the image and write it to the file.
-                  final compressedImage =
-                      await FlutterImageCompress.compressWithList(
-                    qrImageBytes!.buffer.asUint8List(),
-                    minWidth: 512,
-                    minHeight: 512,
-                    quality: 88,
-                  );
-
-                  
-
-                 Share.file('Qr Code', 'qrcode.png', compressedImage, 'image/png',);
+                Share.file(
+                  'Qr Code',
+                  'qrcode.png',
+                  compressedImage,
+                  'image/png',
+                );
               },
             ),
             const SizedBox(
@@ -212,7 +213,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   print(downloadDirectoryPath);
                   // Create a file in the downloads directory
                   final File file = File(
-                    '$downloadDirectoryPath/qr_code${provider.number == 0 ? '' : provider.number.toString()}.png',
+                    '$downloadDirectoryPath/qr_code${provider.number == 0 ? '' : '(${provider.number.toString()})'}.png',
                   );
                   Provider.of<NumberProvider>(context, listen: false)
                       .incrementNumber();
@@ -228,11 +229,15 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   await file.writeAsBytes(compressedImage, flush: true);
 
                   // showDialog(context: context, builder: (context){
-                  //   return 
+                  //   return
                   // });
 
-                  infoSnackBar(context, 'Qr Code saved to $downloadDirectoryPath',
-                    const Duration(seconds: 5), Colors.green,);
+                  infoSnackBar(
+                    context,
+                    'Qr Code saved to $downloadDirectoryPath',
+                    const Duration(seconds: 5),
+                    Colors.green,
+                  );
 
                   // The image file is now saved in the device's temporary directory.
                   print('Image saved at ${file.path}');

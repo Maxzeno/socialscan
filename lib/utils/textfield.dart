@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
 class ReusableTextField extends StatelessWidget {
@@ -56,7 +55,7 @@ class ReusableTextField extends StatelessWidget {
           hintText: hintText,
           // labelText: 'i3dn3kdnk3dn',
           suffixIcon: iconButton ?? iconButton,
-          hintStyle: GoogleFonts.montserrat(
+          hintStyle: const TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w500,
             color: Colors.black38,

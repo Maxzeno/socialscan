@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class OptionTile extends StatelessWidget {
   final VoidCallback? onTap;
@@ -23,7 +22,7 @@ class OptionTile extends StatelessWidget {
             children: [
               Text(
                 text,
-                style: GoogleFonts.montserrat(
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
+import 'package:socialscan/utils/selected_count.dart';
 
 class SocialMediaTile extends StatefulWidget {
   final String socialText;
@@ -33,6 +33,16 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
   //   super.initState();
   //   _isChecked = widget.isSocialChecked;
   // }
+
+  void _onCheckboxSelected(bool? isSelected) {
+    setState(() {
+      if (isSelected == true) {
+        selectedCount++;
+      } else {
+        selectedCount--;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +87,7 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
               ),
               Text(
                 widget.socialText,
-                style: GoogleFonts.montserrat(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                   color: ProjectColors.midBlack.withOpacity(0.5),
@@ -96,8 +106,14 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
                   setState(() {
                     _isChecked = value!;
                     widget.onSelected(value);
+
+                    // _onCheckboxSelected(_isChecked);
+                    
                   });
+                  
+                  print(selectedCount);
                 },
+                // onChanged: widget.onSelected,
                 activeColor: ProjectColors.mainPurple,
                 checkColor: Colors.white,
                 side: const BorderSide(color: ProjectColors.midBlack),

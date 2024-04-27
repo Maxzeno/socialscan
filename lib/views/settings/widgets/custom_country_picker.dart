@@ -1,6 +1,5 @@
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
 class CustomCountryField extends StatefulWidget {
@@ -54,7 +53,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
         controller: widget.controller,
         initialValue: widget.initialValue,
         textInputAction: TextInputAction.done,
-        style: GoogleFonts.montserrat(
+        style: const TextStyle(
           fontSize: 14,
           color: ProjectColors.midBlack,
         ),
@@ -63,7 +62,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Enter Phone number',
-          hintStyle: GoogleFonts.montserrat(
+          hintStyle: const TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w500,
             color: Colors.black38,
@@ -78,7 +77,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
             //   });
             // },
             child: Container(
-              width: 85,
+              width: 80,
               margin: const EdgeInsets.symmetric(
                 horizontal: 19,
                 vertical: 10,
@@ -108,7 +107,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
                   ),
                   Text(
                     widget.countryCode?.dialCode ?? "+1",
-                    style: GoogleFonts.montserrat(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),

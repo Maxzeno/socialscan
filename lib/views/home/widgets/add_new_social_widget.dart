@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/lists/added_socials_list.dart';
+import 'package:socialscan/utils/lists/hex_color_list.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
+import 'package:socialscan/view_model/user_provider.dart';
+import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
 
 class AddNewSocialWidget extends StatefulWidget {
   final double screenHeight;
@@ -36,6 +41,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Container(
       height: widget.screenHeight * 0.46,
       width: widget.screenWidth,
@@ -141,28 +147,61 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
           SizedBox(
             height: widget.screenHeight * 0.024,
           ),
-          ReusableTextField(
-            controller: widget.linkController,
-            onTap: () {},
-            hintText: 'Paste Link',
-            // width: 338,
-            width: double.infinity,
-            obscure: false,
-            iconButton: InkWell(
-              onTap: () async {
-                // ClipboardData? data = await Clipboard.getData('text/plain');
-                // setState(() {
-                //   widget.linkController.text = data!.text
-                //       .toString(); // this will paste "copied text" to textFieldController
-                // });
-              },
-              child: const Icon(
-                Icons.paste_rounded,
-                size: 18,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          selectedSocialMedia != null
+              ? selectedSocialMedia!.conColor == wsaConColor
+                  ? CustomCountryField(
+                      controller: widget.linkController,
+                      countryCode: userProvider.countryCode,
+                      onTap: () {
+                        userProvider.selectCountryCode(context);
+                      },
+                    )
+                  : ReusableTextField(
+                      controller: widget.linkController,
+                      onTap: () {},
+                      hintText: 'Paste Link',
+                      // width: 338,
+                      width: double.infinity,
+                      obscure: false,
+                      iconButton: InkWell(
+                        onTap: () async {
+                          ClipboardData? data =
+                              await Clipboard.getData('text/plain');
+                          setState(() {
+                            widget.linkController.text = data!.text
+                                .toString(); // this will paste "copied text" to textFieldController
+                          });
+                        },
+                        child: const Icon(
+                          Icons.paste_rounded,
+                          size: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+              : ReusableTextField(
+                  controller: widget.linkController,
+                  onTap: () {},
+                  hintText: 'Paste Link',
+                  // width: 338,
+                  width: double.infinity,
+                  obscure: false,
+                  iconButton: InkWell(
+                    onTap: () async {
+                      ClipboardData? data =
+                          await Clipboard.getData('text/plain');
+                      setState(() {
+                        widget.linkController.text = data!.text
+                            .toString(); // this will paste "copied text" to textFieldController
+                      });
+                    },
+                    child: const Icon(
+                      Icons.paste_rounded,
+                      size: 18,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
           SizedBox(
             height: widget.screenHeight * 0.040,
           ),

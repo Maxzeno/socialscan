@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -14,14 +13,14 @@ import '../../../models/user_model.dart';
 import '../../../utils/frosted_glass_box.dart';
 import '../../../utils/services/firebase_services.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String firstName = '';
   String lastName = '';
@@ -278,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget textTile(String text) {
     return Text(
       text,
-      style: GoogleFonts.montserrat(
+      style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: ProjectColors.midBlack.withOpacity(0.4),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/colors.dart';
 
 class ButtonTile extends StatelessWidget {
@@ -49,8 +48,8 @@ class ButtonTile extends StatelessWidget {
                   ? _buildLoadingIndicator()
                   : Text(
                       text,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: textColor ?? Colors.white,
                       ),

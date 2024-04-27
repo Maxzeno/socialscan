@@ -8,15 +8,13 @@ import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/added_socials_list.dart';
 import 'package:socialscan/utils/lists/hex_color_list.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
+import 'package:socialscan/utils/selected_count.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
-import 'package:socialscan/views/home/screens/qr_code_screen.dart';
 import 'package:socialscan/views/home/widgets/add_new_social_widget.dart';
 import 'package:socialscan/views/home/widgets/social_media_tile.dart';
 
-import '../../../utils/button.dart';
 import '../screens/edit_social_screen.dart';
-import '../screens/scan_qr_code.dart';
 
 class SocialListsWidget extends StatefulWidget {
   final bool isAllMediasChecked;
@@ -100,6 +98,16 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
   }
 
   bool _isSocialChecked = false;
+
+  void _onCheckboxSelected(bool? isSelected) {
+    setState(() {
+      if (isSelected == true) {
+        selectedCount++;
+      } else {
+        selectedCount--;
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -266,11 +274,15 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                               linkUrl: data.linkUrl,
                             ),
                           );
+                          setState(() {});
                           print("Social added: $selectedSocialsToSendList");
                         } else {
                           selectedSocialsToSendList.removeAt(index);
+
+                          setState(() {});
                           print("Social removed: $selectedSocialsToSendList");
                         }
+                        _onCheckboxSelected(_isSocialChecked);
                       },
                     ),
                   );
@@ -331,50 +343,6 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
         //     ),
         //   ],
         // ),
-        selectedSocialsToSendList.isNotEmpty
-            ? ButtonTile(
-                width: double.infinity,
-                text: connect,
-                boxRadius: 8,
-                icon: const Icon(
-                  Icons.qr_code,
-                  color: Colors.white,
-                ),
-                onTap: () {
-                  // List<String> allLinks = extractLinkUrls(socialLinks);
-                  List<String> allLinks =
-                      extractLinkUrls(selectedSocialsToSendList);
-
-                  print('all Links ====> $allLinks');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => QrCodeScreen(
-                        qrData: allLinks,
-                      ),
-                    ),
-                  );
-                },
-              )
-            : ButtonTile(
-                width: double.infinity,
-                text: "Scan QR Code",
-                boxRadius: 8,
-                icon: SvgPicture.asset(
-                  connectIcon,
-                  height: 24,
-                  width: 24,
-                ),
-                onTap: () {
-                  // List<String> allLinks = extractLinkUrls(socialLinks);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const ScanQrCode(),
-                    ),
-                  );
-                },
-              ),
       ],
     );
   }

@@ -41,244 +41,253 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  createAnAccount,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.name,
-                        controller: userProvider.firstName,
-                        hintText: 'First Name',
-                        obscure: false,
-                        onTap: () {},
-                        iconButton: null,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.name,
-                        controller: userProvider.lastName,
-                        hintText: 'Last Name',
-                        obscure: false,
-                        onTap: () {},
-                        iconButton: null,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.emailAddress,
-                        controller: userProvider.emailController,
-                        hintText: 'Email',
-                        obscure: false,
-                        onTap: () {},
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          if (!RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$',
-                          ).hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-                          return null;
-                        },
-                        iconButton: null,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.name,
-                        controller: userProvider.profession,
-                        hintText: 'Profession',
-                        obscure: false,
-                        onTap: () {},
-                        iconButton: null,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                CustomCountryField(
-                  controller: userProvider.phoneNumberController,
-                  countryCode: userProvider.countryCode,
-                  onTap: () {
-                    userProvider.selectCountryCode(context);
-                  },
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.visiblePassword,
-                        controller: userProvider.passwordController,
-                        hintText: 'Password',
-                        obscure: _obscure,
-                        iconButton: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _obscure = !_obscure;
-                            });
-                          },
-                          child: _obscure
-                              ? const Icon(
-                                  Icons.visibility_off_outlined,
-                                  size: 15,
-                                )
-                              : const Icon(
-                                  Icons.visibility_outlined,
-                                  size: 15,
-                                ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                          if (value.length < 6) {
-                            return 'Password must be at least 6 characters long';
-                          }
-                          return null;
-                        },
-                        onTap: () {},
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: ReusableTextField(
-                        textInputType: TextInputType.visiblePassword,
-                        controller: userProvider.retypePasswordController,
-                        hintText: reTypePassword,
-                        obscure: _obscureText,
-                        iconButton: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                          child: _obscureText
-                              ? const Icon(
-                                  Icons.visibility_off_outlined,
-                                  size: 15,
-                                )
-                              : const Icon(
-                                  Icons.visibility_outlined,
-                                  size: 15,
-                                ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please retype your password';
-                          }
-                          if (value != userProvider.passwordController.text) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                        onTap: () {},
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                ButtonTile(
-                  text: create,
-                  onTap: () {
-                    if (_formKey.currentState!.validate() &&
-                        userProvider.countryCode != null) {
-                      userProvider.registerAccount(context);
-                      print('Registration successful!');
-                    }
-                  },
-                  boxRadius: 8,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      alreadyHaveAnAccount,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 14,
+                      createAnAccount,
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(
-                      width: 5,
+                      height: 30,
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => const SignInScreen(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ReusableTextField(
+                            textInputType: TextInputType.name,
+                            controller: userProvider.firstName,
+                            hintText: 'First Name',
+                            obscure: false,
+                            onTap: () {},
+                            iconButton: null,
                           ),
-                        );
-                      },
-                      child: Text(
-                        login,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 14,
-                          color: ProjectColors.mainPurple.withOpacity(0.6),
                         ),
-                      ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ReusableTextField(
+                            textInputType: TextInputType.name,
+                            controller: userProvider.lastName,
+                            hintText: 'Last Name',
+                            obscure: false,
+                            onTap: () {},
+                            iconButton: null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ReusableTextField(
+                            textInputType: TextInputType.emailAddress,
+                            controller: userProvider.emailController,
+                            hintText: 'Email',
+                            obscure: false,
+                            onTap: () {},
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              if (!RegExp(
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$',
+                              ).hasMatch(value)) {
+                                return 'Please enter a valid email address';
+                              }
+                              return null;
+                            },
+                            iconButton: null,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ReusableTextField(
+                            textInputType: TextInputType.name,
+                            controller: userProvider.profession,
+                            hintText: 'Profession',
+                            obscure: false,
+                            onTap: () {},
+                            iconButton: null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomCountryField(
+                      controller: userProvider.phoneNumberController,
+                      countryCode: userProvider.countryCode,
+                      onTap: () {
+                        userProvider.selectCountryCode(context);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Column(
+                      children: [
+                        ReusableTextField(
+                          textInputType: TextInputType.visiblePassword,
+                          controller: userProvider.passwordController,
+                          hintText: 'Password',
+                          obscure: _obscure,
+                          iconButton: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _obscure = !_obscure;
+                              });
+                            },
+                            child: _obscure
+                                ? const Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 15,
+                                  )
+                                : const Icon(
+                                    Icons.visibility_outlined,
+                                    size: 15,
+                                  ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters long';
+                            }
+                            return null;
+                          },
+                          onTap: () {},
+                        ),
+                        // const SizedBox(
+                        //   width: 10,
+                        // ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        ReusableTextField(
+                          textInputType: TextInputType.visiblePassword,
+                          controller: userProvider.retypePasswordController,
+                          hintText: reTypePassword,
+                          obscure: _obscureText,
+                          iconButton: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                            child: _obscureText
+                                ? const Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 15,
+                                  )
+                                : const Icon(
+                                    Icons.visibility_outlined,
+                                    size: 15,
+                                  ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please retype your password';
+                            }
+                            if (value != userProvider.passwordController.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null;
+                          },
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ButtonTile(
+                      text: create,
+                      onTap: () {
+                        if (_formKey.currentState!.validate() &&
+                            userProvider.countryCode != null) {
+                          userProvider.registerAccount(context);
+                          print('Registration successful!');
+                        }
+                      },
+                      boxRadius: 8,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          alreadyHaveAnAccount,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => const SignInScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            login,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: ProjectColors.mainPurple.withOpacity(0.6),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 100,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                const SizedBox(height: 50),
+                // const Spacer(),
+                Column(
                   children: [
-                    SizedBox(
-                      width: 108,
-                      child: Divider(
-                        color: ProjectColors.midBlack.withOpacity(0.4),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          // width: double.infinity,
+                          child: Divider(
+                            color: ProjectColors.midBlack.withOpacity(0.4),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(orContinueWith),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          // width: double.infinity,
+                          child: Divider(
+                            color: ProjectColors.midBlack.withOpacity(0.4),
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(orContinueWith),
-                    SizedBox(
-                      width: 108,
-                      child: Divider(
-                        color: ProjectColors.midBlack.withOpacity(0.4),
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
+                    accountButton(),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                accountButton(),
               ],
             ),
           ),
