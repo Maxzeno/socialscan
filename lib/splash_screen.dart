@@ -6,7 +6,7 @@ import 'package:flutter_animator/flutter_animator.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/view_model/user_provider.dart';
-import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
+import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
-            builder: (_) => const SignUpScreen(),
+            builder: (_) => const SignInScreen(),
           ),
         );
       }

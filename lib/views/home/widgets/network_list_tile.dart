@@ -39,7 +39,7 @@ class NetworkListTile extends StatelessWidget {
                 width: 10,
               ),
               SizedBox(
-                width: 110,
+                width: 120,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -70,53 +70,73 @@ class NetworkListTile extends StatelessWidget {
             child: Wrap(
               direction: Axis.horizontal,
               alignment: WrapAlignment.end,
-              spacing: 8,
-              runSpacing: 8,
+              spacing: -4,
+              runSpacing: 4,
               children: [
-                SvgPicture.asset(
-                  instagramIcon,
-                  height: 15,
-                  width: 15,
-                  colorFilter: const ColorFilter.mode(
-                    igConColor,
-                    BlendMode.srcIn,
-                  ),
+                // SvgPicture.asset(
+                //   instagramIcon,
+                //   height: 15,
+                //   width: 15,
+                //   colorFilter: const ColorFilter.mode(
+                //     igConColor,
+                //     BlendMode.srcIn,
+                //   ),
+                // ),
+                // SvgPicture.asset(
+                //   faceBookIcon,
+                //   height: 15,
+                //   width: 15,
+                //   colorFilter: const ColorFilter.mode(
+                //     fbConColor,
+                //     BlendMode.srcIn,
+                //   ),
+                // ),
+                // SvgPicture.asset(
+                //   linkedInIcon,
+                //   height: 15,
+                //   width: 15,
+                //   colorFilter: const ColorFilter.mode(
+                //     liConColor,
+                //     BlendMode.srcIn,
+                //   ),
+                // ),
+                // SvgPicture.asset(
+                //   whatsAppIcon,
+                //   height: 15,
+                //   width: 15,
+                //   colorFilter: const ColorFilter.mode(
+                //     wsaConColor,
+                //     BlendMode.srcIn,
+                //   ),
+                // ),
+                // SvgPicture.asset(
+                //   twitterIcon,
+                //   height: 15,
+                //   width: 15,
+                //   colorFilter: const ColorFilter.mode(
+                //     xConColor,
+                //     BlendMode.srcIn,
+                //   ),
+                // ),
+                NetworkScreenSocialCircle(
+                  bgColor: igConColor,
+                  icon: instagramIcon,
                 ),
-                SvgPicture.asset(
-                  faceBookIcon,
-                  height: 15,
-                  width: 15,
-                  colorFilter: const ColorFilter.mode(
-                    fbConColor,
-                    BlendMode.srcIn,
-                  ),
+                NetworkScreenSocialCircle(
+                  bgColor: fbConColor,
+                  icon: faceBookIcon,
                 ),
-                SvgPicture.asset(
-                  linkedInIcon,
-                  height: 15,
-                  width: 15,
-                  colorFilter: const ColorFilter.mode(
-                    liConColor,
-                    BlendMode.srcIn,
-                  ),
+                NetworkScreenSocialCircle(
+                  bgColor: liConColor,
+                  icon: linkedInIcon,
                 ),
-                SvgPicture.asset(
-                  whatsAppIcon,
-                  height: 15,
-                  width: 15,
-                  colorFilter: const ColorFilter.mode(
-                    wsaConColor,
-                    BlendMode.srcIn,
-                  ),
+                NetworkScreenSocialCircle(
+                  bgColor: wsaConColor,
+                  icon: whatsAppIcon,
                 ),
-                SvgPicture.asset(
-                  twitterIcon,
-                  height: 15,
-                  width: 15,
-                  colorFilter: const ColorFilter.mode(
-                    xConColor,
-                    BlendMode.srcIn,
-                  ),
+                NetworkScreenSocialCircle(
+                  bgColor: xConColor,
+                  icon: twitterIcon,
                 ),
                 // SvgPicture.asset(
                 //   instagramIcon,
@@ -140,6 +160,39 @@ class NetworkListTile extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NetworkScreenSocialCircle extends StatelessWidget {
+  final Color bgColor;
+  final String icon;
+  const NetworkScreenSocialCircle({
+    super.key,
+    required this.bgColor,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 25,
+      height: 25,
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        // borderRadius: BorderRadius.circular(50),
+        shape: BoxShape.circle,
+      ),
+      child: SvgPicture.asset(
+        icon,
+        height: 15,
+        width: 15,
+        colorFilter: const ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
