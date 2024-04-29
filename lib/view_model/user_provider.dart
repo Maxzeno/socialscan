@@ -6,8 +6,10 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socialscan/bottom_nav_screen.dart';
+import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/pick_image.dart';
+import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
 
@@ -32,6 +34,8 @@ class UserProvider extends ChangeNotifier {
   CountryCode? countryCode;
 
   bool isLoading = false;
+  bool _isSocialChecked = false;
+
   bool _isSignedIn = false;
 
   bool get isSignedIn => _isSignedIn;
@@ -165,6 +169,27 @@ class UserProvider extends ChangeNotifier {
     final code = await countryPicker.showPicker(context: context);
     if (code != null) {
       countryCode = code;
+    }
+    notifyListeners();
+  }
+
+  void selectSocialToQrCode(bool isSelected, dynamic data, int index) {
+    if (isSelected == true) {
+      selectedSocialsToSendList.add(
+        SocialLinkModel(
+          text: data.text,
+          imagePath: data.imagePath,
+          conColor: data.conColor,
+          iconColor: data.iconColor,
+          // id: index, // Optional
+          linkUrl: data.linkUrl,
+        ),
+      );
+      log("Social added: $selectedSocialsToSendList");
+    } else {
+      log('checking');
+      selectedSocialsToSendList.removeWhere((item) => item.text == data.text);
+      log("Social removed: $selectedSocialsToSendList");
     }
     notifyListeners();
   }

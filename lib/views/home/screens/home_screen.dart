@@ -115,33 +115,33 @@ class _HomeScreenState extends State<HomeScreen>
                                   shape: BoxShape.circle,
                                   color: ProjectColors.mainPurple,
                                 ),
-                                child: (userProvider
-                                            .userModel!.image.isEmpty) &&
-                                        userProvider.image == null
-                                    ? Center(
-                                        child: Text(
-                                          userProvider.userModel!.firstName
-                                              .substring(0, 1),
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    : userProvider.image != null &&
-                                            userProvider.image!.isNotEmpty
-                                        ? ClipOval(
-                                            child: Image.memory(
-                                              userProvider.image!,
-                                              fit: BoxFit.cover,
+                                child:
+                                    (userProvider.userModel!.image.isEmpty) &&
+                                            userProvider.image == null
+                                        ? Center(
+                                            child: Text(
+                                              userProvider.userModel!.firstName
+                                                  .substring(0, 1),
+                                              style: const TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           )
-                                        : ClipOval(
-                                            child: Image.network(
-                                              userProvider.userModel!.image,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                        : userProvider.image != null &&
+                                                userProvider.image!.isNotEmpty
+                                            ? ClipOval(
+                                                child: Image.memory(
+                                                  userProvider.image!,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : ClipOval(
+                                                child: Image.network(
+                                                  userProvider.userModel!.image,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                               ),
                             ),
                             const SizedBox(
@@ -198,7 +198,8 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                   selectedSocialsToSendList.isNotEmpty
-                  // selectedCount > 0
+                      // selectedCount > 0
+
                       ? ButtonTile(
                           width: double.infinity,
                           text: connect,
@@ -211,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen>
                             // List<String> allLinks = extractLinkUrls(socialLinks);
                             List<String> allLinks =
                                 extractLinkUrls(selectedSocialsToSendList);
-      
+
                             print('all Links ====> $allLinks');
                             Navigator.push(
                               context,
