@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
@@ -11,6 +14,7 @@ import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/selected_count.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/home/widgets/add_new_social_widget.dart';
 import 'package:socialscan/views/home/widgets/social_media_tile.dart';
 
@@ -28,7 +32,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
   addSocial(SocialLinkModel? newItem) async {
     try {
       final message = await FirebaseService().addSocialLink(newItem!);
-      print(message);
+      log(message);
       if (message == 'Social link added successfully!') {
         setState(() {
           addedSocialsList.add(newItem);
@@ -37,10 +41,10 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
         infoSnackBar(context, 'Social Media already exists!',
             const Duration(milliseconds: 700), Colors.red);
       } else {
-        print('Failed to add social link.');
+        log('Failed to add social link.');
       }
     } catch (error) {
-      print('Error adding social link: $error');
+      log('Error adding social link: $error');
     }
   }
 
@@ -121,6 +125,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     List<SocialLinkModel> dropdownItems = List.from(socialLinks);
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Column(
       children: [
@@ -164,8 +169,8 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                               return StatefulBuilder(builder:
                                   (BuildContext context,
                                       StateSetter setState1) {
-                                print('Screen Height: $screenHeight');
-                                print('Screen Width: $screenWidth');
+                                log('Screen Height: $screenHeight');
+                                log('Screen Width: $screenWidth');
                                 return AddNewSocialWidget(
                                   screenHeight: screenHeight,
                                   screenWidth: screenWidth,
@@ -176,7 +181,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                                 );
                               });
                             });
-                        print('linkController ====> ${linkController.text}');
+                        log('linkController ====> ${linkController.text}');
                       },
                       child: DottedBorder(
                         borderType: BorderType.RRect,
@@ -240,7 +245,10 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                       );
                     },
                     onLongPress: () {
-                      print('CLicked');
+                      log('CLicked');
+                      print(
+                          'Selected list link =====> ${selectedSocialsToSendList}');
+
                       // setState(() {
                       //   _isSocialChecked = !_isSocialChecked;
                       // });
@@ -262,26 +270,12 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                       onSelected: (value) {
                         setState(() {
                           _isSocialChecked = value!;
+                          log("_isSocialChecked: $_isSocialChecked");
+                          log("selectedSocialsToSendList: $selectedSocialsToSendList");
+                          userProvider.selectSocialToQrCode(
+                              _isSocialChecked, data, index);
                         });
-                        if (_isSocialChecked == true) {
-                          selectedSocialsToSendList.add(
-                            SocialLinkModel(
-                              text: data.text,
-                              imagePath: data.imagePath,
-                              conColor: data.conColor,
-                              iconColor: data.iconColor,
-                              // id: index,
-                              linkUrl: data.linkUrl,
-                            ),
-                          );
-                          setState(() {});
-                          print("Social added: $selectedSocialsToSendList");
-                        } else {
-                          selectedSocialsToSendList.removeAt(index);
 
-                          setState(() {});
-                          print("Social removed: $selectedSocialsToSendList");
-                        }
                         _onCheckboxSelected(_isSocialChecked);
                       },
                     ),
