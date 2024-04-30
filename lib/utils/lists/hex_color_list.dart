@@ -21,3 +21,9 @@ final wsaIconColor = wsaConColor.withOpacity(0.5);
 
 const liConColor = ProjectColors.li;
 final liIconColor = liConColor.withOpacity(0.5);
+
+const scConColor = ProjectColors.sc;
+final scIconColor = scConColor.withOpacity(0.5);
+
+const ghConColor = ProjectColors.gh;
+final ghIconColor = ghConColor.withOpacity(0.5);

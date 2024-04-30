@@ -34,7 +34,7 @@ class UserProvider extends ChangeNotifier {
   CountryCode? countryCode;
 
   bool isLoading = false;
-  bool _isSocialChecked = false;
+  final bool _isSocialChecked = false;
 
   bool _isSignedIn = false;
 
@@ -193,4 +193,26 @@ class UserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+//   void selectAllSocials(bool isSelected, List<dynamic> allData) {
+//   if (isSelected) {
+//     allData.forEach((data) {
+//       selectedSocialsToSendList.add(
+//         SocialLinkModel(
+//           text: data.text,
+//           imagePath: data.imagePath,
+//           conColor: data.conColor,
+//           iconColor: data.iconColor,
+//           linkUrl: data.linkUrl,
+//         ),
+//       );
+//     });
+//     log("All socials added: $selectedSocialsToSendList");
+//   } else {
+//     selectedSocialsToSendList.clear();
+//     log("All socials removed: $selectedSocialsToSendList");
+//   }
+//   notifyListeners();
+// }
+
 }

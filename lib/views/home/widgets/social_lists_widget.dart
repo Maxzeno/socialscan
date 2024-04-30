@@ -9,8 +9,8 @@ import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/added_socials_list.dart';
-import 'package:socialscan/utils/lists/hex_color_list.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
+import 'package:socialscan/utils/lists/social_links_list.dart';
 import 'package:socialscan/utils/selected_count.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
@@ -50,49 +50,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
 
   TextEditingController linkController = TextEditingController();
 
-  List<SocialLinkModel> socialLinks = [
-    SocialLinkModel(
-      id: newLinkId,
-      text: faceBook,
-      imagePath: faceBookIcon,
-      conColor: fbConColor,
-      iconColor: fbIconColor,
-      linkUrl: '',
-    ),
-    SocialLinkModel(
-      id: newLinkId,
-      text: instagram,
-      imagePath: instagramIcon,
-      conColor: igConColor,
-      iconColor: igIconColor,
-      linkUrl: '',
-    ),
-    SocialLinkModel(
-      id: newLinkId,
-      text: whatsApp,
-      imagePath: whatsAppIcon,
-      conColor: wsaConColor,
-      iconColor: wsaIconColor,
-      linkUrl: '',
-    ),
-    SocialLinkModel(
-      id: newLinkId,
-      text: twitter,
-      imagePath: twitterIcon,
-      conColor: xConColor,
-      iconColor: xIconColor,
-      linkUrl: '',
-    ),
-    SocialLinkModel(
-      id: newLinkId,
-      text: linkedin,
-      imagePath: linkedInIcon,
-      conColor: liConColor,
-      iconColor: liIconColor,
-      linkUrl: '',
-    ),
-  ];
-
+  
   List<String> extractLinkUrls(List<SocialLinkModel> socialLinks) {
     List<String> linkUrls = [];
     for (var socialLink in socialLinks) {
@@ -247,7 +205,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                     onLongPress: () {
                       log('CLicked');
                       print(
-                          'Selected list link =====> ${selectedSocialsToSendList}');
+                          'Selected list link =====> $selectedSocialsToSendList');
 
                       // setState(() {
                       //   _isSocialChecked = !_isSocialChecked;

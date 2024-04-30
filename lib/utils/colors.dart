@@ -10,4 +10,6 @@ class ProjectColors {
   static const Color wsa = Color(0xFF299A27);
   static const Color x = Color(0xFF000000);
   static const Color li = Color(0xFF0C73DE);
+  static const Color sc = Color(0xFFEFB715);
+  static const Color gh = Color(0xFF000000);
 }

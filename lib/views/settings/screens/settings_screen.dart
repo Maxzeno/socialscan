@@ -144,7 +144,7 @@ class _SettingScreenState extends State<SettingScreen> {
   // }
 }
 
-class GeneralOptions extends StatelessWidget {
+class GeneralOptions extends StatefulWidget {
   const GeneralOptions({
     super.key,
     required this.context,
@@ -155,9 +155,21 @@ class GeneralOptions extends StatelessWidget {
   final UserProvider userProvider;
 
   @override
+  State<GeneralOptions> createState() => _GeneralOptionsState();
+}
+
+class _GeneralOptionsState extends State<GeneralOptions> {
+  // bool _isChecked = false;
+  // int _selectedCheckbox = 0;
+
+  bool isCheckedDarkTheme = false;
+  bool isCheckedLightTheme = false;
+
+  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       // height: 221,
       width: double.infinity,
@@ -212,6 +224,162 @@ class GeneralOptions extends StatelessWidget {
               height: 24,
               width: 24,
             ),
+            onTap: () {
+              showModalBottomSheet(
+                context: widget.context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                  ),
+                ),
+                builder: (context) {
+                  return SizedBox(
+                    height: screenHeight * 0.18,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ListTile(
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color(0xFF7E7E7E),
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Transform.scale(
+                                    scale: 0.8,
+                                    child: Checkbox.adaptive(
+                                      value: isCheckedLightTheme,
+                                      activeColor: ProjectColors.mainPurple,
+                                      checkColor: ProjectColors.mainPurple,
+                                      fillColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.disabled)) {
+                                          return const Color(0xFFE5E5E5);
+                                        }
+                                        return ProjectColors.mainPurple;
+                                      }),
+                                      side: const BorderSide(
+                                        color: Color(0xFFE5E5E5),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      onChanged: (value) {
+                                          // _isChecked = value!;
+                                          // _selectedCheckbox = value! ? 1 : 0;
+                                          setState(() {
+                                            isCheckedLightTheme = value!;
+                                            // isCheckedLightTheme = !isCheckedLightTheme;
+                                            if (isCheckedLightTheme) {
+                                              isCheckedDarkTheme = false;
+                                            }
+                                          });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            title: const Text(
+                              "Light Theme",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          ListTile(
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color(0xFF7E7E7E),
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Transform.scale(
+                                    scale: 0.8,
+                                    child: Checkbox.adaptive(
+                                      value: isCheckedDarkTheme,
+                                      activeColor: ProjectColors.mainPurple,
+                                      checkColor: ProjectColors.mainPurple,
+                                      fillColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.disabled)) {
+                                          return const Color(0xFFE5E5E5);
+                                        }
+                                        return ProjectColors.mainPurple;
+                                      }),
+                                      side: const BorderSide(
+                                        color: Color(0xFFE5E5E5),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      onChanged: (value) {
+                                          // _selectedCheckbox = value! ? 2 : 0;
+                                          setState(() {
+                                            isCheckedDarkTheme = value!;
+                                            // isCheckedDarkTheme = !isCheckedDarkTheme;
+                                            if (isCheckedDarkTheme) {
+                                              isCheckedLightTheme = false;
+                                            }
+                                          });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            title: const Text(
+                              "Dark Theme",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
           const Divider(
             thickness: 0.8,
@@ -302,7 +470,7 @@ class GeneralOptions extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  userProvider.signOut(context);
+                                  widget.userProvider.signOut(context);
                                 },
                                 child: const Text(
                                   'Yes, Logout',

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
 
@@ -12,10 +14,11 @@ class SocialsPage extends StatefulWidget {
 }
 
 class _SocialsPageState extends State<SocialsPage> {
-  bool isChecked = false;
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -28,7 +31,7 @@ class _SocialsPageState extends State<SocialsPage> {
             //         height: 20,
             //         width: 20,
             //         child: Checkbox(
-            //           value: isChecked,
+            //           value: _isChecked,
             //           activeColor: ProjectColors.mainPurple,
             //           side: const BorderSide(width: 1),
             //           shape: RoundedRectangleBorder(
@@ -36,7 +39,7 @@ class _SocialsPageState extends State<SocialsPage> {
             //           ),
             //           onChanged: (val) {
             //             setState(() {
-            //               isChecked = !isChecked;
+            //               _isChecked = !_isChecked;
             //             });
             //           },
             //           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -47,7 +50,7 @@ class _SocialsPageState extends State<SocialsPage> {
               height: 20,
               width: 20,
               child: Checkbox(
-                value: isChecked,
+                value: _isChecked,
                 activeColor: ProjectColors.mainPurple,
                 side: const BorderSide(width: 1),
                 shape: RoundedRectangleBorder(
@@ -55,8 +58,31 @@ class _SocialsPageState extends State<SocialsPage> {
                 ),
                 onChanged: (val) {
                   setState(() {
-                    isChecked = !isChecked;
+                    _isChecked = !_isChecked;
                   });
+
+                  // setState(() {
+                  //   _isChecked = val!;
+                  //   log("_isAllSocialChecked: $_isChecked");
+                  //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
+                  //   userProvider.selectSocialToQrCode(
+                  //     _isChecked,
+                  //     data,
+                  //     index,
+                  //   );
+                  // });
+
+                  // setState(() {
+                  //   _isChecked = !_isChecked;
+                  //   log("_isAllSocialChecked: $_isChecked");
+                  //   if (_isChecked) {
+                  //     userProvider.selectAllSocials(
+                  //         _isChecked, addedSocialsList);
+                  //   } else {
+                  //     userProvider.selectSocialToQrCode(_isChecked, "data", -1);
+                  //   }
+                  //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
+                  // });
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
@@ -67,7 +93,7 @@ class _SocialsPageState extends State<SocialsPage> {
             height: 14,
           ),
           SocialListsWidget(
-            isAllMediasChecked: isChecked,
+            isAllMediasChecked: _isChecked,
           ),
           const SizedBox(
             height: 55,

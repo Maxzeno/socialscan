@@ -269,6 +269,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         ),
       ),
     );
+  
   }
 
   Widget textTile(String text) {
