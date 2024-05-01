@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:socialscan/models/social_link_model.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -14,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 // import 'package:path_provider/path_provider.dart';
 
+import '../../../models/user_model.dart';
 import '../../../utils/images.dart';
 import '../widgets/horizontal_dot_tile.dart';
 import 'dart:async';
@@ -25,7 +27,7 @@ import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeScreen extends StatefulWidget {
-  final List<String>? qrData;
+  final dynamic qrData;
   const QrCodeScreen({super.key, this.qrData});
 
   @override
@@ -35,9 +37,63 @@ class QrCodeScreen extends StatefulWidget {
 class _QrCodeScreenState extends State<QrCodeScreen> {
   var random = Random();
   // int _
-  String generateMultiLinkURI(List<String> qrData) {
-    return qrData.map((link) => Uri.encodeComponent(link)).join(';');
+
+  // String generateMultiLinkURI(List<String> qrData) {
+  //   return qrData.map((link) => Uri.encodeComponent(link)).join(';');
+  // }
+
+  // String generateQRData(Map<String, dynamic> qrData) {
+  //   String firstName = qrData['firstName'] ?? '';
+  //   String lastName = qrData['lastName'] ?? '';
+  //   String profession = qrData['profession'] ?? '';
+  //   String phoneNumber = qrData['phoneNumber'] ?? '';
+  //   List<SocialLinkModel> social = (qrData['socials'] as List<SocialLinkModel>?)?.cast<SocialLinkModel>() ?? [];
+  //
+  //   String qrString = 'First Name: $firstName\n'
+  //       'Last Name: $lastName\n'
+  //       'Profession: $profession\n'
+  //       'Phone Number: $phoneNumber\n';
+  //
+  //   print('Hello data ====> $qrString ');
+  //   print('Hello socials ====> $social ');
+  //
+  //   if (social.isNotEmpty) {
+  //     qrString += 'Social:\n';
+  //     social.forEach((s) {
+  //       qrString += '$s\n';
+  //       print(' Hello Selected social ==> $qrString');
+  //     });
+  //   }
+  //
+  //   return qrString;
+  // }
+
+  String generateQRData(UserModel userModel) {
+    String firstName = userModel.firstName ?? '';
+    String lastName = userModel.lastName ?? '';
+    String profession = userModel.profession ?? '';
+    String phoneNumber = userModel.phoneNumber ?? '';
+    List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
+
+    String qrString = 'First Name: $firstName\n'
+        'Last Name: $lastName\n'
+        'Profession: $profession\n'
+        'Phone Number: $phoneNumber\n';
+
+    print('Hello data ====> $qrString ');
+    print('Hello socials ====> $social ');
+
+    if (social.isNotEmpty) {
+      qrString += 'Social:\n';
+      for (var s in social) {
+        qrString += '${s.text}\n';
+        print(' Hello Selected social ==> $qrString');
+      }
+    }
+
+    return qrString;
   }
+
 
   void openSelectedLink(String encodedLinks, String chosenLink) {
     final decodedLinks = encodedLinks.split(';');
@@ -100,7 +156,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 height: 300,
                 width: 300,
                 child: PrettyQrView.data(
-                  data: generateMultiLinkURI(widget.qrData!),
+                  data:generateQRData(widget.qrData),
                   decoration: PrettyQrDecoration(
                     image: PrettyQrDecorationImage(
                       padding: const EdgeInsets.all(10),
@@ -135,7 +191,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
               color: const Color(0xFFECECEC),
               onTap: () async {
                 final qrCode = QrCode.fromData(
-                  data: generateMultiLinkURI(widget.qrData!),
+                  data: generateQRData(widget.qrData!),
                   errorCorrectLevel: QrErrorCorrectLevel.H,
                 );
 
@@ -183,7 +239,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 ),
                 onTap: () async {
                   final qrCode = QrCode.fromData(
-                    data: generateMultiLinkURI(widget.qrData!),
+                    data: generateQRData(widget.qrData!),
                     errorCorrectLevel: QrErrorCorrectLevel.H,
                   );
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
+import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/services/storage_service.dart';
 
 class FirebaseService {
@@ -167,6 +168,42 @@ class FirebaseService {
     }
     return res;
   }
+//   Stream<Map<String, dynamic>> getUserDetailsAndLinks() {
+//     try {
+//       // Get the current user
+//       User? currentUser = auth.currentUser;
+//       if (currentUser == null) {
+//         throw 'User not logged in.';
+//       }
+//
+//       // Get user details from Firestore
+//       Stream<DocumentSnapshot> userDocStream = _firestore.collection('users').doc(currentUser.uid).snapshots();
+//       Stream<Map<String, dynamic>> userDetailsStream = userDocStream.map((userDoc) {
+//         if (!userDoc.exists) {
+//           throw 'User document does not exist';
+//         }
+//
+// final selected = selectedSocialsToSendList;
+//
+//
+//         return {
+//           'userId': currentUser.uid,
+//           'firstName': userDoc['firstName'],
+//           'lastName': userDoc['lastName'],
+//           'profession': userDoc['profession'],
+//           'email': userDoc['email'],
+//           'phoneNumber': userDoc['phoneNumber'],
+//           'socials': selected,
+//         };
+//       });
+//
+//       return userDetailsStream;
+//     } catch (error) {
+//       print("Error fetching user details and links: $error");
+//       throw error;
+//     }
+//   }
+
 
   // Future<String> updateProfile(
   //     {String? firstName,
@@ -201,6 +238,43 @@ class FirebaseService {
   //   }
   //   return res;
   // }
+
+  Stream<UserModel> getUserDetailsAndLinks() {
+    try {
+      // Get the current user
+      User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        throw 'User not logged in.';
+      }
+
+      // Get user details from Firestore
+      Stream<DocumentSnapshot> userDocStream = _firestore.collection('users').doc(currentUser.uid).snapshots();
+      Stream<UserModel> userDetailsStream = userDocStream.map((userDoc) {
+        if (!userDoc.exists) {
+          throw 'User document does not exist';
+        }
+        final selected = selectedSocialsToSendList;
+        final userDetails = UserModel(
+          firstName: userDoc['firstName'],
+          lastName: userDoc['lastName'],
+          phoneNumber: userDoc['phoneNumber'],
+          profession: userDoc['profession'],
+          email: userDoc['email'],
+          id: currentUser.uid,
+          image: userDoc['image'],
+          socialMediaLink: selected,
+        );
+
+        return userDetails;
+      });
+
+      return userDetailsStream;
+    } catch (error) {
+      print("Error fetching user details and links: $error");
+      rethrow;
+    }
+  }
+
 
   Future<String> updateProfile({
     String? firstName,
