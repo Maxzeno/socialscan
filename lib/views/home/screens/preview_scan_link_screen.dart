@@ -30,7 +30,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
                         Text('Phone Number: ${user.phoneNumber}'),
                         Text('Profession: ${user.profession}'),
                         Text('Image: ${user.image}'),
-                        Text('Social Links:'),
+                        const Text('Social Links:'),
                         ListView.builder(
                           itemCount: user.socialMediaLink!.length,
                           shrinkWrap: true,
