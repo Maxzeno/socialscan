@@ -73,23 +73,13 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     String lastName = userModel.lastName ?? '';
     String profession = userModel.profession ?? '';
     String phoneNumber = userModel.phoneNumber ?? '';
+    String email = userModel.email ?? '';
+    String id = userModel.id ?? '';
     List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
 
-    String qrString = 'First Name: $firstName\n'
-        'Last Name: $lastName\n'
-        'Profession: $profession\n'
-        'Phone Number: $phoneNumber\n';
+    String socialLinksString = social.map((link) => '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}').join(',');
 
-    print('Hello data ====> $qrString ');
-    print('Hello socials ====> $social ');
-
-    if (social.isNotEmpty) {
-      qrString += 'Social:\n';
-      for (var s in social) {
-        qrString += '${s.text}\n';
-        print(' Hello Selected social ==> $qrString');
-      }
-    }
+    String qrString = '$firstName;$lastName;$phoneNumber;$profession;$email;$id;$socialLinksString';
 
     return qrString;
   }
