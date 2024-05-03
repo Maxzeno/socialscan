@@ -19,42 +19,42 @@ class _ScanQrCodeState extends State<ScanQrCode> {
   List<UserModel> extractedModelLinks = [];
   MobileScannerController _mobileScannerController = MobileScannerController();
 
+  // UserModel parseQRData(String qrData) {
+  //   print("Scanned QR Data: $qrData");
+  //   List<String> userData = qrData.split(':');
+  //   // if (userData.length != 7) {
+  //   //   print('Mad error =======>');
 
-  UserModel parseQRData(String qrData) {
-    List<String> userData = qrData.split(';');
-    if (userData.length != 7) {
-      print('Mad error =======>');
+  //   //   throw Exception('Invalid QR data format');
+  //   // }
+  //   print("Scanned User Data: $userData");
+  //   String firstName = userData[0];
+  //   String lastName = userData[1];
+  //   String phoneNumber = userData[2];
+  //   String profession = userData[3];
+  //   String email = userData[4];
+  //   String id = userData[5];
+  //   List<SocialLinkModel> socialLinks = parseSocialLinks(userData[6]);
 
-      throw Exception('Invalid QR data format');
-    }
-    String firstName = userData[0];
-    String lastName = userData[1];
-    String phoneNumber = userData[2];
-    String profession = userData[3];
-    String email = userData[4];
-    String id = userData[5];
-    List<SocialLinkModel> socialLinks = parseSocialLinks(userData[6]);
-
-    return UserModel(
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      profession: profession,
-      email: email,
-      socialMediaLink: socialLinks,
-      image: '',
-    );
-  }
-
-
+  //   return UserModel(
+  //     id: id,
+  //     firstName: firstName,
+  //     lastName: lastName,
+  //     phoneNumber: phoneNumber,
+  //     profession: profession,
+  //     email: email,
+  //     socialMediaLink: socialLinks,
+  //     image: '',
+  //   );
+  // }
 
   List<SocialLinkModel> parseSocialLinks(String socialLinksString) {
     List<String> socialLinksData = socialLinksString.split(',');
+    print("Social Link Data is: $socialLinksData");
     List<SocialLinkModel> socialLinks = [];
     for (String linkData in socialLinksData) {
-      List<String> linkFields = linkData.split(',');
-      if (linkFields.length != 3) {
+      List<String> linkFields = linkData.split('\n');
+      if (linkFields.length < 4) {
         throw Exception('Invalid social link data format');
       }
       SocialLinkModel link = SocialLinkModel(
@@ -66,6 +66,39 @@ class _ScanQrCodeState extends State<ScanQrCode> {
       socialLinks.add(link);
     }
     return socialLinks;
+  }
+
+  UserModel parseQRData(String qrData) {
+    print("Scanned QR Data: $qrData");
+    List<String> lines = qrData.split('\n');
+    Map<String, String> userData = {};
+    for (var line in lines) {
+      List<String> pair = line.split(':');
+      if (pair.length == 2) {
+        userData[pair[0].trim()] = pair[1].trim();
+      }
+    }
+    print("Scanned User Data: $userData");
+    String firstName = userData['First Name']!;
+    String lastName = userData['Last Name']!;
+    String phoneNumber = userData['Phone Number']!;
+    String profession = userData['Profession']!;
+    String email =
+        userData['Email'] ?? ''; // Assuming 'Email' is a key in your QR data
+    String id = userData['ID'] ?? ''; // Assuming 'ID' is a key in your QR data
+    List<SocialLinkModel> socialLinks = parseSocialLinks(
+        userData['Social']!); // Assuming 'Social' is a key in your QR data
+
+    return UserModel(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      profession: profession,
+      email: email,
+      socialMediaLink: socialLinks,
+      image: '',
+    );
   }
 
   ImagePicker picker = ImagePicker();
@@ -135,60 +168,58 @@ class _ScanQrCodeState extends State<ScanQrCode> {
       body: Stack(
         children: [
           MobileScanner(
-            controller: _mobileScannerController,
-            onDetect: (capture) async {
-              final List<Barcode> barcodes = capture.barcodes;
-              if (capture.barcodes.isEmpty) return;
+              controller: _mobileScannerController,
+              onDetect: (capture) async {
+                final List<Barcode> barcodes = capture.barcodes;
+                if (capture.barcodes.isEmpty) return;
 
-              for (final barcode in barcodes) {
-                print("Barcode found! ${barcode.rawValue}");
-                try {
-                  UserModel userModel = parseQRData(barcode.rawValue!);
-                  extractedModelLinks.add(userModel);
-                  if (capture.image != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            PreviewScanLinkScreen(
-                              data: extractedModelLinks,
-                            ),
-                      ),
-                    );
+                for (final barcode in barcodes) {
+                  print("Barcode found! ${barcode.rawValue}");
+                  try {
+                    UserModel userModel = parseQRData(barcode.rawValue!);
+                    extractedModelLinks.add(userModel);
+                    print("Extracted Model Links: $extractedModelLinks");
+                    if (capture.image != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PreviewScanLinkScreen(
+                            data: extractedModelLinks,
+                          ),
+                        ),
+                      );
+                    }
+                  } on Exception catch (e) {
+                    // Handle parsing exceptions (e.g., invalid format)
+                    print("Error parsing QR data: $e");
                   }
-                } on Exception catch (e) {
-                  // Handle parsing exceptions (e.g., invalid format)
-                  print("Error parsing QR data: $e");
+                  // }
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context) {
+                  //     return AlertDialog(
+                  //       title: const Text("QR Code Data"),
+                  //       content: Column(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           for (var link in extractedLinks)
+                  //             ListTile(title: Text(link)),
+                  //         ],
+                  //       ),
+                  //       actions: [
+                  //         TextButton(
+                  //           onPressed: () {
+                  //             Navigator.pop(context);
+                  //           },
+                  //           child: const Text('OK'),
+                  //         ),
+                  //       ],
+                  //     );
+                  //   },
+                  // );
                 }
-                // }
-                // showDialog(
-                //   context: context,
-                //   builder: (context) {
-                //     return AlertDialog(
-                //       title: const Text("QR Code Data"),
-                //       content: Column(
-                //         mainAxisSize: MainAxisSize.min,
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           for (var link in extractedLinks)
-                //             ListTile(title: Text(link)),
-                //         ],
-                //       ),
-                //       actions: [
-                //         TextButton(
-                //           onPressed: () {
-                //             Navigator.pop(context);
-                //           },
-                //           child: const Text('OK'),
-                //         ),
-                //       ],
-                //     );
-                //   },
-                // );
-
-              }
-            }
-          ),
+              }),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
           Positioned(
             left: 0,
@@ -205,11 +236,20 @@ class _ScanQrCodeState extends State<ScanQrCode> {
                     builder: (context, state, child) {
                       switch (state) {
                         case CameraFacing.front:
-                          return const ScanQRCircleWidget(
+                          return ScanQRCircleWidget(
                             width: 49,
                             height: 49,
-                            bgColor: ProjectColors.mainPurple,
-                            icon: Icon(
+                            // bgColor: Colors.transparent,
+                            bgGradient: RadialGradient(
+                              colors: [
+                                // Colors.white.withOpacity(0),
+                                Colors.white.withOpacity(0.2),
+                                Colors.white.withOpacity(0.4),
+                                Colors.white.withOpacity(0.6),
+                                // Colors.white.withOpacity(0.8),
+                              ],
+                            ),
+                            icon: const Icon(
                               Icons.cameraswitch_outlined,
                               color: Colors.white,
                               size: 25,
@@ -311,7 +351,7 @@ class _ScanQrCodeState extends State<ScanQrCode> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => PreviewScanLinkScreen(
-                              data: extractedLinks,
+                              data: extractedModelLinks,
                             ),
                           ),
                         );
@@ -369,11 +409,20 @@ class _ScanQrCodeState extends State<ScanQrCode> {
                             ),
                           );
                         case TorchState.on:
-                          return const ScanQRCircleWidget(
+                          return ScanQRCircleWidget(
                             width: 49,
                             height: 49,
-                            bgColor: ProjectColors.mainPurple,
-                            icon: Icon(
+                            // bgColor: ProjectColors.mainPurple,
+                            bgGradient: RadialGradient(
+                              colors: [
+                                // Colors.white.withOpacity(0),
+                                Colors.white.withOpacity(0.2),
+                                Colors.white.withOpacity(0.4),
+                                Colors.white.withOpacity(0.6),
+                                // Colors.white.withOpacity(0.8),
+                              ],
+                            ),
+                            icon: const Icon(
                               Icons.flashlight_on_outlined,
                               color: Colors.white,
                               size: 25,
@@ -394,8 +443,8 @@ class _ScanQrCodeState extends State<ScanQrCode> {
               right: 0,
               bottom: 0,
               child: Container(
-                  width: 40,
-                  height: 40,
+                width: 40,
+                height: 40,
                 color: Colors.black.withOpacity(0.8),
                 child: const CircularProgressIndicator(),
               ),
@@ -411,14 +460,16 @@ class ScanQRCircleWidget extends StatelessWidget {
   final double width;
   final double height;
   final Widget icon;
-  final Color bgColor;
+  final Color? bgColor;
+  final Gradient? bgGradient;
 
   const ScanQRCircleWidget({
     super.key,
     required this.width,
     required this.height,
     required this.icon,
-    required this.bgColor,
+    this.bgColor,
+    this.bgGradient,
   });
 
   @override
@@ -428,6 +479,7 @@ class ScanQRCircleWidget extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: bgColor,
+        gradient: bgGradient,
         border: Border.all(color: Colors.white.withOpacity(0.5)),
         shape: BoxShape.circle,
       ),
