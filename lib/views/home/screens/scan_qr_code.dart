@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:socialscan/models/social_link_model.dart';
+import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/views/home/screens/preview_scan_link_screen.dart';
 import 'package:socialscan/views/home/widgets/qr_scanner_overlay.dart';
 
@@ -12,7 +14,58 @@ class ScanQrCode extends StatefulWidget {
 
 class _ScanQrCodeState extends State<ScanQrCode> {
   List<String> extractedLinks = [];
+  List<UserModel> extractedModelLinks = [];
   MobileScannerController _mobileScannerController = MobileScannerController();
+
+
+  UserModel parseQRData(String qrData) {
+    List<String> userData = qrData.split(';');
+    if (userData.length != 7) {
+      print('Mad error =======>');
+
+      throw Exception('Invalid QR data format');
+    }
+    String firstName = userData[0];
+    String lastName = userData[1];
+    String phoneNumber = userData[2];
+    String profession = userData[3];
+    String email = userData[4];
+    String id = userData[5];
+    List<SocialLinkModel> socialLinks = parseSocialLinks(userData[6]);
+
+    return UserModel(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      profession: profession,
+      email: email,
+      socialMediaLink: socialLinks,
+      image: '',
+    );
+  }
+
+
+
+  List<SocialLinkModel> parseSocialLinks(String socialLinksString) {
+    List<String> socialLinksData = socialLinksString.split(',');
+    List<SocialLinkModel> socialLinks = [];
+    for (String linkData in socialLinksData) {
+      List<String> linkFields = linkData.split(',');
+      if (linkFields.length != 3) {
+        throw Exception('Invalid social link data format');
+      }
+      SocialLinkModel link = SocialLinkModel(
+        id: linkFields[0],
+        text: linkFields[1],
+        imagePath: linkFields[2],
+        linkUrl: linkFields[3],
+      );
+      socialLinks.add(link);
+    }
+    return socialLinks;
+  }
+
 
   @override
   void initState() {
@@ -74,50 +127,58 @@ class _ScanQrCodeState extends State<ScanQrCode> {
         children: [
           MobileScanner(
             controller: _mobileScannerController,
-            onDetect: (capture) {
+            onDetect: (capture) async {
               final List<Barcode> barcodes = capture.barcodes;
-              // final Uint8List? image = capture.image;
+              if (capture.barcodes.isEmpty) return;
+
               for (final barcode in barcodes) {
                 print("Barcode found! ${barcode.rawValue}");
-                extractedLinks = barcode.rawValue?.split(';') ?? [];
-                if (capture.image != null) {
-                  // for (var link in extractedLinks) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PreviewScanLinkScreen(
-                        data: extractedLinks,
+                try {
+                  UserModel userModel = parseQRData(barcode.rawValue!);
+                  extractedModelLinks.add(userModel);
+                  if (capture.image != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            PreviewScanLinkScreen(
+                              data: extractedLinks,
+                            ),
                       ),
-                    ),
-                  );
-                  // }
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return AlertDialog(
-                  //       title: const Text("QR Code Data"),
-                  //       content: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           for (var link in extractedLinks)
-                  //             ListTile(title: Text(link)),
-                  //         ],
-                  //       ),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.pop(context);
-                  //           },
-                  //           child: const Text('OK'),
-                  //         ),
-                  //       ],
-                  //     );
-                  //   },
-                  // );
+                    );
+                  }
+                } on Exception catch (e) {
+                  // Handle parsing exceptions (e.g., invalid format)
+                  print("Error parsing QR data: $e");
                 }
+                // }
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return AlertDialog(
+                //       title: const Text("QR Code Data"),
+                //       content: Column(
+                //         mainAxisSize: MainAxisSize.min,
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           for (var link in extractedLinks)
+                //             ListTile(title: Text(link)),
+                //         ],
+                //       ),
+                //       actions: [
+                //         TextButton(
+                //           onPressed: () {
+                //             Navigator.pop(context);
+                //           },
+                //           child: const Text('OK'),
+                //         ),
+                //       ],
+                //     );
+                //   },
+                // );
+
               }
-            },
+            }
           ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
         ],
