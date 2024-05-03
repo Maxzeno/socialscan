@@ -142,7 +142,7 @@ class _ScanQrCodeState extends State<ScanQrCode> {
                       MaterialPageRoute(
                         builder: (_) =>
                             PreviewScanLinkScreen(
-                              data: extractedLinks,
+                              data: extractedModelLinks,
                             ),
                       ),
                     );
