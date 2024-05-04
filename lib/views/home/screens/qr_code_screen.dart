@@ -1,28 +1,29 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:downloadsfolder/downloadsfolder.dart';
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:socialscan/models/social_link_model.dart';
+import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/view_model/number_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 // import 'package:path_provider/path_provider.dart';
 
+import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
 import '../../../utils/images.dart';
 import '../widgets/horizontal_dot_tile.dart';
-import 'dart:async';
-import 'package:downloadsfolder/downloadsfolder.dart';
-
-import 'package:provider/provider.dart';
-import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+// import '../widgets/horizontal_dot_tile/esys_flutter_share_plus.dart';
 
 // import 'package:qr_flutter/qr_flutter.dart';
 
@@ -75,15 +76,40 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     String phoneNumber = userModel.phoneNumber ?? '';
     String email = userModel.email ?? '';
     String id = userModel.id ?? '';
+    String image = userModel.image ?? '';
     List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
 
-    String socialLinksString = social.map((link) => '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}').join(',');
+    String socialLinksString = social
+        .map((link) =>
+            '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}')
+        .join(',');
 
-    String qrString = '$firstName;$lastName;$phoneNumber;$profession;$email;$id;$socialLinksString';
+    String userDataString =
+        '$firstName;$lastName;$phoneNumber;$profession;$email;$id';
+    if (image.isNotEmpty) {
+      userDataString += ';$image';
+    }
+
+    String qrString = '$userDataString;$socialLinksString';
 
     return qrString;
   }
 
+  // String generateQRData(UserModel userModel) {
+  //   String firstName = userModel.firstName ?? '';
+  //   String lastName = userModel.lastName ?? '';
+  //   String profession = userModel.profession ?? '';
+  //   String phoneNumber = userModel.phoneNumber ?? '';
+  //   String email = userModel.email ?? '';
+  //   String id = userModel.id ?? '';
+  //   List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
+  //
+  //   String socialLinksString = social.map((link) => '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}').join(',');
+  //
+  //   String qrString = '$firstName;$lastName;$phoneNumber;$profession;$email;$id;$socialLinksString';
+  //
+  //   return qrString;
+  // }
 
   void openSelectedLink(String encodedLinks, String chosenLink) {
     final decodedLinks = encodedLinks.split(';');
@@ -146,7 +172,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 height: 300,
                 width: 300,
                 child: PrettyQrView.data(
-                  data:generateQRData(widget.qrData),
+                  data: generateQRData(widget.qrData),
                   decoration: PrettyQrDecoration(
                     image: PrettyQrDecorationImage(
                       padding: const EdgeInsets.all(10),
