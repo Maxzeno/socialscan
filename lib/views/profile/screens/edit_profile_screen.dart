@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
@@ -45,7 +46,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         elevation: 0.0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => const BottomNav()));
           },
           icon: const Icon(
             Icons.arrow_back_outlined,
