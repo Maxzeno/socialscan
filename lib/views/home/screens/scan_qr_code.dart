@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
-import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/views/home/screens/preview_scan_link_screen.dart';
 import 'package:socialscan/views/home/widgets/qr_scanner_overlay.dart';
 
@@ -19,75 +18,33 @@ class _ScanQrCodeState extends State<ScanQrCode> {
   List<UserModel> extractedModelLinks = [];
   MobileScannerController _mobileScannerController = MobileScannerController();
 
-  // UserModel parseQRData(String qrData) {
-  //   print("Scanned QR Data: $qrData");
-  //   List<String> userData = qrData.split(':');
-  //   // if (userData.length != 7) {
-  //   //   print('Mad error =======>');
-
-  //   //   throw Exception('Invalid QR data format');
-  //   // }
-  //   print("Scanned User Data: $userData");
-  //   String firstName = userData[0];
-  //   String lastName = userData[1];
-  //   String phoneNumber = userData[2];
-  //   String profession = userData[3];
-  //   String email = userData[4];
-  //   String id = userData[5];
-  //   List<SocialLinkModel> socialLinks = parseSocialLinks(userData[6]);
-
-  //   return UserModel(
-  //     id: id,
-  //     firstName: firstName,
-  //     lastName: lastName,
-  //     phoneNumber: phoneNumber,
-  //     profession: profession,
-  //     email: email,
-  //     socialMediaLink: socialLinks,
-  //     image: '',
-  //   );
-  // }
-
-  List<SocialLinkModel> parseSocialLinks(String socialLinksString) {
-    List<String> socialLinksData = socialLinksString.split(',');
-    print("Social Link Data is: $socialLinksData");
-    List<SocialLinkModel> socialLinks = [];
-    for (String linkData in socialLinksData) {
-      List<String> linkFields = linkData.split('\n');
-      if (linkFields.length < 4) {
-        throw Exception('Invalid social link data format');
-      }
-      SocialLinkModel link = SocialLinkModel(
-        id: linkFields[0],
-        text: linkFields[1],
-        imagePath: linkFields[2],
-        linkUrl: linkFields[3],
-      );
-      socialLinks.add(link);
-    }
-    return socialLinks;
-  }
-
   UserModel parseQRData(String qrData) {
     print("Scanned QR Data: $qrData");
-    List<String> lines = qrData.split('\n');
-    Map<String, String> userData = {};
-    for (var line in lines) {
-      List<String> pair = line.split(':');
-      if (pair.length == 2) {
-        userData[pair[0].trim()] = pair[1].trim();
+    List<String> userData = qrData.split(';');
+    print('Users ===> $userData');
+    if (userData.length < 6) {
+      throw Exception('Invalid QR data format');
+    }
+    String firstName = userData[0];
+    String lastName = userData[1];
+    String phoneNumber = userData[2];
+    String profession = userData[3];
+    String email = userData[4];
+    String id = userData[5];
+    String image = '';
+    List<SocialLinkModel> socialLinks = [];
+
+    if (userData.length > 6) {
+      if (userData[6].startsWith('https')) {
+        image = userData[6];
+      } else {
+        socialLinks = parseSocialLinks(userData[6]);
       }
     }
-    print("Scanned User Data: $userData");
-    String firstName = userData['First Name']!;
-    String lastName = userData['Last Name']!;
-    String phoneNumber = userData['Phone Number']!;
-    String profession = userData['Profession']!;
-    String email =
-        userData['Email'] ?? ''; // Assuming 'Email' is a key in your QR data
-    String id = userData['ID'] ?? ''; // Assuming 'ID' is a key in your QR data
-    List<SocialLinkModel> socialLinks = parseSocialLinks(
-        userData['Social']!); // Assuming 'Social' is a key in your QR data
+
+    if (userData.length > 7) {
+      socialLinks = parseSocialLinks(userData[7]);
+    }
 
     return UserModel(
       id: id,
@@ -96,9 +53,45 @@ class _ScanQrCodeState extends State<ScanQrCode> {
       phoneNumber: phoneNumber,
       profession: profession,
       email: email,
+      image: image,
       socialMediaLink: socialLinks,
-      image: '',
     );
+  }
+
+  List<SocialLinkModel> parseSocialLinks(String socialLinksString) {
+    List<String> linksData = socialLinksString.split(',');
+    List<SocialLinkModel> socialLinks = [];
+    for (int i = 0; i < linksData.length; i += 5) {
+      if (i + 5 > linksData.length) {
+        throw Exception('Invalid social link data format');
+      }
+      String text = linksData[i];
+      String imagePath = linksData[i + 1];
+      String conColorHex = linksData[i + 2];
+      String iconColorHex = linksData[i + 3];
+      String linkUrl = linksData[i + 4];
+      socialLinks.add(SocialLinkModel(
+        text: text,
+        imagePath: imagePath,
+        conColor: parseColor(conColorHex),
+        iconColor: parseColor(iconColorHex),
+        // conColor: Color(int.parse(conColorHex.substring(1), radix: 16)),
+        // iconColor: Color(int.parse(iconColorHex.substring(1), radix: 16)),
+        linkUrl: linkUrl,
+      ));
+    }
+    print('Social add ===> $socialLinks');
+    return socialLinks;
+  }
+
+  Color parseColor(String colorString) {
+    String hexCode = colorString.split('(')[1].split(')')[0].substring(2);
+
+    if (hexCode.isNotEmpty && hexCode.length == 8) {
+      int hexValue = int.parse(hexCode, radix: 16);
+      return Color(hexValue);
+    }
+    return Colors.black;
   }
 
   ImagePicker picker = ImagePicker();
@@ -177,10 +170,12 @@ class _ScanQrCodeState extends State<ScanQrCode> {
                   print("Barcode found! ${barcode.rawValue}");
                   try {
                     UserModel userModel = parseQRData(barcode.rawValue!);
+                    print('parseqrdata ===> $userModel');
+                    print('=======> checking ');
                     extractedModelLinks.add(userModel);
                     print("Extracted Model Links: $extractedModelLinks");
                     if (capture.image != null) {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PreviewScanLinkScreen(
