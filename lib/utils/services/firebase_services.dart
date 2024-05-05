@@ -95,6 +95,25 @@ class FirebaseService {
     }
   }
 
+
+// TODO: Here
+  // void addUserToFirebase(UserModel userModel) async {
+  //   User? currentUser = auth.currentUser;
+  //   await _firestore
+  //       .collection('users')
+  //       .doc(currentUser?.uid)
+  //         .collection('socialMediaLinks');
+  // }
+
+  // void addUserToList(UserModel userModel) {
+  //   extractedModelLinks.add(userModel);
+  //   addUserToFirebase(userModel);
+  //   print("Extracted Model Links: $extractedModelLinks");
+  // }
+
+
+
+
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
       User? currentUser = auth.currentUser;
@@ -204,7 +223,6 @@ class FirebaseService {
 //     }
 //   }
 
-
   // Future<String> updateProfile(
   //     {String? firstName,
   //     String? lastName,
@@ -248,7 +266,8 @@ class FirebaseService {
       }
 
       // Get user details from Firestore
-      Stream<DocumentSnapshot> userDocStream = _firestore.collection('users').doc(currentUser.uid).snapshots();
+      Stream<DocumentSnapshot> userDocStream =
+          _firestore.collection('users').doc(currentUser.uid).snapshots();
       Stream<UserModel> userDetailsStream = userDocStream.map((userDoc) {
         if (!userDoc.exists) {
           throw 'User document does not exist';
@@ -274,7 +293,6 @@ class FirebaseService {
       rethrow;
     }
   }
-
 
   Future<String> updateProfile({
     String? firstName,

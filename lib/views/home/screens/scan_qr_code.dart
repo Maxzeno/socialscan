@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
+import 'package:socialscan/utils/lists/extracted_model_links.dart';
 import 'package:socialscan/views/home/screens/preview_scan_link_screen.dart';
 import 'package:socialscan/views/home/widgets/qr_scanner_overlay.dart';
 
@@ -15,7 +16,7 @@ class ScanQrCode extends StatefulWidget {
 
 class _ScanQrCodeState extends State<ScanQrCode> {
   List<String> extractedLinks = [];
-  List<UserModel> extractedModelLinks = [];
+  
   MobileScannerController _mobileScannerController = MobileScannerController();
 
   UserModel parseQRData(String qrData) {
@@ -161,60 +162,71 @@ class _ScanQrCodeState extends State<ScanQrCode> {
       body: Stack(
         children: [
           MobileScanner(
-              controller: _mobileScannerController,
-              onDetect: (capture) async {
-                final List<Barcode> barcodes = capture.barcodes;
-                if (capture.barcodes.isEmpty) return;
+            controller: _mobileScannerController,
+            onDetect: (capture) async {
+              setState(() {
+                isLoaderVisible = true;
+              });
+              final List<Barcode> barcodes = capture.barcodes;
+              if (capture.barcodes.isEmpty) return;
 
-                for (final barcode in barcodes) {
-                  print("Barcode found! ${barcode.rawValue}");
-                  try {
-                    UserModel userModel = parseQRData(barcode.rawValue!);
-                    print('parseqrdata ===> $userModel');
-                    print('=======> checking ');
-                    extractedModelLinks.add(userModel);
-                    print("Extracted Model Links: $extractedModelLinks");
-                    if (capture.image != null) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PreviewScanLinkScreen(
-                            data: extractedModelLinks,
-                          ),
+              for (final barcode in barcodes) {
+                print("Barcode found! ${barcode.rawValue}");
+                try {
+                  UserModel userModel = parseQRData(barcode.rawValue!);
+                  print('parseqrdata ===> $userModel');
+                  print('=======> checking ');
+                  extractedModelLinks.add(userModel);
+                  // FirebaseService().addUserToList(userModel);
+                  print("Extracted Model Links: $extractedModelLinks");
+                  setState(() {
+                    isLoaderVisible = false;
+                  });
+                  if (capture.image != null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PreviewScanLinkScreen(
+                          data: extractedModelLinks,
                         ),
-                      );
-                    }
-                  } on Exception catch (e) {
-                    // Handle parsing exceptions (e.g., invalid format)
-                    print("Error parsing QR data: $e");
+                      ),
+                    );
                   }
-                  // }
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return AlertDialog(
-                  //       title: const Text("QR Code Data"),
-                  //       content: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           for (var link in extractedLinks)
-                  //             ListTile(title: Text(link)),
-                  //         ],
-                  //       ),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () {
-                  //             Navigator.pop(context);
-                  //           },
-                  //           child: const Text('OK'),
-                  //         ),
-                  //       ],
-                  //     );
-                  //   },
-                  // );
+                } on Exception catch (e) {
+                  // Handle parsing exceptions (e.g., invalid format)
+                  setState(() {
+                    isLoaderVisible = false;
+                  });
+                  print("Error parsing QR data: $e");
                 }
-              }),
+                // }
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return AlertDialog(
+                //       title: const Text("QR Code Data"),
+                //       content: Column(
+                //         mainAxisSize: MainAxisSize.min,
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           for (var link in extractedLinks)
+                //             ListTile(title: Text(link)),
+                //         ],
+                //       ),
+                //       actions: [
+                //         TextButton(
+                //           onPressed: () {
+                //             Navigator.pop(context);
+                //           },
+                //           child: const Text('OK'),
+                //         ),
+                //       ],
+                //     );
+                //   },
+                // );
+              }
+            },
+          ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
           Positioned(
             left: 0,
@@ -437,11 +449,17 @@ class _ScanQrCodeState extends State<ScanQrCode> {
               left: 0,
               right: 0,
               bottom: 0,
-              child: Container(
-                width: 40,
-                height: 40,
-                color: Colors.black.withOpacity(0.8),
-                child: const CircularProgressIndicator(),
+              child: Stack(
+                children: [
+                  Container(
+                    // width: 40,
+                    // height: 40,
+                    color: Colors.black.withOpacity(0.8),
+                  ),
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -38,6 +39,29 @@ class PreviewScanLinkScreen extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return const BottomNav();
+                  }),
+                  (route) => false,
+                );
+              },
+              child: const Text(
+                "Back to home",
+                style: TextStyle(
+                  color: ProjectColors.mainPurple,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

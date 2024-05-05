@@ -27,7 +27,6 @@ List<UserModel> networkList = [
         iconColor: fbIconColor,
         linkUrl: 'https://www.facebook.com/aghazie.emeka',
       ),
-      
       SocialLinkModel(
         text: 'X',
         imagePath: twitterIcon,
@@ -166,6 +165,34 @@ class NetworkPage extends StatelessWidget {
                   height: 10,
                 ),
               ),
+
+              // StreamBuilder<QuerySnapshot>(
+              //   stream:
+              //       FirebaseFirestore.instance.collection('users').snapshots(),
+              //   builder: (BuildContext context,
+              //       AsyncSnapshot<QuerySnapshot> snapshot) {
+              //     if (snapshot.hasError) {
+              //       return const Text('Something went wrong');
+              //     }
+              
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return const Text("Loading");
+              //     }
+              
+              //     return ListView(
+              //       shrinkWrap: true,
+              //       children:
+              //           snapshot.data!.docs.map((DocumentSnapshot document) {
+              //         Map<String, dynamic> data =
+              //             document.data()! as Map<String, dynamic>;
+              //         return ListTile(
+              //           title: Text(data['firstName'] + ' ' + data['lastName']),
+              //           subtitle: Text(data['email']),
+              //         );
+              //       }).toList(),
+              //     );
+              //   },
+              // ),
               const SizedBox(
                 height: 25,
               ),
@@ -182,7 +209,7 @@ class NetworkPage extends StatelessWidget {
                 itemCount: networkList.length,
                 itemBuilder: (context, index) => NetworkListTile(
                   user: networkList[index],
-                    socialMediaList: networkList[index].socialMediaLink!,
+                  socialMediaList: networkList[index].socialMediaLink!,
                 ),
                 separatorBuilder: (context, child) => const SizedBox(
                   height: 10,
