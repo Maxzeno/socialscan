@@ -18,7 +18,7 @@ class TextTileWidget extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        icon!,
+        // icon!,
       ],
     );
   }

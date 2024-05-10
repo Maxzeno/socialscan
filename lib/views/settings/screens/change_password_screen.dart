@@ -35,6 +35,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
+        toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

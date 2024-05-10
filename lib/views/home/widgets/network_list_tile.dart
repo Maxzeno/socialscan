@@ -202,6 +202,11 @@ class NetworkScreenSocialCircle extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: bgColor,
+        border: Border.all(
+          width: 2.0,
+          color: ProjectColors.mainGray,
+          strokeAlign: BorderSide.strokeAlignCenter,
+        ),
         // borderRadius: BorderRadius.circular(50),
         shape: BoxShape.circle,
       ),
