@@ -50,7 +50,6 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
 
   TextEditingController linkController = TextEditingController();
 
-  
   List<String> extractLinkUrls(List<SocialLinkModel> socialLinks) {
     List<String> linkUrls = [];
     for (var socialLink in socialLinks) {
@@ -241,7 +240,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                 },
               );
             } else {
-              return const SizedBox();
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),

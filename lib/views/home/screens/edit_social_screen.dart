@@ -39,6 +39,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
+        toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -49,116 +50,122 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BackgroundBox(
-                  theChild: Container(
-                    height: 115,
-                    width: 115,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  BackgroundBox(
+                    theChild: Container(
+                      height: 115,
+                      width: 115,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1, color: Colors.white),
+                        color: widget.socialColor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 10,
+                            // blurStyle: BlurStyle.outer,
+                            color: widget.socialColor,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          widget.icon,
+                          height: 60,
+                          width: 60,
+                        ),
+                      ),
+                    ),
+                    text: widget.socialText,
+                    color: widget.socialColor.withOpacity(0.1),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  // Text(
+                  //   'Social Media',
+                  //   style: TextStyle(
+                  //     fontSize: 14,
+                  //     fontWeight: FontWeight.w500,
+                  //     color: Colors.black38,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 5),
+                  Container(
+                    height: 53,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 19),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 1, color: Colors.white),
-                      color: widget.socialColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10,
-                          // blurStyle: BlurStyle.outer,
-                          color: widget.socialColor,
+                      borderRadius: BorderRadius.circular(8),
+                      color: ProjectColors.mainGray,
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: widget.socialColor,
+                          radius: 16,
+                          child: SvgPicture.asset(
+                            widget.icon,
+                            height: 20,
+                            width: 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.socialText,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        widget.icon,
-                        height: 60,
-                        width: 60,
-                      ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text(
+                    'Link',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black38,
                     ),
                   ),
-                  text: widget.socialText,
-                  color: widget.socialColor.withOpacity(0.1),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                // Text(
-                //   'Social Media',
-                //   style: TextStyle(
-                //     fontSize: 14,
-                //     fontWeight: FontWeight.w500,
-                //     color: Colors.black38,
-                //   ),
-                // ),
-                // const SizedBox(height: 5),
-                Container(
-                  height: 53,
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 19),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: ProjectColors.mainGray,
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: widget.socialColor,
-                        radius: 16,
-                        child: SvgPicture.asset(
-                          widget.icon,
-                          height: 20,
-                          width: 20,
-                        ),
+                  const SizedBox(height: 5),
+                  ReusableTextField(
+                    onTap: () {},
+                    hintText: 'Paste Link',
+                    initialValue: widget.linkUrl,
+                    width: double.infinity,
+                    obscure: false,
+                    iconButton: const InkWell(
+                      child: Icon(
+                        Icons.paste_rounded,
+                        size: 18,
+                        color: Colors.black,
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        widget.socialText,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text(
-                  'Link',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black38,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                ReusableTextField(
-                  onTap: () {},
-                  hintText: 'Paste Link',
-                  initialValue: widget.linkUrl,
-                  width: double.infinity,
-                  obscure: false,
-                  iconButton: const InkWell(
-                    child: Icon(
-                      Icons.paste_rounded,
-                      size: 18,
-                      color: Colors.black,
                     ),
+                    onSaved: (value) {
+                      link = value!;
+                    },
                   ),
-                  onSaved: (value) {
-                    link = value!;
-                  },
-                ),
-                const SizedBox(
-                  height: 110,
-                ),
+                  // const SizedBox(
+                  //   height: 110,
+                  // ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
                 ButtonTile(
                   onTap: () {
                     FirebaseService().editSocialLink(widget.id, link).then(
@@ -228,7 +235,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                 ),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

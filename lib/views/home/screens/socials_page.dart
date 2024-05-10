@@ -46,48 +46,48 @@ class _SocialsPageState extends State<SocialsPage> {
             //           visualDensity: VisualDensity.compact,
             //         ),
             //       ),
-            icon: SizedBox(
-              height: 20,
-              width: 20,
-              child: Checkbox(
-                value: _isChecked,
-                activeColor: ProjectColors.mainPurple,
-                side: const BorderSide(width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                onChanged: (val) {
-                  setState(() {
-                    _isChecked = !_isChecked;
-                  });
+            // icon: SizedBox(
+            //   height: 20,
+            //   width: 20,
+            //   child: Checkbox(
+            //     value: _isChecked,
+            //     activeColor: ProjectColors.mainPurple,
+            //     side: const BorderSide(width: 1),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(5),
+            //     ),
+            //     onChanged: (val) {
+            //       setState(() {
+            //         _isChecked = !_isChecked;
+            //       });
 
-                  // setState(() {
-                  //   _isChecked = val!;
-                  //   log("_isAllSocialChecked: $_isChecked");
-                  //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
-                  //   userProvider.selectSocialToQrCode(
-                  //     _isChecked,
-                  //     data,
-                  //     index,
-                  //   );
-                  // });
+            //       // setState(() {
+            //       //   _isChecked = val!;
+            //       //   log("_isAllSocialChecked: $_isChecked");
+            //       //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
+            //       //   userProvider.selectSocialToQrCode(
+            //       //     _isChecked,
+            //       //     data,
+            //       //     index,
+            //       //   );
+            //       // });
 
-                  // setState(() {
-                  //   _isChecked = !_isChecked;
-                  //   log("_isAllSocialChecked: $_isChecked");
-                  //   if (_isChecked) {
-                  //     userProvider.selectAllSocials(
-                  //         _isChecked, addedSocialsList);
-                  //   } else {
-                  //     userProvider.selectSocialToQrCode(_isChecked, "data", -1);
-                  //   }
-                  //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
-                  // });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-            ),
+            //       // setState(() {
+            //       //   _isChecked = !_isChecked;
+            //       //   log("_isAllSocialChecked: $_isChecked");
+            //       //   if (_isChecked) {
+            //       //     userProvider.selectAllSocials(
+            //       //         _isChecked, addedSocialsList);
+            //       //   } else {
+            //       //     userProvider.selectSocialToQrCode(_isChecked, "data", -1);
+            //       //   }
+            //       //   log("selectedSocialsToSendList: $selectedSocialsToSendList");
+            //       // });
+            //     },
+            //     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //     visualDensity: VisualDensity.compact,
+            //   ),
+            // ),
           ),
           const SizedBox(
             height: 14,

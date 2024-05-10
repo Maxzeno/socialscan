@@ -44,6 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
+        toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pushReplacement(
