@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
@@ -14,11 +13,14 @@ class SocialsPage extends StatefulWidget {
 }
 
 class _SocialsPageState extends State<SocialsPage> {
-  bool _isChecked = false;
+  final bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    // final userProvider = Provider.of<UserProvider>(context);
+
+
+
     return SingleChildScrollView(
       child: Column(
         children: [

@@ -12,4 +12,8 @@ class ProjectColors {
   static const Color li = Color(0xFF0C73DE);
   static const Color sc = Color(0xFFEFB715);
   static const Color gh = Color(0xFF000000);
+  static const Color successColor = Colors.green;
+  static const Color errorColor = Colors.red;
+  static const Color warningColor = Colors.yellow;
+  static const Color fadeBlack = Colors.black54;
 }

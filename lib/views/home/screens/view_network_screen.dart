@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/models/social_link_model.dart';
@@ -6,7 +7,9 @@ import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/frosted_glass_box.dart';
 import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/user_provider.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ViewNetworkScreen extends StatelessWidget {
   final UserModel user;
@@ -152,10 +155,28 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Icon(
-                              Icons.copy_outlined,
-                              size: 24,
-                              color: Colors.grey.shade800,
+                            GestureDetector(
+                              onTap: () async{
+                                await Clipboard.setData(
+                                    ClipboardData(
+                                      text: user.phoneNumber,
+                                    ),
+                                  );
+
+
+                                  VxToast.show(
+                                    context,
+                                    msg: 'Copied to clipboard.',
+                                    bgColor: ProjectColors.fadeBlack,
+                                    textColor: Colors.white,
+                                    showTime: 2000,
+                                  );
+                              },
+                              child: Icon(
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
+                              ),
                             ),
                           ],
                         ),
@@ -188,11 +209,29 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Icon(
-                              // onPressed: () {},
-                              Icons.copy_outlined,
-                              size: 24,
-                              color: Colors.grey.shade800,
+                            GestureDetector(
+                              onTap: () async{
+                                await Clipboard.setData(
+                                    ClipboardData(
+                                      text: user.email,
+                                    ),
+                                  );
+
+
+                                  VxToast.show(
+                                    context,
+                                    msg: 'Copied to clipboard.',
+                                    bgColor: ProjectColors.fadeBlack,
+                                    textColor: Colors.white,
+                                    showTime: 2000,
+                                  );
+                              },
+                              child: Icon(
+                                // onPressed: () {},
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
+                              ),
                             ),
                           ],
                         ),
@@ -235,58 +274,117 @@ class ViewNetworkScreen extends StatelessWidget {
                       const SizedBox(
                         height: 6,
                       ),
-                      TextField(
-                        // enabled: false,
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: socialMediaList[index].linkUrl,
-                        ),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          // fontSize: 15,
-                        ),
-                        decoration: InputDecoration(
-                          // hintText: socialMediaList[index].linkUrl,
-                          // hintStyle: const TextStyle(
-                          //   color: Colors.black,
-                          // ),
-                          enabled: false,
-                          filled: true,
-                          fillColor: Colors.grey.shade300,
-                          // contentPadding: const EdgeInsets.all(0),
-                          // suffixIconConstraints:
-                          //     BoxConstraints.tight(const Size.fromWidth(100)),
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    // await Clipboard.setData(ClipboardData(
-                                    //     text: socialMediaList[index].linkUrl));
+                      // TextField(
+                      //   // enabled: false,
+                      //   readOnly: true,
+                      //   controller: TextEditingController(
+                      //     text: socialMediaList[index].linkUrl,
+                      //   ),
+                      //   style: const TextStyle(
+                      //     color: Colors.black,
+                      //     // fontSize: 15,
+                      //   ),
+                      //   decoration: InputDecoration(
+                      //     // hintText: socialMediaList[index].linkUrl,
+                      //     // hintStyle: const TextStyle(
+                      //     //   color: Colors.black,
+                      //     // ),
+                      //     enabled: false,
+                      //     filled: true,
+                      //     fillColor: Colors.grey.shade300,
+                      //     // contentPadding: const EdgeInsets.all(0),
+                      //     // suffixIconConstraints:
+                      //     //     BoxConstraints.tight(const Size.fromWidth(100)),
+                      //     suffixIcon: Padding(
+                      //       padding: const EdgeInsets.only(right: 10.0),
+                      //       child: Row(
+                      //         mainAxisSize: MainAxisSize.min,
+                      //         children: [
+                      //           GestureDetector(
+                      //             onTap: () async {
+                      //               // await Clipboard.setData(ClipboardData(
+                      //               //     text: socialMediaList[index].linkUrl));
 
-                                    // ScaffoldMessenger.of(context)
-                                    //     .showSnackBar(const SnackBar(
-                                    //   content: Text('Copied to clipboard'),
-                                    // ));
-                                    // print("Copied");
-                                  },
-                                  child: Icon(
-                                    // onPressed: () {},
-                                    Icons.copy_outlined,
-                                    size: 24,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                                const SizedBox(width: 7),
-                                Icon(
-                                  Icons.launch_outlined,
+                      //               // ScaffoldMessenger.of(context)
+                      //               //     .showSnackBar(const SnackBar(
+                      //               //   content: Text('Copied to clipboard'),
+                      //               // ));
+                      //               // print("Copied");
+                      //             },
+                      //             child: Icon(
+                      //               // onPressed: () {},
+                      //               Icons.copy_outlined,
+                      //               size: 24,
+                      //               color: Colors.grey.shade800,
+                      //             ),
+                      //           ),
+                      //           const SizedBox(width: 7),
+                      //           Icon(
+                      //             Icons.launch_outlined,
+                      //             size: 24,
+                      //             color: Colors.grey.shade800,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      ReusableTextField(
+                        // controller: TextEditingController(
+                        //   text: socialMediaList[index].linkUrl,
+                        // ),
+                        initialValue: socialMediaList[index].linkUrl,
+                        obscure: false,
+                        textSize: 15,
+                        onTap: () {},
+                        iconButton: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  // await Clipboard.setData(ClipboardData(
+                                  //     text: socialMediaList[index].linkUrl));
+
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(const SnackBar(
+                                  //   content: Text('Copied to clipboard'),
+                                  // ));
+                                  // print("Copied");
+                                  await Clipboard.setData(
+                                    ClipboardData(
+                                      text: socialMediaList[index].linkUrl,
+                                    ),
+                                  );
+
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(const SnackBar(
+                                  //   content: Text('Copied to clipboard'),
+                                  // ));
+                                  VxToast.show(
+                                    context,
+                                    msg: 'Copied to clipboard.',
+                                    bgColor: ProjectColors.fadeBlack,
+                                    textColor: Colors.white,
+                                    showTime: 2000,
+                                  );
+                                },
+                                child: Icon(
+                                  // onPressed: () {},
+                                  Icons.copy_outlined,
                                   size: 24,
                                   color: Colors.grey.shade800,
                                 ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: 7),
+                              Icon(
+                                Icons.launch_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
+                              ),
+                            ],
                           ),
                         ),
                       ),

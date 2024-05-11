@@ -34,7 +34,7 @@ class UserProvider extends ChangeNotifier {
   CountryCode? countryCode;
 
   bool isLoading = false;
-  final bool _isSocialChecked = false;
+  // final bool _isSocialChecked = false;
 
   bool _isSignedIn = false;
 
