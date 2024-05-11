@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/view_model/number_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,6 +22,7 @@ import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
 import '../../../utils/images.dart';
 import '../widgets/horizontal_dot_tile.dart';
+import "package:velocity_x/velocity_x.dart";
 // import '../widgets/horizontal_dot_tile/esys_flutter_share_plus.dart';
 
 // import 'package:qr_flutter/qr_flutter.dart';
@@ -70,13 +70,13 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   // }
 
   String generateQRData(UserModel userModel) {
-    String firstName = userModel.firstName ?? '';
-    String lastName = userModel.lastName ?? '';
+    String firstName = userModel.firstName;
+    String lastName = userModel.lastName;
     String profession = userModel.profession ?? '';
-    String phoneNumber = userModel.phoneNumber ?? '';
-    String email = userModel.email ?? '';
-    String id = userModel.id ?? '';
-    String image = userModel.image ?? '';
+    String phoneNumber = userModel.phoneNumber;
+    String email = userModel.email;
+    String id = userModel.id;
+    String image = userModel.image;
     List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
 
     String socialLinksString = social
@@ -175,6 +175,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 child: PrettyQrView.data(
                   data: generateQRData(widget.qrData),
                   decoration: PrettyQrDecoration(
+                    // shape:PrettyQrSmoothSymbol(),
                     image: PrettyQrDecorationImage(
                       padding: const EdgeInsets.all(10),
                       image: AssetImage(socialIcon),
@@ -207,6 +208,20 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
               icon: SvgPicture.asset(shareIcon),
               color: const Color(0xFFECECEC),
               onTap: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                );
+
                 final qrCode = QrCode.fromData(
                   data: generateQRData(widget.qrData!),
                   errorCorrectLevel: QrErrorCorrectLevel.H,
@@ -214,7 +229,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
                 final qrImage = QrImage(qrCode);
                 final qrImageBytes = await qrImage.toImageAsBytes(
-                  size: 512,
+                  size: 1080,
                   format: ImageByteFormat.png,
                   decoration: PrettyQrDecoration(
                     background: Colors.white,
@@ -229,10 +244,12 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 final compressedImage =
                     await FlutterImageCompress.compressWithList(
                   qrImageBytes!.buffer.asUint8List(),
-                  minWidth: 512,
-                  minHeight: 512,
+                  minWidth: 1080,
+                  minHeight: 1080,
                   quality: 88,
                 );
+
+                Navigator.pop(context);
 
                 Share.file(
                   'Qr Code',
@@ -240,8 +257,28 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   compressedImage,
                   'image/png',
                 );
+
+                // VxToast.show(
+                //   context,
+                //   msg: 'Shared successfully!',
+                //   bgColor: ProjectColors.fadeBlack,
+                //   textColor: Colors.white,
+                //   showTime: 5000,
+                // );
+
+// Future.delayed(Duration(seconds: 4), () {
+//       VxToast.show(context, msg: 'Shared successfully!', bgColor: Colors.black54, textColor: Colors.white);});
+                // Future.delayed(const Duration(seconds: 2), () {
+                //   return VxToast.show(
+                //     context,
+                //     msg: 'Shared',
+                //     bgColor: Colors.black54,
+                //     textColor: Colors.white,
+                //   );
+                // });
               },
             ),
+
             const SizedBox(
               height: 10,
             ),
@@ -255,6 +292,20 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   color: Colors.white,
                 ),
                 onTap: () async {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return const Center(
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                  );
+
                   final qrCode = QrCode.fromData(
                     data: generateQRData(widget.qrData!),
                     errorCorrectLevel: QrErrorCorrectLevel.H,
@@ -262,7 +313,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
                   final qrImage = QrImage(qrCode);
                   final qrImageBytes = await qrImage.toImageAsBytes(
-                    size: 512,
+                    size: 1080,
                     format: ImageByteFormat.png,
                     decoration: PrettyQrDecoration(
                       background: Colors.white,
@@ -295,8 +346,8 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   final compressedImage =
                       await FlutterImageCompress.compressWithList(
                     qrImageBytes!.buffer.asUint8List(),
-                    minWidth: 512,
-                    minHeight: 512,
+                    minWidth: 1080,
+                    minHeight: 1080,
                     quality: 88,
                   );
                   await file.writeAsBytes(compressedImage, flush: true);
@@ -305,11 +356,20 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   //   return
                   // });
 
-                  infoSnackBar(
+                  // infoSnackBar(
+                  //   context,
+                  //   'Qr Code saved to $downloadDirectoryPath',
+                  //   const Duration(seconds: 8),
+                  //   Colors.green,
+                  // );
+                  Navigator.pop(context);
+
+                  VxToast.show(
                     context,
-                    'Qr Code saved to $downloadDirectoryPath',
-                    const Duration(seconds: 5),
-                    Colors.green,
+                    msg: 'Downloaded successfully!',
+                    bgColor: ProjectColors.successColor.withOpacity(0.95),
+                    textColor: Colors.white,
+                    showTime: 5000,
                   );
 
                   // The image file is now saved in the device's temporary directory.

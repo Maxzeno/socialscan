@@ -66,17 +66,17 @@ class _SettingScreenState extends State<SettingScreen> {
             const SizedBox(
               height: 35,
             ),
-            Text(
-              whileConnecting,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            whileConnectingOption(),
+            // Text(
+            //   whileConnecting,
+            //   style: const TextStyle(
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            // whileConnectingOption(),
           ],
         ),
       ),
@@ -285,11 +285,12 @@ class _GeneralOptionsState extends State<GeneralOptions> {
                                           // _isChecked = value!;
                                           // _selectedCheckbox = value! ? 1 : 0;
                                           setState(() {
-                                            isCheckedLightTheme = value!;
+                                            isCheckedLightTheme = true;
+                                            isCheckedDarkTheme = false;
                                             // isCheckedLightTheme = !isCheckedLightTheme;
-                                            if (isCheckedLightTheme) {
-                                              isCheckedDarkTheme = false;
-                                            }
+                                            // if (isCheckedLightTheme) {
+                                            //   isCheckedDarkTheme = false;
+                                            // }
                                           });
                                       },
                                     ),
@@ -352,11 +353,13 @@ class _GeneralOptionsState extends State<GeneralOptions> {
                                       onChanged: (value) {
                                           // _selectedCheckbox = value! ? 2 : 0;
                                           setState(() {
-                                            isCheckedDarkTheme = value!;
-                                            // isCheckedDarkTheme = !isCheckedDarkTheme;
-                                            if (isCheckedDarkTheme) {
-                                              isCheckedLightTheme = false;
-                                            }
+                                            // isCheckedDarkTheme = value!;
+                                            // // isCheckedDarkTheme = !isCheckedDarkTheme;
+                                            // if (isCheckedDarkTheme) {
+                                            //   isCheckedLightTheme = false;
+                                            // }
+                                            isCheckedDarkTheme = true;
+                                            isCheckedLightTheme = false;
                                           });
                                       },
                                     ),
