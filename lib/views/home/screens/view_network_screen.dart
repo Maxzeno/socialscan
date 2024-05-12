@@ -513,6 +513,9 @@ class ViewNetworkScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                 itemCount: socialMediaList.length,
               ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
