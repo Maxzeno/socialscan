@@ -156,21 +156,20 @@ class ViewNetworkScreen extends StatelessWidget {
                               ],
                             ),
                             GestureDetector(
-                              onTap: () async{
+                              onTap: () async {
                                 await Clipboard.setData(
-                                    ClipboardData(
-                                      text: user.phoneNumber,
-                                    ),
-                                  );
+                                  ClipboardData(
+                                    text: user.phoneNumber,
+                                  ),
+                                );
 
-
-                                  VxToast.show(
-                                    context,
-                                    msg: 'Copied to clipboard.',
-                                    bgColor: ProjectColors.fadeBlack,
-                                    textColor: Colors.white,
-                                    showTime: 2000,
-                                  );
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: ProjectColors.fadeBlack,
+                                  textColor: Colors.white,
+                                  showTime: 2000,
+                                );
                               },
                               child: Icon(
                                 Icons.copy_outlined,
@@ -210,21 +209,20 @@ class ViewNetworkScreen extends StatelessWidget {
                               ],
                             ),
                             GestureDetector(
-                              onTap: () async{
+                              onTap: () async {
                                 await Clipboard.setData(
-                                    ClipboardData(
-                                      text: user.email,
-                                    ),
-                                  );
+                                  ClipboardData(
+                                    text: user.email,
+                                  ),
+                                );
 
-
-                                  VxToast.show(
-                                    context,
-                                    msg: 'Copied to clipboard.',
-                                    bgColor: ProjectColors.fadeBlack,
-                                    textColor: Colors.white,
-                                    showTime: 2000,
-                                  );
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: ProjectColors.fadeBlack,
+                                  textColor: Colors.white,
+                                  showTime: 2000,
+                                );
                               },
                               child: Icon(
                                 // onPressed: () {},
@@ -398,6 +396,9 @@ class ViewNetworkScreen extends StatelessWidget {
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 20),
                 itemCount: socialMediaList.length,
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),
