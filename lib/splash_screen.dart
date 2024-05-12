@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
             autoPlay: AnimationPlayStates.Loop,
           ),
           child: Image.asset(
-            'assets/images/sslogo_purple.png',
+            'assets/images/socialscan_logo_png.png',
             height: 100,
           ),
         ),
