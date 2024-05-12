@@ -9,6 +9,7 @@ import 'package:socialscan/utils/frosted_glass_box.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/user_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ViewNetworkScreen extends StatelessWidget {
@@ -34,6 +35,85 @@ class ViewNetworkScreen extends StatelessWidget {
       );
     }
 
+    void launchURL(String url) async {
+      try {
+        Uri finalUrl = Uri.parse(url);
+        bool launched = await launchUrl(finalUrl);
+        if (!launched) {
+          VxToast.show(
+            context,
+            msg: 'Cannot launch URL.',
+            bgColor: ProjectColors.errorColor,
+            textColor: Colors.white,
+            showTime: 3000,
+          );
+        }
+      } catch (e) {
+        VxToast.show(
+          context,
+          msg: 'Cannot launch URL.',
+          bgColor: ProjectColors.errorColor,
+          textColor: Colors.white,
+          showTime: 3000,
+        );
+      }
+    }
+
+    void openPhone(String phoneNumber) async {
+      try {
+        String phoneUrl = "tel:$phoneNumber";
+        Uri finalUrl = Uri.parse(phoneUrl);
+        bool launched = await launchUrl(finalUrl);
+
+        if (!launched) {
+          VxToast.show(
+            context,
+            msg: 'Invalid Phone Number.',
+            bgColor: ProjectColors.errorColor,
+            textColor: Colors.white,
+            showTime: 3000,
+          );
+        }
+      } catch (e) {
+        // await launch(fallbackUrl);
+        VxToast.show(
+          context,
+          msg: 'Invalid Phone Number.',
+          bgColor: ProjectColors.errorColor,
+          textColor: Colors.white,
+          showTime: 3000,
+        );
+      }
+    }
+
+    void openEmail(String emailAddress, String subject, String body) async {
+      try {
+        String emailUrl =
+            "mailto:$emailAddress?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(body)}";
+        Uri finalUrl = Uri.parse(emailUrl);
+        bool launched = await launchUrl(finalUrl);
+
+        if (!launched) {
+          VxToast.show(
+            context,
+            msg: 'Invalid E-mail.',
+            bgColor: ProjectColors.errorColor,
+            textColor: Colors.white,
+            showTime: 3000,
+          );
+        }
+      } catch (e) {
+        // await launch(fallbackUrl);
+        VxToast.show(
+          context,
+          msg: 'Invalid E-mail.',
+          bgColor: ProjectColors.errorColor,
+          textColor: Colors.white,
+          showTime: 3000,
+        );
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       // extendBody: true,
@@ -54,7 +134,11 @@ class ViewNetworkScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            bottom: 30.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -155,28 +239,40 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () async{
-                                await Clipboard.setData(
-                                    ClipboardData(
-                                      text: user.phoneNumber,
-                                    ),
-                                  );
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await Clipboard.setData(
+                                      ClipboardData(
+                                        text: user.phoneNumber,
+                                      ),
+                                    );
 
-
-                                  VxToast.show(
-                                    context,
-                                    msg: 'Copied to clipboard.',
-                                    bgColor: ProjectColors.fadeBlack,
-                                    textColor: Colors.white,
-                                    showTime: 2000,
-                                  );
-                              },
-                              child: Icon(
-                                Icons.copy_outlined,
-                                size: 24,
-                                color: Colors.grey.shade800,
-                              ),
+                                    VxToast.show(
+                                      context,
+                                      msg: 'Copied to clipboard.',
+                                      bgColor: ProjectColors.fadeBlack,
+                                      textColor: Colors.white,
+                                      showTime: 2000,
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.copy_outlined,
+                                    size: 24,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                                const SizedBox(width: 7),
+                                GestureDetector(
+                                  onTap: () => openPhone(user.phoneNumber),
+                                  child: Icon(
+                                    Icons.launch_outlined,
+                                    size: 24,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -209,29 +305,41 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () async{
-                                await Clipboard.setData(
-                                    ClipboardData(
-                                      text: user.email,
-                                    ),
-                                  );
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await Clipboard.setData(
+                                      ClipboardData(
+                                        text: user.email,
+                                      ),
+                                    );
 
-
-                                  VxToast.show(
-                                    context,
-                                    msg: 'Copied to clipboard.',
-                                    bgColor: ProjectColors.fadeBlack,
-                                    textColor: Colors.white,
-                                    showTime: 2000,
-                                  );
-                              },
-                              child: Icon(
-                                // onPressed: () {},
-                                Icons.copy_outlined,
-                                size: 24,
-                                color: Colors.grey.shade800,
-                              ),
+                                    VxToast.show(
+                                      context,
+                                      msg: 'Copied to clipboard.',
+                                      bgColor: ProjectColors.fadeBlack,
+                                      textColor: Colors.white,
+                                      showTime: 2000,
+                                    );
+                                  },
+                                  child: Icon(
+                                    // onPressed: () {},
+                                    Icons.copy_outlined,
+                                    size: 24,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                                const SizedBox(width: 7),
+                                GestureDetector(
+                                  onTap: () => openEmail(user.email, "", ""),
+                                  child: Icon(
+                                    Icons.launch_outlined,
+                                    size: 24,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -242,6 +350,7 @@ class ViewNetworkScreen extends StatelessWidget {
               ),
               ListView.separated(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   // socialMediaList.map((social) {
                   return Column(
@@ -337,6 +446,7 @@ class ViewNetworkScreen extends StatelessWidget {
                         initialValue: socialMediaList[index].linkUrl,
                         obscure: false,
                         textSize: 15,
+                        readOnly: true,
                         onTap: () {},
                         iconButton: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
@@ -374,15 +484,19 @@ class ViewNetworkScreen extends StatelessWidget {
                                 child: Icon(
                                   // onPressed: () {},
                                   Icons.copy_outlined,
-                                  size: 24,
+                                  size: 22,
                                   color: Colors.grey.shade800,
                                 ),
                               ),
                               const SizedBox(width: 7),
-                              Icon(
-                                Icons.launch_outlined,
-                                size: 24,
-                                color: Colors.grey.shade800,
+                              GestureDetector(
+                                onTap: () =>
+                                    launchURL(socialMediaList[index].linkUrl),
+                                child: Icon(
+                                  Icons.launch_outlined,
+                                  size: 22,
+                                  color: Colors.grey.shade800,
+                                ),
                               ),
                             ],
                           ),
