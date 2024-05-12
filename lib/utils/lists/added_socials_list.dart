@@ -1,4 +1,4 @@
-  import 'package:socialscan/models/social_link_model.dart';
+import 'package:socialscan/models/social_link_model.dart';
 
 import '../../models/user_model.dart';
 

@@ -43,10 +43,25 @@ class NetworkListTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundImage: NetworkImage(user.image),
-                ),
+                user.image.isEmpty
+                    ? CircleAvatar(
+                        radius: 22,
+                        backgroundColor: ProjectColors.mainPurple,
+                        child: Center(
+                          child: Text(
+                            user.firstName.toString().substring(0, 1),
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : CircleAvatar(
+                        radius: 22,
+                        backgroundImage: NetworkImage(user.image),
+                      ),
                 const SizedBox(
                   width: 10,
                 ),

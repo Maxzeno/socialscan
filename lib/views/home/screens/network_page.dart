@@ -5,6 +5,7 @@ import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/lists/hex_color_list.dart';
+import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/widgets/network_list_tile.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
@@ -148,22 +149,35 @@ class NetworkPage extends StatelessWidget {
                 height: 18,
               ),
               // networkLists(3),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: networkList.length,
-                itemBuilder: (context, index) {
-                  // final List data = List.generate(networkList.length, (index){
-                  //   return NetworkListTile();
-                  // });
-                  return NetworkListTile(
-                    user: networkList[index],
-                    socialMediaList: networkList[index].socialMediaLink!,
-                  );
+              StreamBuilder(
+                stream: FirebaseService().getAllNetworkUsers(),
+                builder: (context, AsyncSnapshot<List<UserModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    final results = snapshot.data;
+                    print('Network data ====> $results');
+
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: results!.length,
+                      itemBuilder: (context, index) {
+                        final data = results[index];
+                        // final List data = List.generate(networkList.length, (index){
+                        //   return NetworkListTile();
+                        // });
+                        return NetworkListTile(
+                          user: data,
+                          socialMediaList: data.socialMediaLink!,
+                        );
+                      },
+                      separatorBuilder: (context, child) => const SizedBox(
+                        height: 10,
+                      ),
+                    );
+                  } else {
+                    return const Center();
+                  }
                 },
-                separatorBuilder: (context, child) => const SizedBox(
-                  height: 10,
-                ),
               ),
 
               // StreamBuilder<QuerySnapshot>(
@@ -174,11 +188,11 @@ class NetworkPage extends StatelessWidget {
               //     if (snapshot.hasError) {
               //       return const Text('Something went wrong');
               //     }
-              
+
               //     if (snapshot.connectionState == ConnectionState.waiting) {
               //       return const Text("Loading");
               //     }
-              
+
               //     return ListView(
               //       shrinkWrap: true,
               //       children:

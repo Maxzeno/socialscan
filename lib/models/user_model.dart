@@ -33,8 +33,21 @@ class UserModel {
     data['profession'] = profession;
     data['id'] = id;
     data['image'] = image;
-    data['socialMediaLink'] = socialMediaLink;
+    data['socialMediaLink'] = socialMediaLink?.map((e) => e.toJson());
     return data;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNumber': phoneNumber,
+      'profession': profession,
+      'email': email,
+      'image': image,
+      'socialMediaLink': socialMediaLink?.map((e) => e.toJson()).toList(),
+    };
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {

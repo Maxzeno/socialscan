@@ -9,6 +9,8 @@ import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/services/storage_service.dart';
 
+import '../strings.dart';
+
 class FirebaseService {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -95,7 +97,6 @@ class FirebaseService {
     }
   }
 
-
 // TODO: Here
   // void addUserToFirebase(UserModel userModel) async {
   //   User? currentUser = auth.currentUser;
@@ -110,9 +111,6 @@ class FirebaseService {
   //   addUserToFirebase(userModel);
   //   print("Extracted Model Links: $extractedModelLinks");
   // }
-
-
-
 
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
@@ -187,85 +185,107 @@ class FirebaseService {
     }
     return res;
   }
-//   Stream<Map<String, dynamic>> getUserDetailsAndLinks() {
-//     try {
-//       // Get the current user
-//       User? currentUser = auth.currentUser;
-//       if (currentUser == null) {
-//         throw 'User not logged in.';
-//       }
-//
-//       // Get user details from Firestore
-//       Stream<DocumentSnapshot> userDocStream = _firestore.collection('users').doc(currentUser.uid).snapshots();
-//       Stream<Map<String, dynamic>> userDetailsStream = userDocStream.map((userDoc) {
-//         if (!userDoc.exists) {
-//           throw 'User document does not exist';
-//         }
-//
-// final selected = selectedSocialsToSendList;
-//
-//
-//         return {
-//           'userId': currentUser.uid,
-//           'firstName': userDoc['firstName'],
-//           'lastName': userDoc['lastName'],
-//           'profession': userDoc['profession'],
-//           'email': userDoc['email'],
-//           'phoneNumber': userDoc['phoneNumber'],
-//           'socials': selected,
-//         };
-//       });
-//
-//       return userDetailsStream;
-//     } catch (error) {
-//       print("Error fetching user details and links: $error");
-//       throw error;
-//     }
-//   }
 
-  // Future<String> updateProfile(
-  //     {String? firstName,
-  //     String? lastName,
-  //     String? email,
-  //     String? profession,
-  //     String? phoneNumber,
-  //     required Uint8List image}) async {
-  //   String res = 'Some error occurred';
-  //   try {
-  //     User? currentUser = auth.currentUser;
-  //     if (currentUser != null) {
-  //       String photoUrl = await StorageService()
-  //           .uploadingImageToStorage('profilePic', image, false);
-  //       UserModel updatedUser = UserModel(
-  //         image: photoUrl ?? '',
-  //         profession: profession ?? '',
-  //         firstName: firstName ?? '',
-  //         lastName: lastName ?? '',
-  //         id: currentUser.uid,
-  //         email: email ?? '',
-  //         phoneNumber: phoneNumber ?? '',
-  //       );
-  //       await _firestore.collection('users').doc(currentUser.uid).update(
-  //             updatedUser.toJson(),
-  //           );
-  //
-  //       res = 'Profile updated successfully';
-  //     }
-  //   } catch (error) {
-  //     res = error.toString();
-  //   }
-  //   return res;
-  // }
-
-  Stream<UserModel> getUserDetailsAndLinks() {
+  Stream<List<UserModel>> getAllNetworkUsers() {
     try {
-      // Get the current user
       User? currentUser = auth.currentUser;
       if (currentUser == null) {
         throw 'User not logged in.';
       }
 
-      // Get user details from Firestore
+      final firestore = FirebaseFirestore.instance;
+      DocumentReference currentUserDoc =
+          firestore.collection('users').doc(currentUser.uid);
+
+      return currentUserDoc.collection('network').snapshots().map((snapshot) {
+        return snapshot.docs.map((doc) => UserModel.fromSnap(doc)).toList();
+      });
+    } catch (error) {
+      print("Error fetching network users: $error");
+      rethrow;
+    }
+  }
+
+  Future<void> addScannedUserToNetwork(String qrData) async {
+    try {
+      UserModel ownerData = parseQRData(qrData);
+      String ownerId = ownerData.id;
+
+      if (ownerId == auth.currentUser?.uid) {
+        print('Cannot add yourself to your network');
+        return;
+      }
+
+      final firestore = FirebaseFirestore.instance;
+      CollectionReference usersCollection = firestore.collection('users');
+      DocumentReference currentUserDoc = usersCollection
+          .doc(auth.currentUser!.uid); // Use current user directly
+      CollectionReference networkCollection =
+          currentUserDoc.collection('network');
+
+      DocumentSnapshot ownerDocSnapshot =
+          await usersCollection.doc(ownerId).get();
+      if (!ownerDocSnapshot.exists) {
+        print('Owner with ID $ownerId not found in Firestore');
+        return;
+      }
+
+      await networkCollection.add(ownerData.toJson());
+
+      print('Successfully added scanned user to your network');
+    } catch (error) {
+      print('Error adding user to network: $error');
+    }
+  }
+
+  Future<void> addUserToNetworkFromScannedQR(String qrData) async {
+    try {
+      UserModel ownerData = parseQRData(qrData);
+      String ownerId = ownerData.id;
+
+      if (ownerId == auth.currentUser?.uid) {
+        print('Cannot add yourself to your network');
+        return;
+      }
+
+      Stream<UserModel> currentUserStream = getUserDetailsAndLinks();
+
+      await for (UserModel currentUser in currentUserStream) {
+        final firestore = FirebaseFirestore.instance;
+        CollectionReference usersCollection = firestore.collection('users');
+        DocumentReference currentUserDoc = usersCollection.doc(currentUser.id);
+        CollectionReference networkCollection =
+            currentUserDoc.collection('network');
+
+        DocumentSnapshot ownerDocSnapshot =
+            await usersCollection.doc(ownerId).get();
+        if (!ownerDocSnapshot.exists) {
+          print('Owner with ID $ownerId not found in Firestore');
+          return;
+        }
+
+        await usersCollection
+            .doc(ownerId)
+            .collection('network')
+            .add(currentUser.toJson());
+
+        await networkCollection.add(ownerData.toJson());
+
+        print('Successfully added users to network collections');
+        break;
+      }
+    } catch (error) {
+      print('Error adding users to network: $error');
+    }
+  }
+
+  Stream<UserModel> getUserDetailsAndLinks() {
+    try {
+      User? currentUser = auth.currentUser;
+      if (currentUser == null) {
+        throw 'User not logged in.';
+      }
+
       Stream<DocumentSnapshot> userDocStream =
           _firestore.collection('users').doc(currentUser.uid).snapshots();
       Stream<UserModel> userDetailsStream = userDocStream.map((userDoc) {
