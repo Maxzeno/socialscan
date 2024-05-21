@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socialscan/splash_screen.dart';
 import 'package:socialscan/view_model/number_provider.dart';
+import 'package:socialscan/view_model/theme_provider.dart';
 import 'package:socialscan/view_model/user_provider.dart';
 
 void main() async {
@@ -25,22 +26,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => NumberProvider(),
         ),
-      ],
-      child: MaterialApp(
-        title: 'Social Scan',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          // textTheme: TextStyleTextTheme(
-          //   Theme.of(context).textTheme,
-          // ),
-          fontFamily: 'Montserrat',
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7F1F9A)),
-          useMaterial3: false,
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
         ),
-        // home: const HomeScreen(),
-        home: const SplashScreen(),
-      ),
+      ],
+      child: Consumer<ThemeProvider>(builder: (context, themeViewModel, _) {
+        return MaterialApp(
+          title: 'Social Scan',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeProvider.lightTheme,
+          darkTheme: ThemeProvider.darkTheme,
+          themeMode: themeViewModel.themeMode,
+          // home: const HomeScreen(),
+          home: const SplashScreen(),
+        );
+      }),
     );
   }
 }

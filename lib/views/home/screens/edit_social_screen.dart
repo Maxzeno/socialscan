@@ -35,9 +35,9 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
     print('this link ====> ${widget.linkUrl}');
     print('this id ====> ${widget.id}');
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
@@ -46,7 +46,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
           },
           icon: const Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            // color: Colors.black,
           ),
         ),
       ),
@@ -137,7 +137,7 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black38,
+                      // color: Colors.black38,
                     ),
                   ),
                   const SizedBox(height: 5),

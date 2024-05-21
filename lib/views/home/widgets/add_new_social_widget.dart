@@ -50,7 +50,7 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
         vertical: widget.screenHeight / 35,
       ),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
@@ -125,9 +125,10 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
                             ? Text(
                                 value.text,
                                 style: TextStyle(
-                                  color: addedSocialsList.contains(value)
-                                      ? Colors.grey
-                                      : Colors.black,
+                                  color: Colors.black,
+                                  // color: addedSocialsList.contains(value)
+                                  //     ? Colors.grey
+                                  //     : Colors.black,
                                 ),
                               )
                             : const Text('Select Social Media'),
