@@ -61,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen>
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       // appBar: AppBar(
       //   backgroundColor: Colors.white,
       //   // leadingWidth: 20,
