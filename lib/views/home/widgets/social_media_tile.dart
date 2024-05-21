@@ -90,7 +90,7 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: ProjectColors.midBlack.withOpacity(0.5),
+                  // color: ProjectColors.midBlack.withOpacity(0.5),
                 ),
               ),
             ],
@@ -108,15 +108,14 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
                     widget.onSelected(value);
 
                     // _onCheckboxSelected(_isChecked);
-                    
                   });
-                  
+
                   print(selectedCount);
                 },
                 // onChanged: widget.onSelected,
                 activeColor: ProjectColors.mainPurple,
                 checkColor: Colors.white,
-                side: const BorderSide(color: ProjectColors.midBlack),
+                // side: const BorderSide(color: ProjectColors.midBlack),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
