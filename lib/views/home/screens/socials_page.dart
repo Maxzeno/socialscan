@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:socialscan/utils/strings.dart';
-import 'package:socialscan/view_model/user_provider.dart';
 import 'package:socialscan/views/home/widgets/social_lists_widget.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
 
