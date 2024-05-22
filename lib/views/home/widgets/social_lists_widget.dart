@@ -148,7 +148,7 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                           radius: const Radius.circular(8),
                           strokeWidth: 1.5,
                           dashPattern: const [8, 8],
-                          color: ProjectColors.midBlack.withOpacity(0.3),
+                          color: themeProvider.themeMode == ThemeMode.light ? ProjectColors.midBlack.withOpacity(0.3) : Colors.white.withOpacity(0.3),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -156,15 +156,15 @@ class _SocialListsWidgetState extends State<SocialListsWidget> {
                                 CircleAvatar(
                                   radius: 33,
                                   backgroundColor:
-                                      ProjectColors.midBlack.withOpacity(0.1),
+                                     themeProvider.themeMode == ThemeMode.light ? ProjectColors.midBlack.withOpacity(0.1) : Colors.white.withOpacity(0.1),
                                   child: SvgPicture.asset(
                                     addIcon,
                                     height: 22,
                                     width: 22,
-                                    // colorFilter: const ColorFilter.mode(
-                                    //   ProjectColors.midBlack,
-                                    //   BlendMode.srcIn,
-                                    // ),
+                                    colorFilter: ColorFilter.mode(
+                                      themeProvider.themeMode == ThemeMode.light ? ProjectColors.midBlack : Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
