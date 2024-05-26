@@ -3,11 +3,13 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 import 'package:socialscan/utils/services/storage_service.dart';
+import 'package:socialscan/utils/shared_prefrences.dart';
 
 import '../strings.dart';
 
@@ -463,21 +465,101 @@ class FirebaseService {
     return res;
   }
 
-  String _getErrorMessage(String errorCode) {
-    switch (errorCode) {
-      case 'weak-password':
-        return 'The password should be at least 6 characters long.';
-      case 'email-already-in-use':
-        return 'An account with this email already exists.';
-      case 'invalid-email':
-        return 'Please enter a valid email address.';
-      case 'user-not-found':
-        return 'No user found with this email address.';
-      case 'wrong-password':
-        return 'Invalid password.';
-      default:
-        return 'An error occurred. Please try again later.';
+  Future<String> signInWithGoogle({
+    required String? firstName,
+    required BuildContext context,
+    required String? lastName,
+    required String? password,
+    required String? phoneNumber,
+    required String profession,
+  }) async {
+    String res = 'Some error occurred';
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        return 'No User';
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google user credential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? firebaseUser = userCredential.user;
+
+      if (firebaseUser != null) {
+        UserModel userModel = UserModel(
+          id: firebaseUser.uid,
+          firstName: firstName ?? '',
+          lastName: lastName ?? '',
+          email: firebaseUser.email ?? '',
+          phoneNumber: phoneNumber ?? '',
+          password: password ?? '',
+          // This might not be necessary for Google Sign-In
+          profession: profession,
+          // Set this value as needed
+          image: '',
+          socialMediaLink: [], // Set this value as needed
+        );
+
+        CompleteAccountPreference().setAccountSetupComplete(true);
+        debugPrint('Hello google user ');
+        debugPrint('THis user ===> model ${userModel}');
+
+        // Option 1: Wait for Firestore write operation to finish (with error handling)
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(firebaseUser.uid)
+              .set(userModel.toJson());
+          res = 'Successful';
+        } on FirebaseException catch (error) {
+          debugPrint('Error saving user data to Firestore: ${error.message}');
+          res = 'Error saving user data';
+          // Handle error in the calling widget
+        }
+      }
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'no-internet') {
+        infoSnackBar(context, 'No internet connection',
+            const Duration(milliseconds: 200), Colors.red);
+        res = 'No internet connection';
+      } else {
+        res = _getErrorMessage(error.code);
+        infoSnackBar(context, _getErrorMessage(error.code),
+            const Duration(milliseconds: 200), Colors.red);
+      }
+    } catch (error) {
+      res = 'An error occurred. Please try again later.';
     }
+
+    // Return the result (can be used in the calling widget)
+    return res;
+  }
+}
+
+String _getErrorMessage(String errorCode) {
+  switch (errorCode) {
+    case 'weak-password':
+      return 'The password should be at least 6 characters long.';
+    case 'email-already-in-use':
+      return 'An account with this email already exists.';
+    case 'invalid-email':
+      return 'Please enter a valid email address.';
+    case 'user-not-found':
+      return 'No user found with this email address.';
+    case 'wrong-password':
+      return 'Invalid password.';
+    default:
+      return 'An error occurred. Please try again later.';
   }
 }
 

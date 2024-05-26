@@ -8,7 +8,6 @@ class ReusableTextField extends StatelessWidget {
   final Widget? iconButton;
   final VoidCallback onTap;
   final dynamic controller;
-  final bool? readOnly;
   final String? initialValue;
   final TextInputType? textInputType;
   final double? textSize;
@@ -28,7 +27,7 @@ class ReusableTextField extends StatelessWidget {
       this.textSize,
       this.width,
       this.height,
-      this.onSaved, this.readOnly,})
+      this.onSaved})
       : super(key: key);
 
   @override
@@ -44,7 +43,7 @@ class ReusableTextField extends StatelessWidget {
           fontSize: textSize ?? 14,
           letterSpacing: 0.5,
         ),
-  readOnly: readOnly ?? false,
+
         obscureText: obscure!,
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
