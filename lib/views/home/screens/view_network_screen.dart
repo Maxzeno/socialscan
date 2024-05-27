@@ -30,26 +30,31 @@ class ViewNetworkScreen extends ConsumerWidget {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: ProjectColors.midBlack.withOpacity(0.4),
+          // color: ProjectColors.midBlack.withOpacity(0.4),
+          color: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.midBlack.withOpacity(0.4)
+              : Colors.white,
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       // extendBody: true,
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
       ),
@@ -142,10 +147,13 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 ),
                                 Text(
                                   user.phoneNumber,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: ProjectColors.midBlack,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? ProjectColors.midBlack
+                                        : ProjectColors.mainGray,
                                   ),
                                 ),
                               ],
@@ -161,15 +169,24 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 VxToast.show(
                                   context,
                                   msg: 'Copied to clipboard.',
-                                  bgColor: ProjectColors.fadeBlack,
-                                  textColor: Colors.white,
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.fadeBlack
+                                      : Colors.white.withOpacity(0.95),
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.white
+                                      : ProjectColors.midBlack,
                                   showTime: 2000,
                                 );
                               },
                               child: Icon(
                                 Icons.copy_outlined,
                                 size: 24,
-                                color: Colors.grey.shade800,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade800
+                                    : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
                           ],
@@ -195,10 +212,13 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 ),
                                 Text(
                                   user.email,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: ProjectColors.midBlack,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? ProjectColors.midBlack
+                                        : ProjectColors.mainGray,
                                   ),
                                 ),
                               ],
@@ -214,8 +234,14 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 VxToast.show(
                                   context,
                                   msg: 'Copied to clipboard.',
-                                  bgColor: ProjectColors.fadeBlack,
-                                  textColor: Colors.white,
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.fadeBlack
+                                      : Colors.white.withOpacity(0.95),
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.white
+                                      : ProjectColors.midBlack,
                                   showTime: 2000,
                                 );
                               },
@@ -223,7 +249,10 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 // onPressed: () {},
                                 Icons.copy_outlined,
                                 size: 24,
-                                color: Colors.grey.shade800,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade800
+                                    : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
                           ],
@@ -359,8 +388,14 @@ class ViewNetworkScreen extends ConsumerWidget {
                                   VxToast.show(
                                     context,
                                     msg: 'Copied to clipboard.',
-                                    bgColor: ProjectColors.fadeBlack,
-                                    textColor: Colors.white,
+                                    bgColor: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? ProjectColors.fadeBlack
+                                        : Colors.white.withOpacity(0.95),
+                                    textColor: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Colors.white
+                                        : ProjectColors.midBlack,
                                     showTime: 2000,
                                   );
                                 },
@@ -368,14 +403,20 @@ class ViewNetworkScreen extends ConsumerWidget {
                                   // onPressed: () {},
                                   Icons.copy_outlined,
                                   size: 24,
-                                  color: Colors.grey.shade800,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.grey.shade800
+                                      : ProjectColors.midBlack.withOpacity(0.8),
                                 ),
                               ),
                               const SizedBox(width: 7),
                               Icon(
                                 Icons.launch_outlined,
                                 size: 24,
-                                color: Colors.grey.shade800,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade800
+                                    : ProjectColors.midBlack.withOpacity(0.8),
                               ),
                             ],
                           ),

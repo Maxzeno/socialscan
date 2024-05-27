@@ -56,11 +56,17 @@ class _BottomNavState extends State<BottomNav> {
             ),
             child: BottomNavigationBar(
               currentIndex: _currentIndex,
-              selectedItemColor: ProjectColors.mainPurple,
+              backgroundColor: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : ProjectColors.navBarBlack,
+              selectedItemColor:
+                  Theme.of(context).brightness == Brightness.light
+                      ? ProjectColors.mainPurple
+                      : ProjectColors.lightishPurple,
               unselectedItemColor:
                   Theme.of(context).brightness == Brightness.light
                       ? ProjectColors.midBlack
-                      : Colors.white,
+                      : Colors.white.withOpacity(0.6),
               onTap: (index) async {
                 print('Index is : $index');
                 // final connectivityResult =
@@ -78,6 +84,8 @@ class _BottomNavState extends State<BottomNav> {
               // height: 55,
               items: [
                 BottomNavigationBarItem(
+                  // backgroundColor: Theme.of(context).brightness == Brightness.dark && _currentIndex == 0 ? ProjectColors.lightishPurple : null,
+                  backgroundColor: ProjectColors.lightishPurple,
                   icon: SvgPicture.asset(
                     _currentIndex == 0 ? homeIconFill : homeIcon,
                     height: 20,
@@ -86,10 +94,46 @@ class _BottomNavState extends State<BottomNav> {
                     // color: _currentIndex == 0
                     //     ? ProjectColors.mainPurple
                     //     : ProjectColors.midBlack,
+
+                    // colorFilter: ColorFilter.mode(
+                    //   _currentIndex == 0
+                    //     ? (Theme.of(context).brightness == Brightness.light ? ProjectColors.mainPurple : null)
+                    //     : Theme.of(context).brightness == Brightness.light
+                    //         ? ProjectColors.midBlack
+                    //         : Colors.white,
+                    //   BlendMode.srcIn,
+                    // ),
+                    colorFilter:
+                        Theme.of(context).brightness == Brightness.light
+                            ? null
+                            : ColorFilter.mode(
+                                Theme.of(context).brightness == Brightness.light
+                                    ? ProjectColors.midBlack
+                                    : _currentIndex == 0 ? ProjectColors.lightishPurple : Colors.white.withOpacity(0.6),
+                                BlendMode.srcIn,
+                              ),
+
+                    // colorFilter: ColorFilter.mode(
+                    //  Theme.of(context).brightness == Brightness.light
+                    //         ? ProjectColors.midBlack
+                    //         : Colors.white.withOpacity(0.6),
+                    //   BlendMode.srcIn,
+                    // ),
+
+                    // color: _currentIndex == 0
+                    //     ? ProjectColors.mainPurple
+                    //     : Theme.of(context).brightness == Brightness.light
+                    //         ? ProjectColors.midBlack
+                    //         : Colors.white,
                   ),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark &&
+                              _currentIndex == 1
+                          ? ProjectColors.lightishPurple
+                          : null,
                   icon: SvgPicture.asset(
                     _currentIndex == 1
                         ? networkIconFill
@@ -101,10 +145,31 @@ class _BottomNavState extends State<BottomNav> {
                     // color: _currentIndex == 0
                     //     ? ProjectColors.mainPurple
                     //     : ProjectColors.midBlack,
+                    colorFilter: ColorFilter.mode(
+                      _currentIndex == 1
+                          ? Theme.of(context).brightness == Brightness.light
+                              ? ProjectColors.mainPurple
+                              : ProjectColors.lightishPurple
+                          : Theme.of(context).brightness == Brightness.light
+                              ? ProjectColors.midBlack
+                              : Colors.white.withOpacity(0.6),
+                      // : ProjectColors.lightishPurple.withOpacity(0.7),
+                      BlendMode.srcIn,
+                    ),
+                    // color: _currentIndex == 1
+                    //     ? ProjectColors.mainPurple
+                    //     : Theme.of(context).brightness == Brightness.light
+                    //         ? ProjectColors.midBlack
+                    //         : Colors.white,
                   ),
                   label: 'Network',
                 ),
                 BottomNavigationBarItem(
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark &&
+                              _currentIndex == 2
+                          ? ProjectColors.lightishPurple
+                          : null,
                   icon: SvgPicture.asset(
                     // _currentIndex == 1 ? networkIconFill : networkIcon,
                     settingsIcon,
@@ -114,9 +179,19 @@ class _BottomNavState extends State<BottomNav> {
                     //         _currentIndex == 1
                     //     ? Colors.black
                     //     : Colors.white
+                    colorFilter: ColorFilter.mode(
+                      _currentIndex == 2
+                          ? Theme.of(context).brightness == Brightness.light
+                              ? ProjectColors.mainPurple
+                              : ProjectColors.lightishPurple
+                          : Theme.of(context).brightness == Brightness.light
+                              ? ProjectColors.midBlack
+                              : Colors.white.withOpacity(0.5),
+                      BlendMode.srcIn,
+                    ),
                     // color: _currentIndex == 2
                     //     ? ProjectColors.mainPurple
-                    //     : ProjectColors.midBlack,
+                    //     : Theme.of(context).brightness == Brightness.light ? ProjectColors.midBlack : Colors.white,
                   ),
                   label: 'Settings',
                 ),

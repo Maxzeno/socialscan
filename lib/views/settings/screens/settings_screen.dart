@@ -34,7 +34,7 @@ class SettingScreen extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color: Theme.of(context).brightness == Brightness.light
                 ? ProjectColors.midBlack
-                : Colors.white,
+                : ProjectColors.mainGray,
             // color: ProjectColors.midBlack,
           ),
         ),
@@ -190,6 +190,19 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ListTile(
+                            onTap: () {
+                              setState(() {
+                                isCheckedLightTheme = true;
+                                isCheckedDarkTheme = false;
+                                // isCheckedLightTheme = !isCheckedLightTheme;
+                                // if (isCheckedLightTheme) {
+                                //   isCheckedDarkTheme = false;
+                                // }
+                              });
+                              themeNotifier.toggleTheme();
+                              Navigator.pop(context);
+                              print('Light');
+                            },
                             leading: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -235,17 +248,17 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                       onChanged: (value) {
                                         // _isChecked = value!;
                                         // _selectedCheckbox = value! ? 1 : 0;
-                                        setState(() {
-                                          isCheckedLightTheme = true;
-                                          isCheckedDarkTheme = false;
-                                          // isCheckedLightTheme = !isCheckedLightTheme;
-                                          // if (isCheckedLightTheme) {
-                                          //   isCheckedDarkTheme = false;
-                                          // }
-                                        });
-                                        themeNotifier.toggleTheme();
-                                        Navigator.pop(context);
-                                        print('Light');
+                                        // setState(() {
+                                        //   isCheckedLightTheme = true;
+                                        //   isCheckedDarkTheme = false;
+                                        //   // isCheckedLightTheme = !isCheckedLightTheme;
+                                        //   // if (isCheckedLightTheme) {
+                                        //   //   isCheckedDarkTheme = false;
+                                        //   // }
+                                        // });
+                                        // themeNotifier.toggleTheme();
+                                        // Navigator.pop(context);
+                                        // print('Light');
                                       },
                                     ),
                                   ),
@@ -265,6 +278,21 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                             height: 8,
                           ),
                           ListTile(
+                            onTap: () {
+                              setState(() {
+                                // isCheckedDarkTheme = value!;
+                                // // isCheckedDarkTheme = !isCheckedDarkTheme;
+                                // if (isCheckedDarkTheme) {
+                                //   isCheckedLightTheme = false;
+                                // }
+                                isCheckedDarkTheme = true;
+                                isCheckedLightTheme = false;
+                              });
+                              themeNotifier.toggleTheme();
+                              Navigator.pop(context);
+
+                              print('Dark');
+                            },
                             leading: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -309,19 +337,19 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                       ),
                                       onChanged: (value) {
                                         // _selectedCheckbox = value! ? 2 : 0;
-                                        setState(() {
-                                          // isCheckedDarkTheme = value!;
-                                          // // isCheckedDarkTheme = !isCheckedDarkTheme;
-                                          // if (isCheckedDarkTheme) {
-                                          //   isCheckedLightTheme = false;
-                                          // }
-                                          isCheckedDarkTheme = true;
-                                          isCheckedLightTheme = false;
-                                        });
-                                        themeNotifier.toggleTheme();
-                                        Navigator.pop(context);
+                                        // setState(() {
+                                        //   // isCheckedDarkTheme = value!;
+                                        //   // // isCheckedDarkTheme = !isCheckedDarkTheme;
+                                        //   // if (isCheckedDarkTheme) {
+                                        //   //   isCheckedLightTheme = false;
+                                        //   // }
+                                        //   isCheckedDarkTheme = true;
+                                        //   isCheckedLightTheme = false;
+                                        // });
+                                        // themeNotifier.toggleTheme();
+                                        // Navigator.pop(context);
 
-                                        print('Dark');
+                                        // print('Dark');
                                       },
                                     ),
                                   ),
@@ -409,7 +437,10 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                               "Are you sure you want to logout?",
                               style: TextStyle(
                                 fontSize: 15,
-                                color: Colors.grey.shade600,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade600
+                                    : Colors.white60,
                               ),
                             ),
                             SizedBox(
@@ -461,7 +492,10 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                   side: MaterialStateProperty.all(
                                     BorderSide(
                                       width: 1,
-                                      color: Colors.grey.shade600,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Colors.grey.shade600
+                                          : Colors.white60,
                                     ),
                                   ),
                                 ),
@@ -473,7 +507,10 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.grey.shade600,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Colors.grey.shade600
+                                        : Colors.white60,
                                   ),
                                 ),
                               ),

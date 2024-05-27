@@ -46,11 +46,16 @@ class FrostedGlassBox extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
+                  colors: Theme.of(context).brightness == Brightness.light ? [
                     Colors.grey.shade50
                         .withOpacity(0.9), // Adjust opacity as needed
                     Colors.grey.shade50
                         .withOpacity(0.8), // Adjust opacity as needed
+                  ] : [
+                    ProjectColors.bgBlack
+                        .withOpacity(0.6), // Adjust opacity as needed
+                    ProjectColors.bgBlack
+                        .withOpacity(0.5), // Adjust opacity as needed
                   ],
                 ),
               ),
@@ -67,9 +72,10 @@ class FrostedGlassBox extends StatelessWidget {
                   if (title != null)
                     Text(
                       title!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        color: Theme.of(context).brightness == Brightness.light ? ProjectColors.midBlack : Colors.white,
                       ),
                     ),
                   const SizedBox(
@@ -80,7 +86,7 @@ class FrostedGlassBox extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: ProjectColors.midBlack.withOpacity(0.5)),
+                        color: Theme.of(context).brightness == Brightness.light ? ProjectColors.midBlack.withOpacity(0.5) : Colors.white.withOpacity(0.8)),
                   ),
                 ],
               ),

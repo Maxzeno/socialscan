@@ -34,7 +34,9 @@ class NetworkListTile extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).cardColor,
+          color: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.mainGray
+              : ProjectColors.cardBlackColor,
           // color: ProjectColors.mainGray,
         ),
         child: Row(
@@ -81,10 +83,13 @@ class NetworkListTile extends StatelessWidget {
                       ),
                       Text(
                         user.profession!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF696969),
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? const Color(0xFF696969)
+                                  : const Color(0xFFB0B0B0),
                         ),
                       ),
                     ],
@@ -219,8 +224,10 @@ class NetworkScreenSocialCircle extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         border: Border.all(
-          width: 2.0,
-          color: ProjectColors.mainGray,
+          width: Theme.of(context).brightness == Brightness.light ? 2.0 : 1.0,
+          color: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.mainGray
+              : ProjectColors.networkCircleGrey,
           strokeAlign: BorderSide.strokeAlignCenter,
         ),
         // borderRadius: BorderRadius.circular(50),
