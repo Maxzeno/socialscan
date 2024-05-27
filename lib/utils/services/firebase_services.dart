@@ -512,7 +512,7 @@ class FirebaseService {
 
         CompleteAccountPreference().setAccountSetupComplete(true);
         debugPrint('Hello google user ');
-        debugPrint('THis user ===> model ${userModel}');
+        debugPrint('THis user ===> model $userModel');
 
         // Option 1: Wait for Firestore write operation to finish (with error handling)
         try {

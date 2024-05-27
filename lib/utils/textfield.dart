@@ -93,7 +93,7 @@ class ReusableTextField extends StatelessWidget {
               color: ProjectColors.mainGray,
             ),
           ),
-          fillColor: ProjectColors.mainGray,
+          fillColor: Theme.of(context).brightness == Brightness.light ? ProjectColors.mainGray : ProjectColors.lightishPurple,
           filled: true,
         ),
         onTap: onTap,

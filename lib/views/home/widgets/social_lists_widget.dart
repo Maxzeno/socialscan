@@ -124,7 +124,7 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                             backgroundColor:
                                 Theme.of(context).brightness == Brightness.light
                                     ? Colors.white
-                                    : Color(0xFF2E2537),
+                                    : const Color(0xFF2E2537),
                             context: context,
                             builder: (context) {
                               return StatefulBuilder(builder:
@@ -150,8 +150,8 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                         strokeWidth: 1.5,
                         dashPattern: const [8, 8],
                         color: Theme.of(context).brightness == Brightness.light
-                            ? ProjectColors.midBlack.withOpacity(0.3)
-                            : Colors.white,
+                            ? ProjectColors.midBlack
+                            : ProjectColors.lightishPurple,
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -160,16 +160,17 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                                 radius: 33,
                                 backgroundColor: Theme.of(context).brightness ==
                                         Brightness.light
-                                    ? ProjectColors.midBlack.withOpacity(0.3)
-                                    : Colors.white,
+                                    ? ProjectColors.midBlack
+                                    : ProjectColors.lightishPurple,
                                 child: SvgPicture.asset(
                                   addIcon,
                                   height: 22,
                                   width: 22,
-                                  // colorFilter: const ColorFilter.mode(
-                                  //   ProjectColors.midBlack,
-                                  //   BlendMode.srcIn,
-                                  // ),
+                                  colorFilter: ColorFilter.mode(
+                                    Theme.of(context).brightness ==
+                                        Brightness.light ? Colors.white :ProjectColors.midBlack ,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -177,11 +178,15 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                               ),
                               Text(
                                 addNew,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   // color:
                                   // ProjectColors.midBlack.withOpacity(0.5),
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.midBlack
+                                      : ProjectColors.lightishPurple,
                                 ),
                               ),
                             ],

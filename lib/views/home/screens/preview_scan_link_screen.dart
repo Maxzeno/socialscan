@@ -12,19 +12,25 @@ class PreviewScanLinkScreen extends StatelessWidget {
   final List<UserModel> data;
   const PreviewScanLinkScreen({Key? key, required this.data}) : super(key: key);
 
-  Widget textTile(String text) {
+  
+
+  @override
+  Widget build(BuildContext context) {
+    Widget textTile(String text) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: ProjectColors.midBlack.withOpacity(0.4),
+        // color: ProjectColors.midBlack.withOpacity(0.4),
+        color: Theme.of(context).brightness == Brightness.light
+            ? ProjectColors.midBlack.withOpacity(0.4)
+            : Colors.white,
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -35,9 +41,9 @@ class PreviewScanLinkScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
           ),
         ),
         actions: [

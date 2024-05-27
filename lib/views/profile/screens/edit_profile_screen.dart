@@ -34,11 +34,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     // final nameController = TextEditingController();
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
@@ -46,9 +46,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const BottomNav()));
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
           ),
         ),
       ),
@@ -281,7 +281,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: ProjectColors.midBlack.withOpacity(0.4),
+        color: Theme.of(context).brightness == Brightness.light
+            ? ProjectColors.midBlack.withOpacity(0.4)
+            : Colors.white,
       ),
     );
   }

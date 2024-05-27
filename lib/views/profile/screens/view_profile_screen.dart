@@ -282,6 +282,9 @@ class _ViewProfileScreenState extends ConsumerState<ViewProfileScreen> {
         fontSize: 14,
         fontWeight: FontWeight.w500,
         // color: ProjectColors.midBlack.withOpacity(0.4),
+        color: Theme.of(context).brightness == Brightness.light
+            ? ProjectColors.midBlack.withOpacity(0.4)
+            : Colors.white,
       ),
     );
   }

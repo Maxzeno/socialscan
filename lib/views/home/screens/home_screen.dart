@@ -169,10 +169,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   Text(
                                     // helloDavid,
                                     "Hello ${userState.userModel!.firstName}",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       // color: ProjectColors.midBlack,
+                                      color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? ProjectColors.midBlack
+                                    : ProjectColors.mainGray,
                                     ),
                                   ),
                                   // const Spacer(),

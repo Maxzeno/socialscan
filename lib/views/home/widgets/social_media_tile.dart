@@ -115,7 +115,11 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
                 // onChanged: widget.onSelected,
                 activeColor: ProjectColors.mainPurple,
                 checkColor: Colors.white,
-                // side: const BorderSide(color: ProjectColors.midBlack),
+                side: BorderSide(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? ProjectColors.midBlack
+                      : ProjectColors.lightishPurple,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),

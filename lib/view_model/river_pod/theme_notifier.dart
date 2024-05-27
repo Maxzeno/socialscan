@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socialscan/utils/colors.dart';
 // theme.dart
 
 // enum ThemeMode { light, dark }
@@ -10,18 +11,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 final darkTheme = ThemeData(
   useMaterial3: false,
   brightness: Brightness.dark,
-  scaffoldBackgroundColor: const Color(0xFF1A1621),
+  scaffoldBackgroundColor: ProjectColors.bgBlack,
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF1A1621),
+    backgroundColor: ProjectColors.bgBlack,
   ),
   primaryColor: Colors.white,
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Color(0xFF2E2537),
   ),
   fontFamily: 'Montserrat',
+  // bottomSheetTheme:
+  //     const BottomSheetThemeData(backgroundColor: Color(0xFF2E2537)),
   bottomSheetTheme:
-      const BottomSheetThemeData(backgroundColor: Color(0xFF2E2537)),
-  cardColor: const Color(0xFF3d3e40).withOpacity(0.1),
+      const BottomSheetThemeData(backgroundColor: ProjectColors.cardBlackColor),
+  cardColor: ProjectColors.cardBlackColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
   ),
@@ -37,7 +40,8 @@ final lightTheme = ThemeData(
   ),
   iconTheme: const IconThemeData(color: Colors.black),
   bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
-  cardColor: const Color(0xFF3d3e40).withOpacity(0.1),
+  // cardColor: const Color(0xFF3d3e40).withOpacity(0.1),
+  cardColor: ProjectColors.mainGray,
   fontFamily: 'Montserrat',
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,

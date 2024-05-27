@@ -42,9 +42,9 @@ class _CompleteGoogleProfileState extends ConsumerState<CompleteGoogleProfile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Complete your profile',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
                       ),

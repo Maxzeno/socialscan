@@ -29,20 +29,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
           ),
         ),
       ),
@@ -87,7 +87,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     // initialValue: helloTest,
                     controller: _enterPasswordController,
                     textSize: 16,
-                    obscure: true,
+                    obscure: _obscure2,
                     iconButton: InkWell(
                       onTap: () {
                         setState(() {
@@ -98,10 +98,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ? const Icon(
                               Icons.visibility_off_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             )
                           : const Icon(
                               Icons.visibility_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             ),
                     ),
                     onTap: () {},
@@ -133,10 +135,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ? const Icon(
                               Icons.visibility_off_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             )
                           : const Icon(
                               Icons.visibility_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             ),
                     ),
 
@@ -180,10 +184,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ? const Icon(
                               Icons.visibility_off_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             )
                           : const Icon(
                               Icons.visibility_outlined,
                               size: 15,
+                              color: ProjectColors.mainPurple,
                             ),
                     ),
 
@@ -249,7 +255,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: ProjectColors.midBlack.withOpacity(0.4),
+        // color: ProjectColors.midBlack.withOpacity(0.4),
+        color: Theme.of(context).brightness == Brightness.light
+            ? ProjectColors.midBlack.withOpacity(0.4)
+            : Colors.white,
       ),
     );
   }
@@ -276,7 +285,9 @@ class BackgroundBox extends StatelessWidget {
             // Blur effect (BackdropFilter)
             Container(
               decoration: BoxDecoration(
-                color: ProjectColors.mainPurple.withOpacity(0.1),
+                color: Theme.of(context).brightness == Brightness.light
+                    ? ProjectColors.mainPurple.withOpacity(0.1)
+                    : ProjectColors.mainPurple.withOpacity(0.2),
               ),
             ),
             // Gradient effect

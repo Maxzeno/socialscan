@@ -128,7 +128,7 @@ class NetworkPage extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color: Theme.of(context).brightness == Brightness.light
                 ? ProjectColors.midBlack
-                : Colors.white,
+                : ProjectColors.mainGray,
             // color: ProjectColors.midBlack,
           ),
         ),
@@ -161,7 +161,7 @@ class NetworkPage extends StatelessWidget {
                     print('Network data ====> $results');
 
                     return results!.isEmpty
-                        ? Text('No Connection')
+                        ? const Text('No Connection')
                         : ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -182,7 +182,7 @@ class NetworkPage extends StatelessWidget {
                             ),
                           );
                   } else {
-                    return const Center();
+                    return const Center(child: CircularProgressIndicator());
                   }
                 },
               ),

@@ -11,6 +11,8 @@ import 'colors.dart';
 import 'images.dart';
 
 class AccountButton extends StatefulWidget {
+  const AccountButton({super.key});
+
   @override
   State<AccountButton> createState() => _AccountButtonState();
 }
@@ -32,7 +34,7 @@ class _AccountButtonState extends State<AccountButton> {
 
     await FirebaseAuth.instance.signInWithCredential(credential);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => BottomNav()));
+        context, MaterialPageRoute(builder: (context) => const BottomNav()));
   }
 
   @override
@@ -41,7 +43,7 @@ class _AccountButtonState extends State<AccountButton> {
       future: CompleteAccountPreference().isAccountSetupComplete(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Show a loading indicator while waiting for the check
+          return const CircularProgressIndicator(); // Show a loading indicator while waiting for the check
         }
 
         bool isAccountSetupComplete = snapshot.data ?? false;
@@ -54,7 +56,7 @@ class _AccountButtonState extends State<AccountButton> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CompleteGoogleProfile()));
+                      builder: (context) => const CompleteGoogleProfile()));
             }
           },
           child: Container(

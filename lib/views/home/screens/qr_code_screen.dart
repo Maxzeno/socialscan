@@ -135,26 +135,30 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
     print('Url link ====> ${widget.qrData}');
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
-        title: const Text(
+        title: Text(
           'QR Code',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
       ),
@@ -177,9 +181,13 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                   data: generateQRData(widget.qrData),
                   decoration: PrettyQrDecoration(
                     // shape:PrettyQrSmoothSymbol(),
+                    background: Theme.of(context).brightness == Brightness.light
+                        ? null
+                        : Colors.white,
                     image: PrettyQrDecorationImage(
-                      padding: const EdgeInsets.all(10),
-                      image: AssetImage(socialIcon),
+                      fit: BoxFit.cover,
+                      // padding: const EdgeInsets.all(10),
+                      image: AssetImage("$imagePath/images/square_ss_logo.png"),
                     ),
                   ),
                 ),
@@ -187,14 +195,16 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
             const SizedBox(
               height: 27,
             ),
-            const Align(
+            Align(
               alignment: Alignment.center,
               child: Text(
                 'Scan QR with recipient device to connect.',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: ProjectColors.mainPurple,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? ProjectColors.mainPurple
+                      : ProjectColors.lightishPurple,
                 ),
               ),
             ),
@@ -207,7 +217,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
               textColor: Colors.black,
               boxRadius: 35,
               icon: SvgPicture.asset(shareIcon),
-              color: const Color(0xFFECECEC),
+              color: ProjectColors.mainGray,
               onTap: () async {
                 showDialog(
                   context: context,
@@ -301,7 +311,9 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                       child: SizedBox(
                         width: 40,
                         height: 40,
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: ProjectColors.mainPurple,
+                        ),
                       ),
                     );
                   },

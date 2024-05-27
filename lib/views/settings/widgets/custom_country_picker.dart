@@ -84,7 +84,7 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black38,
               ),
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
