@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -8,20 +8,19 @@ import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
-import 'package:socialscan/view_model/user_provider.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 
-import '../../../models/user_model.dart';
 import '../../../utils/frosted_glass_box.dart';
 import '../../../utils/services/firebase_services.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String firstName = '';
   String lastName = '';
@@ -30,12 +29,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String email = '';
   @override
   Widget build(BuildContext context) {
-    UserModel? userModel = Provider.of<UserProvider>(
-      context,
-    ).userModel;
-    final userProvider = Provider.of<UserProvider>(
-      context,
-    );
+    final userNotifier = ref.watch(userProvider);
+    final userState = ref.read(userProvider.notifier);
+
     // final nameController = TextEditingController();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -47,8 +43,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => const BottomNav()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const BottomNav()));
           },
           icon: const Icon(
             Icons.arrow_back_outlined,
@@ -66,8 +62,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FrostedGlassBox(
-                    title: '${userModel!.firstName} ${userModel.lastName}',
-                    subTitle: userModel.profession!,
+                    title:
+                        '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
+                    subTitle: userNotifier.userModel!.profession!,
                     theChild: Stack(
                       children: [
                         Container(
@@ -77,11 +74,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             shape: BoxShape.circle,
                             color: ProjectColors.mainPurple,
                           ),
-                          child: userProvider.userModel!.image.isEmpty &&
-                                  userProvider.image == null
+                          child: userNotifier.userModel!.image.isEmpty &&
+                                  userNotifier.image == null
                               ? Center(
                                   child: Text(
-                                    userModel.firstName
+                                    userNotifier.userModel!.firstName
                                         .toString()
                                         .substring(0, 1),
                                     style: const TextStyle(
@@ -100,15 +97,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     color: Colors.grey,
                                   ),
                                   child: ClipOval(
-                                    child: userModel.image.isNotEmpty &&
-                                                userProvider.image == null ||
-                                            userProvider.image!.isEmpty
+                                    child: userNotifier.userModel!.image
+                                                    .isNotEmpty &&
+                                                userNotifier.image == null ||
+                                            userNotifier.image!.isEmpty
                                         ? Image.network(
-                                            userModel.image,
+                                            userNotifier.userModel!.image,
                                             fit: BoxFit.cover,
                                           )
                                         : Image.memory(
-                                            userProvider.image!,
+                                            userNotifier.image!,
                                             fit: BoxFit.cover,
                                           ),
                                   ),
@@ -119,26 +117,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           top: 30,
                           child: changeProfileIcon(
                             onTap: () {
-                              userProvider.selectProfilePic();
+                              userState.selectProfilePic();
                             },
                           ),
                         ),
                       ],
                     ),
                     background: Center(
-                      child: userModel.image.isNotEmpty &&
-                              (userProvider.image == null ||
-                                  userProvider.image!.isEmpty)
+                      child: userNotifier.userModel!.image.isNotEmpty &&
+                              (userNotifier.image == null ||
+                                  userNotifier.image!.isEmpty)
                           ? Image.network(
-                              userModel.image,
+                              userNotifier.userModel!.image,
                               height: double.infinity,
                               width: double.infinity,
                               fit: BoxFit.cover,
                             )
-                          : userProvider.image != null &&
-                                  userProvider.image!.isNotEmpty
+                          : userNotifier.image != null &&
+                                  userNotifier.image!.isNotEmpty
                               ? Image.memory(
-                                  userProvider.image!,
+                                  userNotifier.image!,
                                   height: double.infinity,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -160,7 +158,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ReusableTextField(
                     // controller: nameController,
                     initialValue:
-                        '${userModel.firstName} ${userModel.lastName}',
+                        '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
@@ -177,7 +175,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   ReusableTextField(
                     // controller: nameController,
-                    initialValue: userModel.profession,
+                    initialValue: userNotifier.userModel!.profession,
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
@@ -194,7 +192,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   ReusableTextField(
                     // controller: nameController,
-                    initialValue: userModel.phoneNumber,
+                    initialValue: userNotifier.userModel!.phoneNumber,
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
@@ -212,7 +210,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   ReusableTextField(
                     // controller: nameController,
-                    initialValue: userModel.email,
+                    initialValue: userNotifier.userModel!.email,
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
@@ -240,7 +238,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   profession: profession,
                   phoneNumber: phoneNumber,
                   email: email,
-                  image: userProvider.image!)
+                  image: userNotifier.image!)
               .then(
                 (value) => infoSnackBar(context, 'Profile Updated Successful',
                     const Duration(milliseconds: 400), Colors.green),

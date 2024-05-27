@@ -1,22 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/strings.dart';
-import 'package:socialscan/view_model/user_provider.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/profile/screens/edit_profile_screen.dart';
 
-import '../../../models/user_model.dart';
 import '../../../utils/frosted_glass_box.dart';
 
-class ViewProfileScreen extends StatefulWidget {
+class ViewProfileScreen extends ConsumerStatefulWidget {
   const ViewProfileScreen({super.key});
 
   @override
-  State<ViewProfileScreen> createState() => _ViewProfileScreenState();
+  ConsumerState<ViewProfileScreen> createState() => _ViewProfileScreenState();
 }
 
-class _ViewProfileScreenState extends State<ViewProfileScreen> {
+class _ViewProfileScreenState extends ConsumerState<ViewProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String firstName = '';
   String lastName = '';
@@ -25,28 +24,29 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
   String email = '';
   @override
   Widget build(BuildContext context) {
-    UserModel? userModel = Provider.of<UserProvider>(
-      context,
-    ).userModel;
-    final userProvider = Provider.of<UserProvider>(
-      context,
-    );
+    // UserModel? userModel = Provider.of<UserProvider>(
+    //   context,
+    // ).userModel;
+    final userNotifier = ref.read(userProvider);
+
     // final nameController = TextEditingController();
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       // extendBody: true,
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
       ),
@@ -59,8 +59,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FrostedGlassBox(
-                  title: '${userModel!.firstName} ${userModel.lastName}',
-                  subTitle: userModel.profession!,
+                  title:
+                      '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
+                  subTitle: userNotifier.userModel!.profession!,
                   theChild: Container(
                     height: 150,
                     width: 150,
@@ -68,11 +69,13 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                       shape: BoxShape.circle,
                       color: ProjectColors.mainPurple,
                     ),
-                    child: userProvider.userModel!.image.isEmpty &&
-                            userProvider.image == null
+                    child: userNotifier.userModel!.image.isEmpty &&
+                            userNotifier.image == null
                         ? Center(
                             child: Text(
-                              userModel.firstName.toString().substring(0, 1),
+                              userNotifier.userModel!.firstName
+                                  .toString()
+                                  .substring(0, 1),
                               style: const TextStyle(
                                 fontSize: 60,
                                 fontWeight: FontWeight.w500,
@@ -89,34 +92,34 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                               color: Colors.grey,
                             ),
                             child: ClipOval(
-                              child: userModel.image.isNotEmpty &&
-                                          userProvider.image == null ||
-                                      userProvider.image!.isEmpty
+                              child: userNotifier.userModel!.image.isNotEmpty &&
+                                          userNotifier.image == null ||
+                                      userNotifier.image!.isEmpty
                                   ? Image.network(
-                                      userModel.image,
+                                      userNotifier.userModel!.image,
                                       fit: BoxFit.cover,
                                     )
                                   : Image.memory(
-                                      userProvider.image!,
+                                      userNotifier.image!,
                                       fit: BoxFit.cover,
                                     ),
                             ),
                           ),
                   ),
                   background: Center(
-                    child: userModel.image.isNotEmpty &&
-                            (userProvider.image == null ||
-                                userProvider.image!.isEmpty)
+                    child: userNotifier.userModel!.image.isNotEmpty &&
+                            (userNotifier.image == null ||
+                                userNotifier.image!.isEmpty)
                         ? Image.network(
-                            userModel.image,
+                            userNotifier.userModel!.image,
                             height: double.infinity,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           )
-                        : userProvider.image != null &&
-                                userProvider.image!.isNotEmpty
+                        : userNotifier.image != null &&
+                                userNotifier.image!.isNotEmpty
                             ? Image.memory(
-                                userProvider.image!,
+                                userNotifier.image!,
                                 height: double.infinity,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
@@ -189,11 +192,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 //   onTap: () {},
                 // ),
                 Text(
-                  userModel.phoneNumber,
+                  userNotifier.userModel!.phoneNumber,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: ProjectColors.midBlack,
+                    // color: ProjectColors.midBlack,
                   ),
                 ),
                 const SizedBox(
@@ -205,11 +208,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 ),
 
                 Text(
-                  userModel.email,
+                  userNotifier.userModel!.email,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: ProjectColors.midBlack,
+                    // color: ProjectColors.midBlack,
                   ),
                 ),
                 const SizedBox(
@@ -270,7 +273,6 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         ),
       ),
     );
-  
   }
 
   Widget textTile(String text) {
@@ -279,7 +281,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: ProjectColors.midBlack.withOpacity(0.4),
+        // color: ProjectColors.midBlack.withOpacity(0.4),
       ),
     );
   }

@@ -1,6 +1,6 @@
 String imagePath = 'assets';
 String googleIcon = '$imagePath/images/google_icon.png';
-String socialIcon = '$imagePath/images/socialscan_logo_png.png';
+String socialIcon = '$imagePath/images/sslogo_purple.png';
 
 /// svg icons.....
 String iconPath = 'assets/svg_icons';
@@ -8,6 +8,7 @@ String forwardIcon = '$iconPath/forward.svg';
 String editIcon = '$iconPath/edit.svg';
 String lockIcon = '$iconPath/lock_icon.svg';
 String settingsIcon = '$iconPath/settings_icon.svg';
+String whiteSettingIcon = '$iconPath/w_settings.svg';
 String homeIcon = '$iconPath/home_icon.svg';
 String homeIconFill = '$iconPath/home_icon_fill.svg';
 String networkIcon = '$iconPath/network_icon.svg';
@@ -24,3 +25,4 @@ String whatsAppIcon = '$iconPath/whatsapp_icon.svg';
 String connectIcon = '$iconPath/connect_icon.svg';
 String downArrowIcon = '$iconPath/down_arrow.svg';
 String shareIcon = '$iconPath/share_icon.svg';
+String wProfileIcon = '$iconPath/w_profile.svg';
