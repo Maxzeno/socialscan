@@ -1,24 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
-import 'package:socialscan/view_model/user_provider.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/auth/screens/sign_in_screen.dart';
 import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
 
-class SignUpScreen extends StatefulWidget {
+import '../../../utils/google_button.dart';
+
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
@@ -26,9 +26,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userNotifier = ref.watch(userProvider.notifier);
+    final userState = ref.watch(userProvider);
+    // final notifier = ref.read(userProvider.notifier);
     return Scaffold(
-      backgroundColor: Colors.white,
       // resizeToAvoidBottomInset: true,
       extendBody: true,
       body: SafeArea(
@@ -59,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: ReusableTextField(
                             textInputType: TextInputType.name,
-                            controller: userProvider.firstName,
+                            controller: userNotifier.firstNameController,
                             hintText: 'First Name',
                             obscure: false,
                             onTap: () {},
@@ -72,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: ReusableTextField(
                             textInputType: TextInputType.name,
-                            controller: userProvider.lastName,
+                            controller: userNotifier.lastNameController,
                             hintText: 'Last Name',
                             obscure: false,
                             onTap: () {},
@@ -89,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: ReusableTextField(
                             textInputType: TextInputType.emailAddress,
-                            controller: userProvider.emailController,
+                            controller: userNotifier.emailController,
                             hintText: 'Email',
                             obscure: false,
                             onTap: () {},
@@ -113,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: ReusableTextField(
                             textInputType: TextInputType.name,
-                            controller: userProvider.profession,
+                            controller: userNotifier.professionController,
                             hintText: 'Profession',
                             obscure: false,
                             onTap: () {},
@@ -126,10 +127,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 16,
                     ),
                     CustomCountryField(
-                      controller: userProvider.phoneNumberController,
-                      countryCode: userProvider.countryCode,
+                      controller: userNotifier.phoneNumberController,
+                      countryCode: userState.countryCode,
                       onTap: () {
-                        userProvider.selectCountryCode(context);
+                        userNotifier.selectCountryCode(context);
                       },
                     ),
                     const SizedBox(
@@ -139,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         ReusableTextField(
                           textInputType: TextInputType.visiblePassword,
-                          controller: userProvider.passwordController,
+                          controller: userNotifier.passwordController,
                           hintText: 'Password',
                           obscure: _obscure,
                           iconButton: InkWell(
@@ -177,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         ReusableTextField(
                           textInputType: TextInputType.visiblePassword,
-                          controller: userProvider.retypePasswordController,
+                          controller: userNotifier.retypePasswordController,
                           hintText: reTypePassword,
                           obscure: _obscureText,
                           iconButton: InkWell(
@@ -200,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please retype your password';
                             }
-                            if (value != userProvider.passwordController.text) {
+                            if (value != userNotifier.passwordController.text) {
                               return 'Passwords do not match';
                             }
                             return null;
@@ -216,8 +217,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: create,
                       onTap: () {
                         if (_formKey.currentState!.validate() &&
-                            userProvider.countryCode != null) {
-                          userProvider.registerAccount(context);
+                            userState.countryCode != null) {
+                          userNotifier.registerAccount(context);
                           print('Registration successful!');
                         }
                       },
@@ -285,42 +286,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    accountButton(),
+                    AccountButton(),
                   ],
                 ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget accountButton() {
-    return Container(
-      height: 53,
-      width: 388,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: ProjectColors.midBlack.withOpacity(0.4),
-          width: 0.5,
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(googleIcon),
-          const SizedBox(
-            width: 16,
-          ),
-          Text(
-            google,
-            style: GoogleFonts.inter(
-              fontSize: 14,
-            ),
-          ),
-        ],
       ),
     );
   }

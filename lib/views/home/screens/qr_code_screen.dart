@@ -7,35 +7,35 @@ import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
-import 'package:socialscan/view_model/number_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import "package:velocity_x/velocity_x.dart";
 
 // import 'package:path_provider/path_provider.dart';
 
 import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
 import '../../../utils/images.dart';
+import '../../../view_model/river_pod/number_notifier.dart';
 import '../widgets/horizontal_dot_tile.dart';
-import "package:velocity_x/velocity_x.dart";
 // import '../widgets/horizontal_dot_tile/esys_flutter_share_plus.dart';
 
 // import 'package:qr_flutter/qr_flutter.dart';
 
-class QrCodeScreen extends StatefulWidget {
+class QrCodeScreen extends ConsumerStatefulWidget {
   final dynamic qrData;
   const QrCodeScreen({super.key, this.qrData});
 
   @override
-  State<QrCodeScreen> createState() => _QrCodeScreenState();
+  ConsumerState<QrCodeScreen> createState() => _QrCodeScreenState();
 }
 
-class _QrCodeScreenState extends State<QrCodeScreen> {
+class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
   var random = Random();
   // int _
 
@@ -131,6 +131,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final number = ref.watch(numberProvider);
     print('Url link ====> ${widget.qrData}');
 
     return Scaffold(
@@ -282,101 +283,100 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
             const SizedBox(
               height: 10,
             ),
-            Consumer<NumberProvider>(
-              builder: (context, provider, child) => ButtonTile(
-                width: double.infinity,
-                text: "Download",
-                boxRadius: 35,
-                icon: const Icon(
-                  Icons.download,
-                  color: Colors.white,
-                ),
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return const Center(
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    },
-                  );
 
-                  final qrCode = QrCode.fromData(
-                    data: generateQRData(widget.qrData!),
-                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                  );
-
-                  final qrImage = QrImage(qrCode);
-                  final qrImageBytes = await qrImage.toImageAsBytes(
-                    size: 1080,
-                    format: ImageByteFormat.png,
-                    decoration: PrettyQrDecoration(
-                      background: Colors.white,
-                      image: PrettyQrDecorationImage(
-                        padding: const EdgeInsets.all(10),
-                        image: AssetImage(socialIcon),
-                      ),
-                    ),
-                  );
-
-                  // Get the temporary directory of the device.
-                  // Directory? directory = await getApplicationCacheDirectory();
-
-                  //Get download directory of the device.
-                  String? downloadDirectoryPath =
-                      await getDownloadDirectoryPath();
-
-                  // Create a file in the temporary directory.
-                  // final File file = File('${directory!.path}/qr_code${random.nextInt(100)}.png');
-
-                  print(downloadDirectoryPath);
-                  // Create a file in the downloads directory
-                  final File file = File(
-                    '$downloadDirectoryPath/qr_code${provider.number == 0 ? '' : '(${provider.number.toString()})'}.png',
-                  );
-                  Provider.of<NumberProvider>(context, listen: false)
-                      .incrementNumber();
-
-                  // Compress the image and write it to the file.
-                  final compressedImage =
-                      await FlutterImageCompress.compressWithList(
-                    qrImageBytes!.buffer.asUint8List(),
-                    minWidth: 1080,
-                    minHeight: 1080,
-                    quality: 88,
-                  );
-                  await file.writeAsBytes(compressedImage, flush: true);
-
-                  // showDialog(context: context, builder: (context){
-                  //   return
-                  // });
-
-                  // infoSnackBar(
-                  //   context,
-                  //   'Qr Code saved to $downloadDirectoryPath',
-                  //   const Duration(seconds: 8),
-                  //   Colors.green,
-                  // );
-                  Navigator.pop(context);
-
-                  VxToast.show(
-                    context,
-                    msg: 'Downloaded successfully!',
-                    bgColor: ProjectColors.successColor.withOpacity(0.95),
-                    textColor: Colors.white,
-                    showTime: 5000,
-                  );
-
-                  // The image file is now saved in the device's temporary directory.
-                  print('Image saved at ${file.path}');
-                },
+            ButtonTile(
+              width: double.infinity,
+              text: "Download",
+              boxRadius: 35,
+              icon: const Icon(
+                Icons.download,
+                color: Colors.white,
               ),
+              onTap: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                );
+
+                final qrCode = QrCode.fromData(
+                  data: generateQRData(widget.qrData!),
+                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                );
+
+                final qrImage = QrImage(qrCode);
+                final qrImageBytes = await qrImage.toImageAsBytes(
+                  size: 1080,
+                  format: ImageByteFormat.png,
+                  decoration: PrettyQrDecoration(
+                    background: Colors.white,
+                    image: PrettyQrDecorationImage(
+                      padding: const EdgeInsets.all(10),
+                      image: AssetImage(socialIcon),
+                    ),
+                  ),
+                );
+
+                // Get the temporary directory of the device.
+                // Directory? directory = await getApplicationCacheDirectory();
+
+                //Get download directory of the device.
+                String? downloadDirectoryPath =
+                    await getDownloadDirectoryPath();
+
+                // Create a file in the temporary directory.
+                // final File file = File('${directory!.path}/qr_code${random.nextInt(100)}.png');
+
+                print(downloadDirectoryPath);
+                // Create a file in the downloads directory
+                final File file = File(
+                  '$downloadDirectoryPath/qr_code${number == 0 ? '' : '(${number.toString()})'}.png',
+                );
+                ref.read(numberProvider.notifier).incrementNumber();
+
+                // Compress the image and write it to the file.
+                final compressedImage =
+                    await FlutterImageCompress.compressWithList(
+                  qrImageBytes!.buffer.asUint8List(),
+                  minWidth: 1080,
+                  minHeight: 1080,
+                  quality: 88,
+                );
+                await file.writeAsBytes(compressedImage, flush: true);
+
+                // showDialog(context: context, builder: (context){
+                //   return
+                // });
+
+                // infoSnackBar(
+                //   context,
+                //   'Qr Code saved to $downloadDirectoryPath',
+                //   const Duration(seconds: 8),
+                //   Colors.green,
+                // );
+                Navigator.pop(context);
+
+                VxToast.show(
+                  context,
+                  msg: 'Downloaded successfully!',
+                  bgColor: ProjectColors.successColor.withOpacity(0.95),
+                  textColor: Colors.white,
+                  showTime: 5000,
+                );
+
+                // The image file is now saved in the device's temporary directory.
+                print('Image saved at ${file.path}');
+              },
             ),
+
             SizedBox(
               height: MediaQuery.of(context).size.height / 18,
             ),

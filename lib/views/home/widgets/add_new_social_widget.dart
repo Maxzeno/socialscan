@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -10,10 +10,10 @@ import 'package:socialscan/utils/lists/added_socials_list.dart';
 import 'package:socialscan/utils/lists/hex_color_list.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
-import 'package:socialscan/view_model/user_provider.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
 
-class AddNewSocialWidget extends StatefulWidget {
+class AddNewSocialWidget extends ConsumerStatefulWidget {
   final double screenHeight;
   final double screenWidth;
   final List<SocialLinkModel> dropdownItems;
@@ -32,16 +32,17 @@ class AddNewSocialWidget extends StatefulWidget {
   });
 
   @override
-  State<AddNewSocialWidget> createState() => _AddNewSocialWidgetState();
+  ConsumerState<AddNewSocialWidget> createState() => _AddNewSocialWidgetState();
 }
 
-class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
+class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
   SocialLinkModel? selectedSocialMedia;
   List<String> checkTextList = [];
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userState = ref.watch(userProvider);
+    final userNotifier = ref.read(userProvider.notifier);
     return Container(
       height: widget.screenHeight * 0.46,
       width: widget.screenWidth,
@@ -49,13 +50,15 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
         horizontal: widget.screenHeight / 40,
         vertical: widget.screenHeight / 35,
       ),
-      decoration: const BoxDecoration(
-        // color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
+      decoration: BoxDecoration(
+          // color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.white
+              : Color(0xFF2E2537)),
       child: Column(
         children: [
           Align(
@@ -124,12 +127,12 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
                         child: value != null
                             ? Text(
                                 value.text,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  // color: addedSocialsList.contains(value)
-                                  //     ? Colors.grey
-                                  //     : Colors.black,
-                                ),
+                                style: const TextStyle(
+                                    // color:  Colors.black,
+                                    // color: addedSocialsList.contains(value)
+                                    //     ? Colors.grey
+                                    //     : Colors.black,
+                                    ),
                               )
                             : const Text('Select Social Media'),
                       ),
@@ -152,9 +155,9 @@ class _AddNewSocialWidgetState extends State<AddNewSocialWidget> {
               ? selectedSocialMedia!.conColor == wsaConColor
                   ? CustomCountryField(
                       controller: widget.linkController,
-                      countryCode: userProvider.countryCode,
+                      countryCode: userState.countryCode,
                       onTap: () {
-                        userProvider.selectCountryCode(context);
+                        userNotifier.selectCountryCode(context);
                       },
                     )
                   : ReusableTextField(

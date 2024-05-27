@@ -16,5 +16,4 @@ class ProjectColors {
   static const Color errorColor = Colors.red;
   static const Color warningColor = Colors.yellow;
   static const Color fadeBlack = Colors.black54;
-  static const Color bgBlack = Color(0xFF1A1621);
 }

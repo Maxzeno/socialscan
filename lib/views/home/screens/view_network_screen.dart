@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/frosted_glass_box.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
-import 'package:socialscan/view_model/user_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ViewNetworkScreen extends StatelessWidget {
+class ViewNetworkScreen extends ConsumerWidget {
   final UserModel user;
   final List<SocialLinkModel> socialMediaList;
   const ViewNetworkScreen(
       {super.key, required this.user, required this.socialMediaList});
 
   @override
-  Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(
-      context,
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final userProvider = Provider.of<UserProvider>(
+    //   context,
+    // );
+    final userSate = ref.watch(userProvider);
 
     Widget textTile(String text) {
       return Text(
@@ -33,85 +33,6 @@ class ViewNetworkScreen extends StatelessWidget {
           color: ProjectColors.midBlack.withOpacity(0.4),
         ),
       );
-    }
-
-    void launchURL(String url) async {
-      try {
-        Uri finalUrl = Uri.parse(url);
-        bool launched = await launchUrl(finalUrl);
-        if (!launched) {
-          VxToast.show(
-            context,
-            msg: 'Cannot launch URL.',
-            bgColor: ProjectColors.errorColor,
-            textColor: Colors.white,
-            showTime: 3000,
-          );
-        }
-      } catch (e) {
-        VxToast.show(
-          context,
-          msg: 'Cannot launch URL.',
-          bgColor: ProjectColors.errorColor,
-          textColor: Colors.white,
-          showTime: 3000,
-        );
-      }
-    }
-
-    void openPhone(String phoneNumber) async {
-      try {
-        String phoneUrl = "tel:$phoneNumber";
-        Uri finalUrl = Uri.parse(phoneUrl);
-        bool launched = await launchUrl(finalUrl);
-
-        if (!launched) {
-          VxToast.show(
-            context,
-            msg: 'Invalid Phone Number.',
-            bgColor: ProjectColors.errorColor,
-            textColor: Colors.white,
-            showTime: 3000,
-          );
-        }
-      } catch (e) {
-        // await launch(fallbackUrl);
-        VxToast.show(
-          context,
-          msg: 'Invalid Phone Number.',
-          bgColor: ProjectColors.errorColor,
-          textColor: Colors.white,
-          showTime: 3000,
-        );
-      }
-    }
-
-    void openEmail(String emailAddress, String subject, String body) async {
-      try {
-        String emailUrl =
-            "mailto:$emailAddress?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(body)}";
-        Uri finalUrl = Uri.parse(emailUrl);
-        bool launched = await launchUrl(finalUrl);
-
-        if (!launched) {
-          VxToast.show(
-            context,
-            msg: 'Invalid E-mail.',
-            bgColor: ProjectColors.errorColor,
-            textColor: Colors.white,
-            showTime: 3000,
-          );
-        }
-      } catch (e) {
-        // await launch(fallbackUrl);
-        VxToast.show(
-          context,
-          msg: 'Invalid E-mail.',
-          bgColor: ProjectColors.errorColor,
-          textColor: Colors.white,
-          showTime: 3000,
-        );
-      }
     }
 
     return Scaffold(
@@ -134,73 +55,63 @@ class ViewNetworkScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            bottom: 30.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FrostedGlassBox(
                 title: '${user.firstName} ${user.lastName}',
                 subTitle: user.profession!,
-                theChild: Container(
-                  height: 150,
-                  width: 150,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ProjectColors.mainPurple,
-                  ),
-                  child: userProvider.userModel!.image.isEmpty &&
-                          userProvider.image == null
-                      ? Center(
-                          child: Text(
-                            user.firstName.toString().substring(0, 1),
-                            style: const TextStyle(
-                              fontSize: 60,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                theChild: Stack(
+                  children: [
+                    Container(
+                      height: 150,
+                      width: 150,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: ProjectColors.mainPurple,
+                      ),
+                      child: user.image.isEmpty
+                          ? Center(
+                              child: Text(
+                                user.firstName.toString().substring(0, 1),
+                                style: const TextStyle(
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 100,
+                              height: 100,
+                              // height: MediaQuery.of(context).size.width - 40,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey,
+                              ),
+                              child: ClipOval(
+                                child: Image.network(
+                                  user.image,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        )
-                      : Container(
-                          width: 100,
-                          height: 100,
-                          // height: MediaQuery.of(context).size.width - 40,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey,
-                          ),
-                          child: ClipOval(
-                            child: user.image.isNotEmpty &&
-                                        userProvider.image == null ||
-                                    userProvider.image!.isEmpty
-                                ? Image.network(
-                                    user.image,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.memory(
-                                    userProvider.image!,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        ),
+                    ),
+                  ],
                 ),
                 background: Center(
                   child: user.image.isNotEmpty &&
-                          (userProvider.image == null ||
-                              userProvider.image!.isEmpty)
+                          (userSate.image == null || userSate.image!.isEmpty)
                       ? Image.network(
                           user.image,
                           height: double.infinity,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         )
-                      : userProvider.image != null &&
-                              userProvider.image!.isNotEmpty
+                      : userSate.image != null && userSate.image!.isNotEmpty
                           ? Image.memory(
-                              userProvider.image!,
+                              userSate.image!,
                               height: double.infinity,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -239,40 +150,27 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await Clipboard.setData(
-                                      ClipboardData(
-                                        text: user.phoneNumber,
-                                      ),
-                                    );
+                            GestureDetector(
+                              onTap: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text: user.phoneNumber,
+                                  ),
+                                );
 
-                                    VxToast.show(
-                                      context,
-                                      msg: 'Copied to clipboard.',
-                                      bgColor: ProjectColors.fadeBlack,
-                                      textColor: Colors.white,
-                                      showTime: 2000,
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.copy_outlined,
-                                    size: 24,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                                const SizedBox(width: 7),
-                                GestureDetector(
-                                  onTap: () => openPhone(user.phoneNumber),
-                                  child: Icon(
-                                    Icons.launch_outlined,
-                                    size: 24,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                              ],
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: ProjectColors.fadeBlack,
+                                  textColor: Colors.white,
+                                  showTime: 2000,
+                                );
+                              },
+                              child: Icon(
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
+                              ),
                             ),
                           ],
                         ),
@@ -305,41 +203,28 @@ class ViewNetworkScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await Clipboard.setData(
-                                      ClipboardData(
-                                        text: user.email,
-                                      ),
-                                    );
+                            GestureDetector(
+                              onTap: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text: user.email,
+                                  ),
+                                );
 
-                                    VxToast.show(
-                                      context,
-                                      msg: 'Copied to clipboard.',
-                                      bgColor: ProjectColors.fadeBlack,
-                                      textColor: Colors.white,
-                                      showTime: 2000,
-                                    );
-                                  },
-                                  child: Icon(
-                                    // onPressed: () {},
-                                    Icons.copy_outlined,
-                                    size: 24,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                                const SizedBox(width: 7),
-                                GestureDetector(
-                                  onTap: () => openEmail(user.email, "", ""),
-                                  child: Icon(
-                                    Icons.launch_outlined,
-                                    size: 24,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                              ],
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: ProjectColors.fadeBlack,
+                                  textColor: Colors.white,
+                                  showTime: 2000,
+                                );
+                              },
+                              child: Icon(
+                                // onPressed: () {},
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
+                              ),
                             ),
                           ],
                         ),
@@ -350,7 +235,6 @@ class ViewNetworkScreen extends StatelessWidget {
               ),
               ListView.separated(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   // socialMediaList.map((social) {
                   return Column(
@@ -446,7 +330,6 @@ class ViewNetworkScreen extends StatelessWidget {
                         initialValue: socialMediaList[index].linkUrl,
                         obscure: false,
                         textSize: 15,
-                        readOnly: true,
                         onTap: () {},
                         iconButton: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
@@ -484,19 +367,15 @@ class ViewNetworkScreen extends StatelessWidget {
                                 child: Icon(
                                   // onPressed: () {},
                                   Icons.copy_outlined,
-                                  size: 22,
+                                  size: 24,
                                   color: Colors.grey.shade800,
                                 ),
                               ),
                               const SizedBox(width: 7),
-                              GestureDetector(
-                                onTap: () =>
-                                    launchURL(socialMediaList[index].linkUrl),
-                                child: Icon(
-                                  Icons.launch_outlined,
-                                  size: 22,
-                                  color: Colors.grey.shade800,
-                                ),
+                              Icon(
+                                Icons.launch_outlined,
+                                size: 24,
+                                color: Colors.grey.shade800,
                               ),
                             ],
                           ),

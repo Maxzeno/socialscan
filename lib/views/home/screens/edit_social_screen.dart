@@ -44,8 +44,11 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_outlined,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
             // color: Colors.black,
           ),
         ),
