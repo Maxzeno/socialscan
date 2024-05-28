@@ -36,6 +36,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   void initState() {
     // addData();
     ref.read(userProvider.notifier).updateUserDetails();
+    final userNotifier = ref.read(userProvider.notifier);
+    userNotifier.checkGoogleUser();
     super.initState();
     // _tabController = TabController(length: 2, vsync: this);
   }
@@ -174,9 +176,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                       fontWeight: FontWeight.w600,
                                       // color: ProjectColors.midBlack,
                                       color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? ProjectColors.midBlack
-                                    : ProjectColors.mainGray,
+                                              Brightness.light
+                                          ? ProjectColors.bgBlack
+                                          : ProjectColors.mainGray,
                                     ),
                                   ),
                                   // const Spacer(),
