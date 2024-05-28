@@ -93,6 +93,8 @@ class GeneralOptions extends ConsumerStatefulWidget {
 }
 
 class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
+  bool? isGoogleAccount;
+
   bool isCheckedDarkTheme = false;
   bool isCheckedLightTheme = false;
   @override
@@ -106,6 +108,7 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
 
     final themeNotifier = ref.read(themeProvider.notifier);
     final userNotifier = ref.read(userProvider.notifier);
+    final userState = ref.watch(userProvider);
     final screenHeight = MediaQuery.of(context).size.height;
     // final screenWidth = MediaQuery.of(context).size.width;
 
@@ -139,26 +142,28 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
               );
             },
           ),
-          const Divider(),
-          OptionTile(
-            text: changePassword,
-            icon: SvgPicture.asset(
-              forwardIcon,
-              height: 24,
-              width: 24,
-              color: themeState == ThemeModeEnum.light
-                  ? Colors.black
-                  : Colors.white,
+          if (!userState.isGoogleAccount) ...[
+            const Divider(),
+            OptionTile(
+              text: changePassword,
+              icon: SvgPicture.asset(
+                forwardIcon,
+                height: 24,
+                width: 24,
+                color: themeState == ThemeModeEnum.light
+                    ? Colors.black
+                    : Colors.white,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const ChangePasswordScreen(),
+                  ),
+                );
+              },
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => const ChangePasswordScreen(),
-                ),
-              );
-            },
-          ),
+          ],
           const Divider(
             thickness: 0.8,
           ),

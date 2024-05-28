@@ -150,7 +150,7 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                         strokeWidth: 1.5,
                         dashPattern: const [8, 8],
                         color: Theme.of(context).brightness == Brightness.light
-                            ? ProjectColors.midBlack
+                            ? ProjectColors.bgBlack
                             : ProjectColors.lightishPurple,
                         child: Center(
                           child: Column(
@@ -160,7 +160,7 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                                 radius: 33,
                                 backgroundColor: Theme.of(context).brightness ==
                                         Brightness.light
-                                    ? ProjectColors.midBlack
+                                    ? ProjectColors.bgBlack
                                     : ProjectColors.lightishPurple,
                                 child: SvgPicture.asset(
                                   addIcon,
@@ -168,7 +168,9 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                                   width: 22,
                                   colorFilter: ColorFilter.mode(
                                     Theme.of(context).brightness ==
-                                        Brightness.light ? Colors.white :ProjectColors.midBlack ,
+                                            Brightness.light
+                                        ? Colors.white
+                                        : ProjectColors.bgBlack,
                                     BlendMode.srcIn,
                                   ),
                                 ),
@@ -185,7 +187,7 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                                   // ProjectColors.midBlack.withOpacity(0.5),
                                   color: Theme.of(context).brightness ==
                                           Brightness.light
-                                      ? ProjectColors.midBlack
+                                      ? ProjectColors.bgBlack
                                       : ProjectColors.lightishPurple,
                                 ),
                               ),

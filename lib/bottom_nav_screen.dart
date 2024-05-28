@@ -65,7 +65,7 @@ class _BottomNavState extends State<BottomNav> {
                       : ProjectColors.lightishPurple,
               unselectedItemColor:
                   Theme.of(context).brightness == Brightness.light
-                      ? ProjectColors.midBlack
+                      ? ProjectColors.bgBlack
                       : Colors.white.withOpacity(0.6),
               onTap: (index) async {
                 print('Index is : $index');
@@ -108,8 +108,10 @@ class _BottomNavState extends State<BottomNav> {
                             ? null
                             : ColorFilter.mode(
                                 Theme.of(context).brightness == Brightness.light
-                                    ? ProjectColors.midBlack
-                                    : _currentIndex == 0 ? ProjectColors.lightishPurple : Colors.white.withOpacity(0.6),
+                                    ? ProjectColors.bgBlack
+                                    : _currentIndex == 0
+                                        ? ProjectColors.lightishPurple
+                                        : Colors.white.withOpacity(0.6),
                                 BlendMode.srcIn,
                               ),
 
@@ -151,7 +153,7 @@ class _BottomNavState extends State<BottomNav> {
                               ? ProjectColors.mainPurple
                               : ProjectColors.lightishPurple
                           : Theme.of(context).brightness == Brightness.light
-                              ? ProjectColors.midBlack
+                              ? ProjectColors.bgBlack
                               : Colors.white.withOpacity(0.6),
                       // : ProjectColors.lightishPurple.withOpacity(0.7),
                       BlendMode.srcIn,
@@ -185,7 +187,7 @@ class _BottomNavState extends State<BottomNav> {
                               ? ProjectColors.mainPurple
                               : ProjectColors.lightishPurple
                           : Theme.of(context).brightness == Brightness.light
-                              ? ProjectColors.midBlack
+                              ? ProjectColors.bgBlack
                               : Colors.white.withOpacity(0.5),
                       BlendMode.srcIn,
                     ),

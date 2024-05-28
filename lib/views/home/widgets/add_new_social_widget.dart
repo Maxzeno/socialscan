@@ -99,14 +99,18 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
             child: Center(
               child: DropdownButton<SocialLinkModel>(
                 isExpanded: true,
-                dropdownColor: Theme.of(context).brightness == Brightness.light ? ProjectColors.cardBlackColor : ProjectColors.mainGray,
+                dropdownColor: Theme.of(context).brightness == Brightness.light
+                    ? ProjectColors.cardBlackColor
+                    : ProjectColors.mainGray,
                 underline: const SizedBox(),
                 value: selectedSocialMedia,
                 hint: Text(
                   'Select social Media',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black38 : Colors.black45,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black38
+                        : Colors.black45,
                   ),
                 ),
                 onChanged: (newValue) {
@@ -130,12 +134,15 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
                             ? Text(
                                 value.text,
                                 style: TextStyle(
-                                    // color:  Colors.black,
-                                    // color: addedSocialsList.contains(value)
-                                    //     ? Colors.grey
-                                    //     : Colors.black,
-                                    color: Theme.of(context).brightness == Brightness.dark ? ProjectColors.midBlack : null,
-                                    ),
+                                  // color:  Colors.black,
+                                  // color: addedSocialsList.contains(value)
+                                  //     ? Colors.grey
+                                  //     : Colors.black,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? ProjectColors.midBlack
+                                      : null,
+                                ),
                               )
                             : const Text('Select Social Media'),
                       ),
