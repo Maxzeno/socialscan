@@ -14,6 +14,7 @@ import '../../models/user_model.dart';
 import '../../utils/info_snackbar.dart';
 import '../../utils/lists/pick_image.dart';
 import '../../utils/services/firebase_services.dart';
+import '../../utils/shared_prefrences.dart';
 import '../../views/auth/screens/sign_in_screen.dart';
 
 class UserState {
@@ -23,6 +24,7 @@ class UserState {
   final bool isLoading;
   final bool isSignedIn;
   final List<SocialLinkModel> selectedSocials;
+  final bool isGoogleAccount;
   UserState({
     this.userModel,
     this.image,
@@ -30,6 +32,7 @@ class UserState {
     this.isLoading = false,
     this.isSignedIn = false,
     this.selectedSocials = const [],
+    this.isGoogleAccount = false,
     // this.selectedSocials = const [],
   });
 
@@ -40,6 +43,7 @@ class UserState {
     bool? isLoading,
     bool? isSignedIn,
     List<SocialLinkModel>? selectedSocials,
+    bool? isGoogleAccount,
   }) {
     return UserState(
       userModel: userModel ?? this.userModel,
@@ -48,6 +52,7 @@ class UserState {
       isLoading: isLoading ?? this.isLoading,
       isSignedIn: isSignedIn ?? this.isSignedIn,
       selectedSocials: selectedSocialsToSendList ?? this.selectedSocials,
+      isGoogleAccount: isGoogleAccount ?? this.isGoogleAccount,
     );
   }
 }
@@ -74,10 +79,15 @@ class UserNotifier extends StateNotifier<UserState> {
 
       if (userModel != null) {
         log('User model: $userModel');
-        state = state.copyWith(userModel: userModel);
+
+        state = state.copyWith(
+          userModel: userModel,
+        );
       } else {
         log('No signed-in user. Clearing user details.');
-        state = state.copyWith(userModel: null);
+        state = state.copyWith(
+          userModel: null,
+        );
       }
     } catch (e) {
       log('Error updating user details: $e');
@@ -225,6 +235,26 @@ class UserNotifier extends StateNotifier<UserState> {
     final code = await countryPicker.showPicker(context: context);
     if (code != null) {
       state = state.copyWith(countryCode: code);
+    }
+  }
+
+  Future<void> checkGoogleUser() async {
+    bool isGoogleAccount =
+        await CompleteAccountPreference().isAccountSetupComplete();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null && isGoogleAccount) {
+      bool isGoogleSignIn = false;
+      for (UserInfo userInfo in currentUser.providerData) {
+        if (userInfo.providerId == GoogleAuthProvider.GOOGLE_SIGN_IN_METHOD) {
+          isGoogleSignIn = true;
+          break;
+        }
+      }
+      print('Account is Google sign-in: $isGoogleSignIn');
+      state = state.copyWith(isGoogleAccount: isGoogleSignIn);
+    } else {
+      state = state.copyWith(isGoogleAccount: false);
     }
   }
 
