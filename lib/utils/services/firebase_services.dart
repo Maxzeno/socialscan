@@ -469,7 +469,6 @@ class FirebaseService {
     required String? firstName,
     required BuildContext context,
     required String? lastName,
-    required String? password,
     required String? phoneNumber,
     required String profession,
   }) async {
@@ -502,10 +501,7 @@ class FirebaseService {
           lastName: lastName ?? '',
           email: firebaseUser.email ?? '',
           phoneNumber: phoneNumber ?? '',
-          password: password ?? '',
-          // This might not be necessary for Google Sign-In
           profession: profession,
-          // Set this value as needed
           image: '',
           socialMediaLink: [], // Set this value as needed
         );
