@@ -19,72 +19,128 @@ class AccountButton extends StatefulWidget {
 
 class _AccountButtonState extends State<AccountButton> {
   Future googleLogin() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser == null) {
-      return 'No User';
+      if (googleUser == null) {
+        return 'No User';
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      bool isAccountSetupComplete =
+          await CompleteAccountPreference().isAccountSetupComplete();
+
+      if (isAccountSetupComplete) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BottomNav()),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CompleteGoogleProfile(),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
     }
-
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const BottomNav()));
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: CompleteAccountPreference().isAccountSetupComplete(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Show a loading indicator while waiting for the check
-        }
-
-        bool isAccountSetupComplete = snapshot.data ?? false;
-
-        return GestureDetector(
-          onTap: () {
-            if (isAccountSetupComplete) {
-              googleLogin();
-            } else {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CompleteGoogleProfile()));
-            }
-          },
-          child: Container(
-            height: 53,
-            width: 388,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: ProjectColors.midBlack.withOpacity(0.4),
-                width: 0.5,
+    return GestureDetector(
+      onTap: () async {
+        await googleLogin();
+        // if (isAccountSetupComplete) {
+        //   await googleLogin();
+        // } else {
+        //   Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => const CompleteGoogleProfile()));
+        // }
+      },
+      child: Container(
+        height: 53,
+        width: 388,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: ProjectColors.midBlack.withOpacity(0.4),
+            width: 0.5,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(googleIcon),
+            const SizedBox(width: 16),
+            Text(
+              google,
+              style: GoogleFonts.inter(
+                fontSize: 14,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(googleIcon),
-                const SizedBox(width: 16),
-                Text(
-                  google,
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
+    // return FutureBuilder<bool>(
+    //   future: CompleteAccountPreference().isAccountSetupComplete(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const CircularProgressIndicator();
+    //     }
+    //
+    //     bool isAccountSetupComplete = snapshot.data ?? false;
+    //
+    //     return GestureDetector(
+    //       onTap: () async {
+    //         await googleLogin();
+    //         // if (isAccountSetupComplete) {
+    //         //   await googleLogin();
+    //         // } else {
+    //         //   Navigator.push(
+    //         //       context,
+    //         //       MaterialPageRoute(
+    //         //           builder: (context) => const CompleteGoogleProfile()));
+    //         // }
+    //       },
+    //       child: Container(
+    //         height: 53,
+    //         width: 388,
+    //         decoration: BoxDecoration(
+    //           borderRadius: BorderRadius.circular(8),
+    //           border: Border.all(
+    //             color: ProjectColors.midBlack.withOpacity(0.4),
+    //             width: 0.5,
+    //           ),
+    //         ),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [
+    //             Image.asset(googleIcon),
+    //             const SizedBox(width: 16),
+    //             Text(
+    //               google,
+    //               style: GoogleFonts.inter(
+    //                 fontSize: 14,
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 }
