@@ -48,12 +48,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           },
           icon: Icon(
             Icons.arrow_back_outlined,
-            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Form(

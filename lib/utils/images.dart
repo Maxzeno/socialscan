@@ -26,3 +26,4 @@ String connectIcon = '$iconPath/connect_icon.svg';
 String downArrowIcon = '$iconPath/down_arrow.svg';
 String shareIcon = '$iconPath/share_icon.svg';
 String wProfileIcon = '$iconPath/w_profile.svg';
+String fillSettingsIcon = '$iconPath/settings_fill.svg';

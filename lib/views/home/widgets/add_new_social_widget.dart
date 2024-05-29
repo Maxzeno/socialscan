@@ -100,7 +100,7 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
               child: DropdownButton<SocialLinkModel>(
                 isExpanded: true,
                 dropdownColor: Theme.of(context).brightness == Brightness.light
-                    ? ProjectColors.cardBlackColor
+                    ? Colors.white
                     : ProjectColors.mainGray,
                 underline: const SizedBox(),
                 value: selectedSocialMedia,
@@ -222,7 +222,7 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
           ButtonTile(
               text: 'Add',
               boxRadius: 10,
-              width: 338,
+              // width: 338,
               onTap: () async {
                 // setState(() {
                 //   final link = selectedSocialMedia!.linkUrl =
