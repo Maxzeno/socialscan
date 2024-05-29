@@ -157,7 +157,6 @@ class UserNotifier extends StateNotifier<UserState> {
         firstName: firstNameController.text,
         lastName: lastNameController.text,
         context: context,
-        password: passwordController.text,
         profession: professionController.text,
         phoneNumber:
             '${state.countryCode!.dialCode}-${phoneNumberController.text}',
@@ -179,8 +178,6 @@ class UserNotifier extends StateNotifier<UserState> {
     firstNameController.clear();
     lastNameController.clear();
     phoneNumberController.clear();
-    professionController.clear();
-    retypePasswordController.clear();
     state = state.copyWith(countryCode: null);
   }
 
