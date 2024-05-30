@@ -59,6 +59,7 @@ class ViewNetworkScreen extends ConsumerWidget {
         ),
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(

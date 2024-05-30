@@ -173,8 +173,8 @@ class _BottomNavState extends State<BottomNav> {
                           ? ProjectColors.lightishPurple
                           : null,
                   icon: SvgPicture.asset(
-                    // _currentIndex == 1 ? networkIconFill : networkIcon,
-                    settingsIcon,
+                    _currentIndex == 2 ? fillSettingsIcon : settingsIcon,
+
                     height: 20,
                     width: 20,
                     // color: Theme.of(context).brightness == Brightness.light &&

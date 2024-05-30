@@ -255,7 +255,7 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                 },
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center();
             }
           },
         ),

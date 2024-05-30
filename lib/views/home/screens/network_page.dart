@@ -139,6 +139,7 @@ class NetworkPage extends StatelessWidget {
           // vertical: 16.0,
         ),
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               TextTileWidget(
@@ -182,7 +183,7 @@ class NetworkPage extends StatelessWidget {
                             ),
                           );
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center();
                   }
                 },
               ),

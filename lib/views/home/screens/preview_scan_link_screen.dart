@@ -12,24 +12,21 @@ class PreviewScanLinkScreen extends StatelessWidget {
   final List<UserModel> data;
   const PreviewScanLinkScreen({Key? key, required this.data}) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     Widget textTile(String text) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        // color: ProjectColors.midBlack.withOpacity(0.4),
-        color: Theme.of(context).brightness == Brightness.light
-            ? ProjectColors.midBlack.withOpacity(0.4)
-            : Colors.white,
-      ),
-    );
-  }
-
+      return Text(
+        text,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          // color: ProjectColors.midBlack.withOpacity(0.4),
+          color: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.midBlack.withOpacity(0.4)
+              : Colors.white,
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,7 +40,9 @@ class PreviewScanLinkScreen extends StatelessWidget {
           },
           icon: Icon(
             Icons.arrow_back_outlined,
-            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
         actions: [
@@ -72,6 +71,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
