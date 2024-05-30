@@ -2,6 +2,7 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:socialscan/utils/colors.dart';
 
+// ignore: must_be_immutable
 class CustomCountryField extends StatefulWidget {
   final String? initialValue;
   CountryCode? countryCode;
@@ -23,7 +24,34 @@ class CustomCountryField extends StatefulWidget {
 }
 
 class _CustomCountryFieldState extends State<CustomCountryField> {
-  final countryPicker = const FlCountryCodePicker();
+  final countryPicker = FlCountryCodePicker(
+    title: Text("Select"),
+    searchBarTextStyle: const TextStyle(color: ProjectColors.midBlack),
+    searchBarDecoration: InputDecoration(
+      border: InputBorder.none,
+      hintText: 'Search Country Code',
+      hintStyle: const TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w500,
+        color: Colors.black38,
+      ),
+      contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(7),
+        borderSide: const BorderSide(
+          width: 0,
+          color: ProjectColors.mainGray,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(7),
+        borderSide: const BorderSide(
+          width: 0,
+          color: ProjectColors.mainGray,
+        ),
+      ),
+    ),
+  );
 
   // void _setCountryCodeFromInitialValue() {
   //   if (widget.initialValue.isNotEmpty) {
@@ -58,7 +86,21 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
           color: ProjectColors.midBlack,
         ),
         maxLines: 1,
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         onSaved: widget.onSave,
+        cursorColor: ProjectColors.mainPurple,
+        validator: (value) {
+          if (value!.isEmpty ||
+              !RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
+                  .hasMatch(value)) {
+            //  r'^[0-9]{10}$' pattern plain match number with length 10
+            return "Enter a valid Phone Number";
+          } else {
+            return null;
+          }
+        },
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Enter Phone number',
@@ -84,7 +126,9 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black38,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : Colors.black87,
               ),
               padding: const EdgeInsets.symmetric(
                 horizontal: 5,
@@ -97,6 +141,9 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
                       width: 19,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
+                        // color: Theme.of(context).brightness == Brightness.light
+                        //     ? ProjectColors.midBlack
+                        //     : ProjectColors.mainGray,
                       ),
                       child: widget.countryCode
                           ?.flagImage(fit: BoxFit.fill, width: 19),
@@ -116,7 +163,9 @@ class _CustomCountryFieldState extends State<CustomCountryField> {
               ),
             ),
           ),
-          fillColor: ProjectColors.mainGray,
+          fillColor: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.mainGray
+              : ProjectColors.lightishPurple,
           filled: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(7),

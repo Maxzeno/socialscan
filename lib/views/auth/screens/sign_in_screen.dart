@@ -20,11 +20,9 @@ class SignInScreen extends ConsumerStatefulWidget {
 }
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
-  bool _obscure = false;
+  bool _obscure = true;
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
     final userNotifier = ref.read(userProvider.notifier);
     return Scaffold(
@@ -71,10 +69,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       ? const Icon(
                           Icons.visibility_off_outlined,
                           size: 15,
+                          color: ProjectColors.mainPurple,
                         )
                       : const Icon(
                           Icons.visibility_outlined,
                           size: 15,
+                          color: ProjectColors.mainPurple,
                         ),
                 ),
                 onTap: () {},
@@ -86,7 +86,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 forgotPassword,
                 style: GoogleFonts.inter(
                   fontSize: 13,
-                  color: ProjectColors.mainPurple.withOpacity(0.6),
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? ProjectColors.mainPurple.withOpacity(0.6)
+                      : ProjectColors.lightishPurple,
                 ),
               ),
               const SizedBox(
@@ -125,7 +127,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       signUp,
                       style: TextStyle(
                         fontSize: 14,
-                        color: ProjectColors.mainPurple.withOpacity(0.6),
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? ProjectColors.mainPurple.withOpacity(0.6)
+                            : ProjectColors.lightishPurple,
                       ),
                     ),
                   ),
@@ -140,14 +145,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   SizedBox(
                     width: 108,
                     child: Divider(
-                      color: ProjectColors.midBlack.withOpacity(0.4),
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? ProjectColors.midBlack.withOpacity(0.4)
+                          : ProjectColors.mainGray,
                     ),
                   ),
                   Text(orContinueWith),
                   SizedBox(
                     width: 108,
                     child: Divider(
-                      color: ProjectColors.midBlack.withOpacity(0.4),
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? ProjectColors.midBlack.withOpacity(0.4)
+                          : ProjectColors.mainGray,
                     ),
                   ),
                 ],
@@ -316,8 +325,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 Widget accountButton(BuildContext context) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const CompleteGoogleProfile()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const CompleteGoogleProfile()));
     },
     child: Container(
       height: 53,

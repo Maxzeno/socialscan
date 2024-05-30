@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socialscan/utils/colors.dart';
 
 import '../../../utils/button.dart';
 import '../../../utils/strings.dart';
@@ -118,10 +119,12 @@ class _CompleteGoogleProfileState extends ConsumerState<CompleteGoogleProfile> {
                             ? const Icon(
                                 Icons.visibility_off_outlined,
                                 size: 15,
+                              color: ProjectColors.mainPurple,
                               )
                             : const Icon(
                                 Icons.visibility_outlined,
                                 size: 15,
+                              color: ProjectColors.mainPurple,
                               ),
                       ),
                       validator: (value) {
@@ -156,10 +159,12 @@ class _CompleteGoogleProfileState extends ConsumerState<CompleteGoogleProfile> {
                             ? const Icon(
                                 Icons.visibility_off_outlined,
                                 size: 15,
+                              color: ProjectColors.mainPurple,
                               )
                             : const Icon(
                                 Icons.visibility_outlined,
                                 size: 15,
+                              color: ProjectColors.mainPurple,
                               ),
                       ),
                       validator: (value) {

@@ -6,6 +6,7 @@ import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/lists/selected_socials_to_send_list.dart';
 
 import '../../bottom_nav_screen.dart';
@@ -62,8 +63,8 @@ class UserNotifier extends StateNotifier<UserState> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseService _authService = FirebaseService();
-  final countryPicker = const FlCountryCodePicker();
-
+  // final countryPicker = const FlCountryCodePicker();
+  
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -229,7 +230,50 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   Future<void> selectCountryCode(BuildContext context) async {
-    final code = await countryPicker.showPicker(context: context);
+    final countryPicker = FlCountryCodePicker(
+    // title: const Text("Select Country"),
+    searchBarTextStyle: const TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+          color: ProjectColors.midBlack,
+    ),
+    searchBarDecoration: InputDecoration(
+      border: InputBorder.none,
+      hintText: 'Search Country Code',
+      hintStyle: const TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w500,
+            color: Colors.black38,
+      ),
+      contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(7),
+        borderSide: const BorderSide(
+          width: 0,
+          color: ProjectColors.mainGray,
+        ),
+      ),
+      fillColor: Theme.of(context).brightness == Brightness.light
+              ? ProjectColors.mainGray
+              : ProjectColors.lightishPurple,
+          filled: true,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(7),
+        borderSide: const BorderSide(
+          width: 0,
+          color: ProjectColors.mainGray,
+        ),
+      ),
+    ),
+  );
+
+
+    final code = await countryPicker.showPicker(
+      context: context,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Colors.white
+          : ProjectColors.midBlack,
+    );
     if (code != null) {
       state = state.copyWith(countryCode: code);
     }

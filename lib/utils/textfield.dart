@@ -43,7 +43,8 @@ class ReusableTextField extends StatelessWidget {
           fontSize: textSize ?? 14,
           letterSpacing: 0.5,
         ),
-
+        
+        cursorColor: ProjectColors.mainPurple,
         obscureText: obscure!,
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();

@@ -153,10 +153,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 ? const Icon(
                                     Icons.visibility_off_outlined,
                                     size: 15,
+                                    color: ProjectColors.mainPurple,
                                   )
                                 : const Icon(
                                     Icons.visibility_outlined,
                                     size: 15,
+                                    color: ProjectColors.mainPurple,
                                   ),
                           ),
                           validator: (value) {
@@ -191,10 +193,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 ? const Icon(
                                     Icons.visibility_off_outlined,
                                     size: 15,
+                                    color: ProjectColors.mainPurple,
                                   )
                                 : const Icon(
                                     Icons.visibility_outlined,
                                     size: 15,
+                                    color: ProjectColors.mainPurple,
                                   ),
                           ),
                           validator: (value) {
@@ -251,7 +255,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             login,
                             style: TextStyle(
                               fontSize: 14,
-                              color: ProjectColors.mainPurple.withOpacity(0.6),
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? ProjectColors.mainPurple.withOpacity(0.6)
+                                  : ProjectColors.lightishPurple,
                             ),
                           ),
                         ),
@@ -269,7 +277,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         Expanded(
                           // width: double.infinity,
                           child: Divider(
-                            color: ProjectColors.midBlack.withOpacity(0.4),
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? ProjectColors.midBlack.withOpacity(0.4)
+                                    : ProjectColors.mainGray,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -278,7 +289,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         Expanded(
                           // width: double.infinity,
                           child: Divider(
-                            color: ProjectColors.midBlack.withOpacity(0.4),
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? ProjectColors.midBlack.withOpacity(0.4)
+                                    : ProjectColors.mainGray,
                           ),
                         ),
                       ],
