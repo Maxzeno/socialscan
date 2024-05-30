@@ -9,7 +9,8 @@ import '../../../view_model/river_pod/user_notifier.dart';
 import '../../settings/widgets/custom_country_picker.dart';
 
 class CompleteGoogleProfile extends ConsumerStatefulWidget {
-  const CompleteGoogleProfile({super.key});
+  final String? email;
+  const CompleteGoogleProfile({super.key, required this.email});
 
   @override
   ConsumerState<CompleteGoogleProfile> createState() =>
@@ -79,6 +80,18 @@ class _CompleteGoogleProfileState extends ConsumerState<CompleteGoogleProfile> {
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    ReusableTextField(
+                      initialValue: widget.email,
+                      // textInputType: TextInputType.name,
+                      // controller: userNotifier.professionController,
+                      hintText: 'Profession',
+                      obscure: false,
+                      onTap: () {},
+                      iconButton: null,
                     ),
                     const SizedBox(
                       height: 16,

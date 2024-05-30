@@ -34,6 +34,7 @@ class _AccountButtonState extends State<AccountButton> {
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
+      final String email = googleUser.email;
       bool isAccountSetupComplete =
           await CompleteAccountPreference().isAccountSetupComplete();
 
@@ -46,7 +47,9 @@ class _AccountButtonState extends State<AccountButton> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const CompleteGoogleProfile(),
+            builder: (context) => CompleteGoogleProfile(
+              email: email ?? '',
+            ),
           ),
         );
       }

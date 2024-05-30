@@ -35,7 +35,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void initState() {
     // addData();
+    // ref.read(userProvider.notifier).updateUserDetails();
     ref.read(userProvider.notifier).updateUserDetails();
+
     final userNotifier = ref.read(userProvider.notifier);
     userNotifier.checkGoogleUser();
     super.initState();
@@ -114,6 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       children: [
                         Expanded(
                           child: ListView(
+                            physics: const BouncingScrollPhysics(),
                             // mainAxisSize: MainAxisSize.min,
                             // crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

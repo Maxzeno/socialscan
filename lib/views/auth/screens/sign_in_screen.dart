@@ -10,7 +10,6 @@ import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/google_button.dart';
 import '../../../view_model/river_pod/user_notifier.dart';
-import 'complete_google_profile_screen.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
