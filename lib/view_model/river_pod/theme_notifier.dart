@@ -10,6 +10,8 @@ import 'package:socialscan/utils/colors.dart';
 
 final darkTheme = ThemeData(
   useMaterial3: false,
+  // primaryColorDark: ProjectColors.mainPurple,
+  // colorScheme: ColorScheme.fromSeed(seedColor: ProjectColors.mainPurple),
   brightness: Brightness.dark,
   scaffoldBackgroundColor: ProjectColors.bgBlack,
   appBarTheme: const AppBarTheme(
@@ -26,17 +28,19 @@ final darkTheme = ThemeData(
       const BottomSheetThemeData(backgroundColor: ProjectColors.cardBlackColor),
   cardColor: ProjectColors.cardBlackColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: Colors.white,
+    backgroundColor: ProjectColors.mainPurple,
   ),
 );
 
 final lightTheme = ThemeData(
   useMaterial3: false,
+  // primaryColorLight: ProjectColors.mainPurple,
+  // colorScheme: ColorScheme.fromSeed(seedColor: ProjectColors.mainPurple),
   brightness: Brightness.light,
   scaffoldBackgroundColor: Colors.white,
   primaryColor: Colors.black,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: Color(0xFF002FFF),
+    backgroundColor: ProjectColors.mainPurple,
   ),
   iconTheme: const IconThemeData(color: Colors.black),
   bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),

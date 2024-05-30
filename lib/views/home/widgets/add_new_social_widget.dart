@@ -12,6 +12,7 @@ import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/settings/widgets/custom_country_picker.dart';
+import 'package:validated/validated.dart' as validate;
 
 class AddNewSocialWidget extends ConsumerStatefulWidget {
   final double screenHeight;
@@ -99,9 +100,10 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
             child: Center(
               child: DropdownButton<SocialLinkModel>(
                 isExpanded: true,
-                dropdownColor: Theme.of(context).brightness == Brightness.light
-                    ? Colors.white
-                    : ProjectColors.mainGray,
+                // dropdownColor: Theme.of(context).brightness == Brightness.light
+                //     ? ProjectColors.cardBlackColor
+                //     : ProjectColors.mainGray,
+                dropdownColor: ProjectColors.mainGray,
                 underline: const SizedBox(),
                 value: selectedSocialMedia,
                 hint: Text(
@@ -138,10 +140,11 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
                                   // color: addedSocialsList.contains(value)
                                   //     ? Colors.grey
                                   //     : Colors.black,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? ProjectColors.midBlack
-                                      : null,
+                                  // color: Theme.of(context).brightness ==
+                                  //         Brightness.dark
+                                  //     ? ProjectColors.midBlack
+                                  //     : null,
+                                  color: ProjectColors.midBlack,
                                 ),
                               )
                             : const Text('Select Social Media'),
@@ -198,6 +201,13 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
                   onTap: () {},
                   hintText: 'Paste Link',
                   // width: 338,
+                  validator: (value){
+                    if(value!.isNotEmpty && validate.isURL(value)){
+                      return null;
+                    } else{
+                      return "Enter a valid link";
+                    }
+                  },
                   width: double.infinity,
                   obscure: false,
                   iconButton: InkWell(

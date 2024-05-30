@@ -1106,6 +1106,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
+  validated:
+    dependency: "direct main"
+    description:
+      name: validated
+      sha256: f4da18b50fa2aeda8d2f6e55bdf73759593abe3f9dd4aeece4e98bf3438e6a9f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   vector_graphics:
     dependency: transitive
     description:

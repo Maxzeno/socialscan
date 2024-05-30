@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -6,6 +7,7 @@ import 'package:socialscan/utils/info_snackbar.dart';
 import 'package:socialscan/utils/services/firebase_services.dart';
 
 import '../../../utils/textfield.dart';
+import 'package:validated/validated.dart' as validate;
 
 class EditSocialDetailsScreen extends StatefulWidget {
   final Color socialColor;
@@ -30,6 +32,15 @@ class EditSocialDetailsScreen extends StatefulWidget {
 String link = '';
 
 class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
+  late TextEditingController socialLinkController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    socialLinkController = TextEditingController(text: widget.linkUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     print('this link ====> ${widget.linkUrl}');
@@ -106,7 +117,9 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 19),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: ProjectColors.mainGray,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? ProjectColors.mainGray
+                          : ProjectColors.cardBlackColor,
                     ),
                     child: Row(
                       children: [
@@ -146,19 +159,35 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                   const SizedBox(height: 5),
                   ReusableTextField(
                     onTap: () {},
+                    controller: socialLinkController,
                     hintText: 'Paste Link',
-                    initialValue: widget.linkUrl,
+                    // initialValue: widget.linkUrl,
+                    validator: (value) {
+                      if (value!.isNotEmpty && validate.isURL(value)) {
+                        return null;
+                      } else {
+                        return "Enter a valid link";
+                      }
+                    },
                     width: double.infinity,
                     obscure: false,
-                    iconButton: const InkWell(
-                      child: Icon(
+                    iconButton: InkWell(
+                      onTap: () async {
+                        ClipboardData? data =
+                            await Clipboard.getData('text/plain');
+                        setState(() {
+                          socialLinkController.text = data!.text
+                              .toString(); // this will paste "copied text" to textFieldController
+                        });
+                      },
+                      child: const Icon(
                         Icons.paste_rounded,
                         size: 18,
                         color: Colors.black,
                       ),
                     ),
                     onSaved: (value) {
-                      link = value!;
+                      socialLinkController.text = value!;
                     },
                   ),
                   // const SizedBox(
@@ -170,16 +199,32 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
             Column(
               children: [
                 ButtonTile(
+                  color: socialLinkController.text != widget.linkUrl
+                      ? ProjectColors.mainPurple
+                      : ProjectColors.mainGray,
+                  textColor: socialLinkController.text != widget.linkUrl
+                      ? Colors.white
+                      : ProjectColors.cardBlackColor.withOpacity(0.6),
                   onTap: () {
-                    FirebaseService().editSocialLink(widget.id, link).then(
-                          (value) => infoSnackBar(
-                              context,
-                              'Social Updated Successful',
-                              const Duration(milliseconds: 400),
-                              Colors.green),
-                        );
-                    link = '';
-                    setState(() {});
+                    setState(() {
+                      if (socialLinkController.text != widget.linkUrl) {
+                        FirebaseService()
+                            .editSocialLink(
+                                widget.id, socialLinkController.text)
+                            .then(
+                              (value) => infoSnackBar(
+                                context,
+                                'Social Updated Successful',
+                                const Duration(milliseconds: 400),
+                                Colors.green,
+                              ),
+                            );
+                        link = '';
+                        setState(() {});
+                      } else {
+                        return;
+                      }
+                    });
                   },
                   text: 'Save',
                   boxRadius: 8,
@@ -198,9 +243,12 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                         ),
                       ),
                       side: MaterialStateProperty.all(
-                        const BorderSide(
+                        BorderSide(
                           width: 1,
-                          color: ProjectColors.mainPurple,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? ProjectColors.mainPurple
+                                  : ProjectColors.lightishPurple,
                         ),
                       ),
                     ),
@@ -225,10 +273,13 @@ class _EditSocialDetailsScreenState extends State<EditSocialDetailsScreen> {
                         );
                       });
                     },
-                    child: const Text(
+                    child: Text(
                       'Delete',
                       style: TextStyle(
-                        color: ProjectColors.mainPurple,
+                        // color: ProjectColors.mainPurple,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? ProjectColors.mainPurple
+                            : ProjectColors.lightishPurple,
                       ),
                     ),
                   ),
