@@ -324,10 +324,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 Widget accountButton(BuildContext context) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const CompleteGoogleProfile()));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => const CompleteGoogleProfile()));
     },
     child: Container(
       height: 53,
