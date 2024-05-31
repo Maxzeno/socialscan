@@ -28,8 +28,15 @@ import '../widgets/horizontal_dot_tile.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeScreen extends ConsumerStatefulWidget {
-  final dynamic qrData;
-  const QrCodeScreen({super.key, this.qrData});
+  final UserModel? qrData;
+  final bool isEmailSelectedToBeSent;
+  final bool isPhoneNumberSelectedToBeSent;
+  const QrCodeScreen({
+    super.key,
+    this.qrData,
+    required this.isEmailSelectedToBeSent,
+    required this.isPhoneNumberSelectedToBeSent,
+  });
 
   @override
   ConsumerState<QrCodeScreen> createState() => _QrCodeScreenState();
@@ -73,8 +80,11 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
     String firstName = userModel.firstName;
     String lastName = userModel.lastName;
     String profession = userModel.profession ?? '';
-    String phoneNumber = userModel.phoneNumber;
-    String email = userModel.email;
+    String? phoneNumber =
+        widget.isPhoneNumberSelectedToBeSent ? userModel.phoneNumber : null;
+    String? email = widget.isEmailSelectedToBeSent ? userModel.email : null;
+    // String phoneNumber = userModel.phoneNumber;
+    // String email = userModel.email;
     String id = userModel.id;
     String image = userModel.image;
     List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
@@ -132,7 +142,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
   @override
   Widget build(BuildContext context) {
     final number = ref.watch(numberProvider);
-    print('Url link ====> ${widget.qrData}');
+    print('Url link ====> ${widget.qrData!.firstName}');
 
     return Scaffold(
       // backgroundColor: Colors.white,
@@ -164,242 +174,252 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 7,
-              ),
-              const HorizontalDotTile(),
-              const SizedBox(
-                height: 30,
-              ),
-              if (widget.qrData != null)
-                SizedBox(
-                  height: 300,
-                  width: 300,
-                  child: PrettyQrView.data(
-                    data: generateQRData(widget.qrData),
-                    decoration: PrettyQrDecoration(
-                      // shape:PrettyQrSmoothSymbol(),
-                      background:
-                          Theme.of(context).brightness == Brightness.light
-                              ? null
-                              : Colors.white,
-                      image: PrettyQrDecorationImage(
-                        fit: BoxFit.cover,
-                        // padding: const EdgeInsets.all(10),
-                        image:
-                            AssetImage("$imagePath/images/square_ss_logo.png"),
-                      ),
-                    ),
-                  ),
+        
+          // physics: const BouncingScrollPhysics(),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              children: [
+                const SizedBox(
+                  height: 7,
                 ),
-              const SizedBox(
-                height: 27,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Scan QR with recipient device to connect.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? ProjectColors.mainPurple
-                        : ProjectColors.lightishPurple,
-                  ),
+                const HorizontalDotTile(),
+                const SizedBox(
+                  height: 30,
                 ),
-              ),
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.height / 4.5,
-              // ),
-              const Spacer(),
-              ButtonTile(
-                text: 'Share',
-                textColor: Colors.black,
-                boxRadius: 35,
-                icon: SvgPicture.asset(shareIcon),
-                color: ProjectColors.mainGray,
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return const Center(
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CircularProgressIndicator(),
+                if (widget.qrData != null)
+                  SizedBox(
+                    height: 300,
+                    width: 300,
+                    child: PrettyQrView.data(
+                      data: generateQRData(widget.qrData!),
+                      decoration: PrettyQrDecoration(
+                        // shape:PrettyQrSmoothSymbol(),
+                        background:
+                            Theme.of(context).brightness == Brightness.light
+                                ? null
+                                : Colors.white,
+                        image: PrettyQrDecorationImage(
+                          fit: BoxFit.cover,
+                          // padding: const EdgeInsets.all(10),
+                          image: AssetImage(
+                              "$imagePath/images/square_ss_logo.png"),
                         ),
-                      );
-                    },
-                  );
-
-                  final qrCode = QrCode.fromData(
-                    data: generateQRData(widget.qrData!),
-                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                  );
-
-                  final qrImage = QrImage(qrCode);
-                  final qrImageBytes = await qrImage.toImageAsBytes(
-                    size: 1080,
-                    format: ImageByteFormat.png,
-                    decoration: PrettyQrDecoration(
-                      background: Colors.white,
-                      image: PrettyQrDecorationImage(
-                        padding: const EdgeInsets.all(10),
-                        image: AssetImage(socialIcon),
                       ),
                     ),
-                  );
-
-                  // Compress the image and write it to the file.
-                  final compressedImage =
-                      await FlutterImageCompress.compressWithList(
-                    qrImageBytes!.buffer.asUint8List(),
-                    minWidth: 1080,
-                    minHeight: 1080,
-                    quality: 88,
-                  );
-
-                  Navigator.pop(context);
-
-                  Share.file(
-                    'Qr Code',
-                    'qrcode.png',
-                    compressedImage,
-                    'image/png',
-                  );
-
-                  // VxToast.show(
-                  //   context,
-                  //   msg: 'Shared successfully!',
-                  //   bgColor: ProjectColors.fadeBlack,
-                  //   textColor: Colors.white,
-                  //   showTime: 5000,
-                  // );
-
-                  // Future.delayed(Duration(seconds: 4), () {
-                  //       VxToast.show(context, msg: 'Shared successfully!', bgColor: Colors.black54, textColor: Colors.white);});
-                  // Future.delayed(const Duration(seconds: 2), () {
-                  //   return VxToast.show(
-                  //     context,
-                  //     msg: 'Shared',
-                  //     bgColor: Colors.black54,
-                  //     textColor: Colors.white,
-                  //   );
-                  // });
-                },
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              ButtonTile(
-                width: double.infinity,
-                text: "Download",
-                boxRadius: 35,
-                icon: const Icon(
-                  Icons.download,
-                  color: Colors.white,
+                  ),
+                const SizedBox(
+                  height: 27,
                 ),
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return const Center(
-                        child: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CircularProgressIndicator(
-                            color: ProjectColors.mainPurple,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Scan QR with recipient device to connect.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? ProjectColors.mainPurple
+                          : ProjectColors.lightishPurple,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height / 4.5,
+            // ),
+            // const SizedBox(
+            //   height: double.infinity,
+            // ),
+            const Spacer(),
+            Column(
+              children: [
+                ButtonTile(
+                  text: 'Share',
+                  textColor: Colors.black,
+                  boxRadius: 35,
+                  icon: SvgPicture.asset(shareIcon),
+                  color: ProjectColors.mainGray,
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: CircularProgressIndicator(),
                           ),
+                        );
+                      },
+                    );
+        
+                    final qrCode = QrCode.fromData(
+                      data: generateQRData(widget.qrData!),
+                      errorCorrectLevel: QrErrorCorrectLevel.H,
+                    );
+        
+                    final qrImage = QrImage(qrCode);
+                    final qrImageBytes = await qrImage.toImageAsBytes(
+                      size: 1080,
+                      format: ImageByteFormat.png,
+                      decoration: PrettyQrDecoration(
+                        background: Colors.white,
+                        image: PrettyQrDecorationImage(
+                          padding: const EdgeInsets.all(10),
+                          image: AssetImage(socialIcon),
                         ),
-                      );
-                    },
-                  );
-
-                  final qrCode = QrCode.fromData(
-                    data: generateQRData(widget.qrData!),
-                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                  );
-
-                  final qrImage = QrImage(qrCode);
-                  final qrImageBytes = await qrImage.toImageAsBytes(
-                    size: 1080,
-                    format: ImageByteFormat.png,
-                    decoration: PrettyQrDecoration(
-                      background: Colors.white,
-                      image: PrettyQrDecorationImage(
-                        padding: const EdgeInsets.all(10),
-                        image: AssetImage(socialIcon),
                       ),
-                    ),
-                  );
-
-                  // Get the temporary directory of the device.
-                  // Directory? directory = await getApplicationCacheDirectory();
-
-                  //Get download directory of the device.
-                  String? downloadDirectoryPath =
-                      await getDownloadDirectoryPath();
-
-                  // Create a file in the temporary directory.
-                  // final File file = File('${directory!.path}/qr_code${random.nextInt(100)}.png');
-
-                  print(downloadDirectoryPath);
-                  // Create a file in the downloads directory
-                  final File file = File(
-                    '$downloadDirectoryPath/qr_code${number == 0 ? '' : '(${number.toString()})'}.png',
-                  );
-                  ref.read(numberProvider.notifier).incrementNumber();
-
-                  // Compress the image and write it to the file.
-                  final compressedImage =
-                      await FlutterImageCompress.compressWithList(
-                    qrImageBytes!.buffer.asUint8List(),
-                    minWidth: 1080,
-                    minHeight: 1080,
-                    quality: 88,
-                  );
-                  await file.writeAsBytes(compressedImage, flush: true);
-
-                  // showDialog(context: context, builder: (context){
-                  //   return
-                  // });
-
-                  // infoSnackBar(
-                  //   context,
-                  //   'Qr Code saved to $downloadDirectoryPath',
-                  //   const Duration(seconds: 8),
-                  //   Colors.green,
-                  // );
-                  Navigator.pop(context);
-
-                  VxToast.show(
-                    context,
-                    msg: 'Downloaded successfully!',
-                    bgColor: ProjectColors.successColor.withOpacity(0.95),
-                    textColor: Colors.white,
-                    showTime: 5000,
-                  );
-
-                  // The image file is now saved in the device's temporary directory.
-                  print('Image saved at ${file.path}');
-                },
-              ),
-
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 18,
-              ),
-            ],
-          ),
+                    );
+        
+                    // Compress the image and write it to the file.
+                    final compressedImage =
+                        await FlutterImageCompress.compressWithList(
+                      qrImageBytes!.buffer.asUint8List(),
+                      minWidth: 1080,
+                      minHeight: 1080,
+                      quality: 88,
+                    );
+        
+                    Navigator.pop(context);
+        
+                    Share.file(
+                      'Qr Code',
+                      'qrcode.png',
+                      compressedImage,
+                      'image/png',
+                    );
+        
+                    // VxToast.show(
+                    //   context,
+                    //   msg: 'Shared successfully!',
+                    //   bgColor: ProjectColors.fadeBlack,
+                    //   textColor: Colors.white,
+                    //   showTime: 5000,
+                    // );
+        
+                    // Future.delayed(Duration(seconds: 4), () {
+                    //       VxToast.show(context, msg: 'Shared successfully!', bgColor: Colors.black54, textColor: Colors.white);});
+                    // Future.delayed(const Duration(seconds: 2), () {
+                    //   return VxToast.show(
+                    //     context,
+                    //     msg: 'Shared',
+                    //     bgColor: Colors.black54,
+                    //     textColor: Colors.white,
+                    //   );
+                    // });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ButtonTile(
+                  width: double.infinity,
+                  text: "Download",
+                  boxRadius: 35,
+                  icon: const Icon(
+                    Icons.download,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: CircularProgressIndicator(
+                              color: ProjectColors.mainPurple,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+        
+                    final qrCode = QrCode.fromData(
+                      data: generateQRData(widget.qrData!),
+                      errorCorrectLevel: QrErrorCorrectLevel.H,
+                    );
+        
+                    final qrImage = QrImage(qrCode);
+                    final qrImageBytes = await qrImage.toImageAsBytes(
+                      size: 1080,
+                      format: ImageByteFormat.png,
+                      decoration: PrettyQrDecoration(
+                        background: Colors.white,
+                        image: PrettyQrDecorationImage(
+                          padding: const EdgeInsets.all(10),
+                          image: AssetImage(socialIcon),
+                        ),
+                      ),
+                    );
+        
+                    // Get the temporary directory of the device.
+                    // Directory? directory = await getApplicationCacheDirectory();
+        
+                    //Get download directory of the device.
+                    String? downloadDirectoryPath =
+                        await getDownloadDirectoryPath();
+        
+                    // Create a file in the temporary directory.
+                    // final File file = File('${directory!.path}/qr_code${random.nextInt(100)}.png');
+        
+                    print(downloadDirectoryPath);
+                    // Create a file in the downloads directory
+                    final File file = File(
+                      '$downloadDirectoryPath/qr_code${number == 0 ? '' : '(${number.toString()})'}.png',
+                    );
+                    ref.read(numberProvider.notifier).incrementNumber();
+        
+                    // Compress the image and write it to the file.
+                    final compressedImage =
+                        await FlutterImageCompress.compressWithList(
+                      qrImageBytes!.buffer.asUint8List(),
+                      minWidth: 1080,
+                      minHeight: 1080,
+                      quality: 88,
+                    );
+                    await file.writeAsBytes(compressedImage, flush: true);
+        
+                    // showDialog(context: context, builder: (context){
+                    //   return
+                    // });
+        
+                    // infoSnackBar(
+                    //   context,
+                    //   'Qr Code saved to $downloadDirectoryPath',
+                    //   const Duration(seconds: 8),
+                    //   Colors.green,
+                    // );
+                    Navigator.pop(context);
+        
+                    VxToast.show(
+                      context,
+                      msg: 'Downloaded successfully!',
+                      bgColor: ProjectColors.successColor.withOpacity(0.95),
+                      textColor: Colors.white,
+                      showTime: 5000,
+                    );
+        
+                    // The image file is now saved in the device's temporary directory.
+                    print('Image saved at ${file.path}');
+                  },
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 18,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
+  
   }
 }
