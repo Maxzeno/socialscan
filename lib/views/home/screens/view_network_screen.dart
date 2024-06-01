@@ -9,6 +9,7 @@ import 'package:socialscan/utils/frosted_glass_box.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
 import 'package:socialscan/view_model/river_pod/user_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ViewNetworkScreen extends ConsumerWidget {
@@ -36,6 +37,14 @@ class ViewNetworkScreen extends ConsumerWidget {
               : Colors.white,
         ),
       );
+    }
+
+    Future<void> launchURL(String url) async {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }
     }
 
     return Scaffold(
@@ -129,7 +138,8 @@ class ViewNetworkScreen extends ConsumerWidget {
                             ),
                 ),
               ),
-              user.phoneNumber == ""
+              user.phoneNumber == "" ||
+                                user.phoneNumber == "null"
                   ? const SizedBox()
                   : Column(
                       children: [
@@ -190,11 +200,13 @@ class ViewNetworkScreen extends ConsumerWidget {
                                     : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
+                          
                           ],
                         ),
                       ],
                     ),
-              user.email == ""
+              user.email == "" ||
+                                user.email == "null"
                   ? const SizedBox()
                   : Column(
                       children: [
@@ -256,6 +268,7 @@ class ViewNetworkScreen extends ConsumerWidget {
                                     : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
+                          
                           ],
                         ),
                       ],
@@ -361,6 +374,7 @@ class ViewNetworkScreen extends ConsumerWidget {
                         obscure: false,
                         textSize: 15,
                         onTap: () {},
+                        readOnly: true,
                         iconButton: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Row(
@@ -411,13 +425,18 @@ class ViewNetworkScreen extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 7),
-                              Icon(
-                                Icons.launch_outlined,
-                                size: 24,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? Colors.grey.shade800
-                                    : ProjectColors.midBlack.withOpacity(0.8),
+                              GestureDetector(
+                                onTap: () {
+                                  launchURL(socialMediaList[index].linkUrl);
+                                },
+                                child: Icon(
+                                  Icons.launch_outlined,
+                                  size: 24,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.grey.shade800
+                                      : ProjectColors.midBlack.withOpacity(0.8),
+                                ),
                               ),
                             ],
                           ),

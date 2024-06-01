@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/bottom_nav_screen.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/frosted_glass_box.dart';
+import 'package:socialscan/utils/textfield.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../utils/strings.dart';
 
@@ -28,10 +32,18 @@ class PreviewScanLinkScreen extends StatelessWidget {
       );
     }
 
+    Future<void> launchURL(String url) async {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
@@ -58,10 +70,10 @@ class PreviewScanLinkScreen extends StatelessWidget {
                   (route) => false,
                 );
               },
-              child: const Text(
+              child: Text(
                 "Back to home",
                 style: TextStyle(
-                  color: ProjectColors.mainPurple,
+                  color: Theme.of(context).brightness == Brightness.light ? ProjectColors.mainPurple : ProjectColors.lightishPurple,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -109,6 +121,9 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                       child: Image.network(
                                         user.image,
                                         fit: BoxFit.cover,
+                                        // loadingBuilder: (context, child, loadingProgress) {
+                                        //   return
+                                        // },
                                       ),
                                     ),
                                   )
@@ -139,7 +154,8 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                   ),
                           ),
                         ),
-                        user.phoneNumber == ""
+                        user.phoneNumber == "" ||
+                                user.phoneNumber == "null"
                             ? const SizedBox()
                             : Column(
                                 children: [
@@ -160,24 +176,55 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                           ),
                                           Text(
                                             user.phoneNumber,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              color: ProjectColors.midBlack,
+                                              color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? ProjectColors.midBlack
+                                        : ProjectColors.mainGray,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      Icon(
-                                        Icons.copy_outlined,
-                                        size: 24,
-                                        color: Colors.grey.shade800,
-                                      ),
+                                      GestureDetector(
+                              onTap: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text: user.phoneNumber,
+                                  ),
+                                );
+
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.fadeBlack
+                                      : Colors.white.withOpacity(0.95),
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.white
+                                      : ProjectColors.midBlack,
+                                  showTime: 2000,
+                                );
+                              },
+                              child: Icon(
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade800
+                                    : ProjectColors.mainGray.withOpacity(0.8),
+                              ),
+                            ),
+                          
                                     ],
                                   ),
                                 ],
                               ),
-                        user.email == ""
+                        user.email == "" ||
+                                user.email == "null"
                             ? const SizedBox()
                             : Column(
                                 children: [
@@ -198,20 +245,50 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                           ),
                                           Text(
                                             user.email,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              color: ProjectColors.midBlack,
+                                              color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? ProjectColors.midBlack
+                                        : ProjectColors.mainGray,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      Icon(
-                                        // onPressed: () {},
-                                        Icons.copy_outlined,
-                                        size: 24,
-                                        color: Colors.grey.shade800,
-                                      ),
+                                      GestureDetector(
+                              onTap: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                    text: user.email,
+                                  ),
+                                );
+
+                                VxToast.show(
+                                  context,
+                                  msg: 'Copied to clipboard.',
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.fadeBlack
+                                      : Colors.white.withOpacity(0.95),
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? Colors.white
+                                      : ProjectColors.midBlack,
+                                  showTime: 2000,
+                                );
+                              },
+                              child: Icon(
+                                // onPressed: () {},
+                                Icons.copy_outlined,
+                                size: 24,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey.shade800
+                                    : ProjectColors.mainGray.withOpacity(0.8),
+                              ),
+                            ),
+                          
                                     ],
                                   ),
                                 ],
@@ -261,59 +338,141 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 6,
                                 ),
-                                TextField(
-                                  // enabled: false,
-                                  readOnly: true,
-                                  controller: TextEditingController(
-                                    text: link.linkUrl,
-                                  ),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    // fontSize: 15,
-                                  ),
-                                  decoration: InputDecoration(
-                                    // hintText: socialMediaList[index].linkUrl,
-                                    // hintStyle: const TextStyle(
-                                    //   color: Colors.black,
-                                    // ),
-                                    enabled: false,
-                                    filled: true,
-                                    fillColor: Colors.grey.shade300,
-                                    // contentPadding: const EdgeInsets.all(0),
-                                    // suffixIconConstraints:
-                                    //     BoxConstraints.tight(const Size.fromWidth(100)),
-                                    suffixIcon: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () async {
-                                              // await Clipboard.setData(ClipboardData(
-                                              //     text: socialMediaList[index].linkUrl));
+                                // TextField(
+                                //   // enabled: false,
+                                //   readOnly: true,
+                                //   controller: TextEditingController(
+                                //     text: link.linkUrl,
+                                //   ),
+                                //   style: const TextStyle(
+                                //     color: Colors.black,
+                                //     // fontSize: 15,
+                                //   ),
+                                //   decoration: InputDecoration(
+                                //     // hintText: socialMediaList[index].linkUrl,
+                                //     // hintStyle: const TextStyle(
+                                //     //   color: Colors.black,
+                                //     // ),
+                                //     enabled: false,
+                                //     filled: true,
+                                //     fillColor: Colors.grey.shade300,
+                                //     // contentPadding: const EdgeInsets.all(0),
+                                //     // suffixIconConstraints:
+                                //     //     BoxConstraints.tight(const Size.fromWidth(100)),
+                                //     suffixIcon: Padding(
+                                //       padding:
+                                //           const EdgeInsets.only(right: 10.0),
+                                //       child: Row(
+                                //         mainAxisSize: MainAxisSize.min,
+                                //         children: [
+                                //           GestureDetector(
+                                //             onTap: () async {
+                                //               // await Clipboard.setData(ClipboardData(
+                                //               //     text: socialMediaList[index].linkUrl));
 
-                                              // ScaffoldMessenger.of(context)
-                                              //     .showSnackBar(const SnackBar(
-                                              //   content: Text('Copied to clipboard'),
-                                              // ));
-                                              // print("Copied");
-                                            },
-                                            child: Icon(
-                                              // onPressed: () {},
-                                              Icons.copy_outlined,
-                                              size: 24,
-                                              color: Colors.grey.shade800,
-                                            ),
+                                //               // ScaffoldMessenger.of(context)
+                                //               //     .showSnackBar(const SnackBar(
+                                //               //   content: Text('Copied to clipboard'),
+                                //               // ));
+                                //               // print("Copied");
+                                //             },
+                                //             child: Icon(
+                                //               // onPressed: () {},
+                                //               Icons.copy_outlined,
+                                //               size: 24,
+                                //               color: Colors.grey.shade800,
+                                //             ),
+                                //           ),
+                                //           const SizedBox(width: 7),
+                                //           Icon(
+                                //             Icons.launch_outlined,
+                                //             size: 24,
+                                //             color: Colors.grey.shade800,
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                ReusableTextField(
+                                  // controller: TextEditingController(
+                                  //   text: socialMediaList[index].linkUrl,
+                                  // ),
+                                  initialValue: link.linkUrl,
+                                  obscure: false,
+                                  textSize: 15,
+                                  onTap: () {},
+                                  readOnly: true,
+                                  iconButton: Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // await Clipboard.setData(ClipboardData(
+                                            //     text: socialMediaList[index].linkUrl));
+
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(const SnackBar(
+                                            //   content: Text('Copied to clipboard'),
+                                            // ));
+                                            // print("Copied");
+                                            await Clipboard.setData(
+                                              ClipboardData(
+                                                text: link.linkUrl,
+                                              ),
+                                            );
+
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(const SnackBar(
+                                            //   content: Text('Copied to clipboard'),
+                                            // ));
+                                            VxToast.show(
+                                              context,
+                                              msg: 'Copied to clipboard.',
+                                              bgColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? ProjectColors.fadeBlack
+                                                  : Colors.white
+                                                      .withOpacity(0.95),
+                                              textColor: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? Colors.white
+                                                  : ProjectColors.midBlack,
+                                              showTime: 2000,
+                                            );
+                                          },
+                                          child: Icon(
+                                            // onPressed: () {},
+                                            Icons.copy_outlined,
+                                            size: 24,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Colors.grey.shade800
+                                                    : ProjectColors.midBlack
+                                                        .withOpacity(0.8),
                                           ),
-                                          const SizedBox(width: 7),
-                                          Icon(
+                                        ),
+                                        const SizedBox(width: 7),
+                                        GestureDetector(
+                                          onTap: (){
+                                            launchURL(link.linkUrl);
+                                          },
+                                          child: Icon(
                                             Icons.launch_outlined,
                                             size: 24,
-                                            color: Colors.grey.shade800,
+                                            color: Theme.of(context).brightness ==
+                                                    Brightness.light
+                                                ? Colors.grey.shade800
+                                                : ProjectColors.midBlack
+                                                    .withOpacity(0.8),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
