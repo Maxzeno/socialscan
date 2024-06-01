@@ -14,6 +14,7 @@ class ReusableTextField extends StatelessWidget {
   final double? width;
   final double? height;
   final void Function(String? p1)? onSaved;
+  final bool? readOnly;
   const ReusableTextField(
       {Key? key,
       this.hintText,
@@ -27,7 +28,7 @@ class ReusableTextField extends StatelessWidget {
       this.textSize,
       this.width,
       this.height,
-      this.onSaved})
+      this.onSaved, this.readOnly,})
       : super(key: key);
 
   @override
@@ -43,7 +44,7 @@ class ReusableTextField extends StatelessWidget {
           fontSize: textSize ?? 14,
           letterSpacing: 0.5,
         ),
-        
+        readOnly: readOnly ?? false,
         cursorColor: ProjectColors.mainPurple,
         obscureText: obscure!,
         onTapOutside: (event) {

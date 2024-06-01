@@ -135,7 +135,7 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
                         child: value != null
                             ? Text(
                                 value.text,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   // color:  Colors.black,
                                   // color: addedSocialsList.contains(value)
                                   //     ? Colors.grey

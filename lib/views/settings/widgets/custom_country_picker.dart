@@ -25,7 +25,7 @@ class CustomCountryField extends StatefulWidget {
 
 class _CustomCountryFieldState extends State<CustomCountryField> {
   final countryPicker = FlCountryCodePicker(
-    title: Text("Select"),
+    title: const Text("Select"),
     searchBarTextStyle: const TextStyle(color: ProjectColors.midBlack),
     searchBarDecoration: InputDecoration(
       border: InputBorder.none,
