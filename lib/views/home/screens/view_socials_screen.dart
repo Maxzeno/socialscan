@@ -1,25 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/animation/animation_preferences.dart';
 import 'package:flutter_animator/animation/animator_play_states.dart';
 import 'package:flutter_animator/widgets/attention_seekers/heart_beat.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/home/screens/qr_code_screen.dart';
-import 'package:socialscan/views/home/screens/scan_qr_code.dart';
 import 'package:socialscan/views/home/screens/socials_page.dart';
 
 import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
 import '../../../utils/button.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/images.dart';
 import '../../../utils/lists/added_socials_list.dart';
 import '../../../utils/lists/selected_socials_to_send_list.dart';
 import '../../../utils/services/firebase_services.dart';
 import '../../../utils/strings.dart';
-import '../../profile/screens/view_profile_screen.dart';
 
 class ViewSocialsScreen extends ConsumerStatefulWidget {
   const ViewSocialsScreen({super.key});
@@ -256,18 +251,27 @@ class _ViewSocialsScreenState extends ConsumerState<ViewSocialsScreen>
                             ],
                           ),
                         ),
-                        selectedSocialsToSendList.isNotEmpty
-                            // selectedCount > 0
+                        // selectedSocialsToSendList.isNotEmpty
+                        // selectedCount > 0
 
-                            ? ButtonTile(
-                                width: double.infinity,
-                                text: connect,
-                                boxRadius: 8,
-                                icon: const Icon(
-                                  Icons.qr_code,
-                                  color: Colors.white,
-                                ),
-                                onTap: () {
+                        ButtonTile(
+                          width: double.infinity,
+                          text: connect,
+                          boxRadius: 8,
+                          color: selectedSocialsToSendList.isNotEmpty
+                              ? ProjectColors.mainPurple
+                              : ProjectColors.mainGray,
+                          textColor: selectedSocialsToSendList.isNotEmpty
+                              ? Colors.white
+                              : ProjectColors.cardBlackColor.withOpacity(0.6),
+                          icon: Icon(
+                            Icons.qr_code,
+                            color: selectedSocialsToSendList.isNotEmpty
+                                ? Colors.white
+                                : ProjectColors.cardBlackColor.withOpacity(0.6),
+                          ),
+                          onTap: selectedSocialsToSendList.isNotEmpty
+                              ? () {
                                   // List<String> allLinks = extractLinkUrls(socialLinks);
                                   List<String> allLinks = extractLinkUrls(
                                       selectedSocialsToSendList);
@@ -524,6 +528,13 @@ class _ViewSocialsScreenState extends ConsumerState<ViewSocialsScreen>
                                                   // print(
                                                   //     'all Links ====> $allLinks');
 
+                                                  // setState(() {
+                                                  //   selectedSocialsToSendList
+                                                  //       .clear();
+                                                  // });
+
+                                                  Navigator.pop(context);
+
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -548,27 +559,28 @@ class _ViewSocialsScreenState extends ConsumerState<ViewSocialsScreen>
                                       );
                                     },
                                   );
-                                },
-                              )
-                            : ButtonTile(
-                                width: double.infinity,
-                                text: "Scan QR Code",
-                                boxRadius: 8,
-                                icon: SvgPicture.asset(
-                                  connectIcon,
-                                  height: 24,
-                                  width: 24,
-                                ),
-                                onTap: () {
-                                  // List<String> allLinks = extractLinkUrls(socialLinks);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const ScanQrCode(),
-                                    ),
-                                  );
-                                },
-                              ),
+                                }
+                              : null,
+                        ),
+                        // : ButtonTile(
+                        //     width: double.infinity,
+                        //     text: "Scan QR Code",
+                        //     boxRadius: 8,
+                        //     icon: SvgPicture.asset(
+                        //       connectIcon,
+                        //       height: 24,
+                        //       width: 24,
+                        //     ),
+                        //     onTap: () {
+                        //       // List<String> allLinks = extractLinkUrls(socialLinks);
+                        //       Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (_) => const ScanQrCode(),
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
                       ],
                     );
                   } else {

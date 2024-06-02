@@ -66,6 +66,7 @@ dependencies:
   fluttertoast: ^8.2.5
   connectivity: ^3.0.6
   validated: ^2.0.0
+  lottie: ^3.1.2
 
 
 
@@ -101,6 +102,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/svg_icons/
+    - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
