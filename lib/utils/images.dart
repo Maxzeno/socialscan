@@ -27,3 +27,6 @@ String downArrowIcon = '$iconPath/down_arrow.svg';
 String shareIcon = '$iconPath/share_icon.svg';
 String wProfileIcon = '$iconPath/w_profile.svg';
 String fillSettingsIcon = '$iconPath/settings_fill.svg';
+String homepageImageDark = '$iconPath/homepage_image_darkmode.svg';
+String homepageImageLight = '$iconPath/homepage_image_lightmode.svg';
+String blocksImage = '$iconPath/blocks_image.svg';
