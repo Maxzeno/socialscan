@@ -10,6 +10,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
@@ -174,8 +175,8 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        
-          // physics: const BouncingScrollPhysics(),
+
+        // physics: const BouncingScrollPhysics(),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // mainAxisSize: MainAxisSize.min,
@@ -193,22 +194,36 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                   SizedBox(
                     height: 300,
                     width: 300,
-                    child: PrettyQrView.data(
+                    child: QrImageView(
+                      foregroundColor:
+                          Theme.of(context).brightness == Brightness.light
+                              ? null
+                              : Colors.white,
                       data: generateQRData(widget.qrData!),
-                      decoration: PrettyQrDecoration(
-                        // shape:PrettyQrSmoothSymbol(),
-                        background:
-                            Theme.of(context).brightness == Brightness.light
-                                ? null
-                                : Colors.white,
-                        image: PrettyQrDecorationImage(
-                          fit: BoxFit.cover,
-                          // padding: const EdgeInsets.all(10),
-                          image: AssetImage(
-                              "$imagePath/images/square_ss_logo.png"),
-                        ),
+                      version: QrVersions.auto,
+                      // size: 320,
+
+                      embeddedImage:
+                          AssetImage("$imagePath/images/square_ss_logo.png"),
+                      embeddedImageStyle: const QrEmbeddedImageStyle(
+                        size: Size.square(40),
+                        // color: Colors.white,
                       ),
                     ),
+                    // child: PrettyQrView.data(
+                    //   data: generateQRData(widget.qrData!),
+                    //   decoration: PrettyQrDecoration(
+                    //     // shape:PrettyQrSmoothSymbol(),
+                    //     background: Colors.white,
+                    //
+                    //     image: PrettyQrDecorationImage(
+                    //       fit: BoxFit.cover,
+                    //       // padding: const EdgeInsets.all(10),
+                    //       image: AssetImage(
+                    //           "$imagePath/images/square_ss_logo.png"),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 const SizedBox(
                   height: 27,
@@ -257,12 +272,12 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                         );
                       },
                     );
-        
+
                     final qrCode = QrCode.fromData(
                       data: generateQRData(widget.qrData!),
                       errorCorrectLevel: QrErrorCorrectLevel.H,
                     );
-        
+
                     final qrImage = QrImage(qrCode);
                     final qrImageBytes = await qrImage.toImageAsBytes(
                       size: 1080,
@@ -275,7 +290,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                         ),
                       ),
                     );
-        
+
                     // Compress the image and write it to the file.
                     final compressedImage =
                         await FlutterImageCompress.compressWithList(
@@ -284,16 +299,16 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                       minHeight: 1080,
                       quality: 88,
                     );
-        
+
                     Navigator.pop(context);
-        
+
                     Share.file(
                       'Qr Code',
                       'qrcode.png',
                       compressedImage,
                       'image/png',
                     );
-        
+
                     // VxToast.show(
                     //   context,
                     //   msg: 'Shared successfully!',
@@ -301,7 +316,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                     //   textColor: Colors.white,
                     //   showTime: 5000,
                     // );
-        
+
                     // Future.delayed(Duration(seconds: 4), () {
                     //       VxToast.show(context, msg: 'Shared successfully!', bgColor: Colors.black54, textColor: Colors.white);});
                     // Future.delayed(const Duration(seconds: 2), () {
@@ -341,12 +356,12 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                         );
                       },
                     );
-        
+
                     final qrCode = QrCode.fromData(
                       data: generateQRData(widget.qrData!),
                       errorCorrectLevel: QrErrorCorrectLevel.H,
                     );
-        
+
                     final qrImage = QrImage(qrCode);
                     final qrImageBytes = await qrImage.toImageAsBytes(
                       size: 1080,
@@ -359,24 +374,24 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                         ),
                       ),
                     );
-        
+
                     // Get the temporary directory of the device.
                     // Directory? directory = await getApplicationCacheDirectory();
-        
+
                     //Get download directory of the device.
                     String? downloadDirectoryPath =
                         await getDownloadDirectoryPath();
-        
+
                     // Create a file in the temporary directory.
                     // final File file = File('${directory!.path}/qr_code${random.nextInt(100)}.png');
-        
+
                     print(downloadDirectoryPath);
                     // Create a file in the downloads directory
                     final File file = File(
                       '$downloadDirectoryPath/qr_code${number == 0 ? '' : '(${number.toString()})'}.png',
                     );
                     ref.read(numberProvider.notifier).incrementNumber();
-        
+
                     // Compress the image and write it to the file.
                     final compressedImage =
                         await FlutterImageCompress.compressWithList(
@@ -386,11 +401,11 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                       quality: 88,
                     );
                     await file.writeAsBytes(compressedImage, flush: true);
-        
+
                     // showDialog(context: context, builder: (context){
                     //   return
                     // });
-        
+
                     // infoSnackBar(
                     //   context,
                     //   'Qr Code saved to $downloadDirectoryPath',
@@ -398,7 +413,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                     //   Colors.green,
                     // );
                     Navigator.pop(context);
-        
+
                     VxToast.show(
                       context,
                       msg: 'Downloaded successfully!',
@@ -406,7 +421,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                       textColor: Colors.white,
                       showTime: 5000,
                     );
-        
+
                     // The image file is now saved in the device's temporary directory.
                     print('Image saved at ${file.path}');
                   },
@@ -420,6 +435,5 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
         ),
       ),
     );
-  
   }
 }
