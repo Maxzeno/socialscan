@@ -220,18 +220,6 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                       log('CLicked');
                       print(
                           'Selected list link =====> $selectedSocialsToSendList');
-
-                      // setState(() {
-                      //   _isSocialChecked = !_isSocialChecked;
-                      // });
-                      // selectedSocialsToSendList.add(SocialLinkModel(
-                      //   text: data.text,
-                      //   imagePath: data.imagePath,
-                      //   conColor: data.conColor,
-                      //   iconColor: data.iconColor,
-                      //   // id: index,
-                      //   linkUrl: data.linkUrl,
-                      // ));
                     },
                     child: SocialMediaTile(
                       socialImage: data.imagePath!,
@@ -240,15 +228,14 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                       socialText: data.text,
                       isSocialChecked: _isSocialChecked,
                       onSelected: (value) {
-                        setState(() {
-                          _isSocialChecked = value!;
-                          log("_isSocialChecked: $_isSocialChecked");
-                          log("selectedSocialsToSendList: $selectedSocialsToSendList");
-                        });
+                        _isSocialChecked = value!;
+                        log("_isSocialChecked: $_isSocialChecked");
+                        log("selectedSocialsToSendList: $selectedSocialsToSendList");
+
                         userSate.selectSocialToQrCode(
                             _isSocialChecked, data, index);
 
-                        _onCheckboxSelected(_isSocialChecked);
+                        // _onCheckboxSelected(_isSocialChecked);
                       },
                     ),
                   );

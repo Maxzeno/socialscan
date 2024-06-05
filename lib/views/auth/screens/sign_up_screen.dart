@@ -55,32 +55,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ReusableTextField(
-                            textInputType: TextInputType.name,
-                            controller: userNotifier.firstNameController,
-                            hintText: 'First Name',
-                            obscure: false,
-                            onTap: () {},
-                            iconButton: null,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: ReusableTextField(
-                            textInputType: TextInputType.name,
-                            controller: userNotifier.lastNameController,
-                            hintText: 'Last Name',
-                            obscure: false,
-                            onTap: () {},
-                            iconButton: null,
-                          ),
-                        ),
-                      ],
+                    ReusableTextField(
+                      textInputType: TextInputType.name,
+                      controller: userNotifier.firstNameController,
+                      hintText: 'Full Name',
+                      obscure: false,
+                      onTap: () {},
+                      iconButton: null,
+                    ),
+                    const SizedBox(
+                      width: 10,
                     ),
                     const SizedBox(
                       height: 16,
@@ -259,7 +243,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               color: Theme.of(context).brightness ==
                                       Brightness.light
                                   ? ProjectColors.mainPurple.withOpacity(0.6)
-                                  : ProjectColors.lightishPurple,
+                                  : Colors.purple.shade300,
                             ),
                           ),
                         ),

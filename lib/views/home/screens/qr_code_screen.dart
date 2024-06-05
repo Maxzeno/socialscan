@@ -23,10 +23,8 @@ import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
 import '../../../utils/images.dart';
 import '../../../view_model/river_pod/number_notifier.dart';
+import '../../../view_model/river_pod/user_notifier.dart';
 import '../widgets/horizontal_dot_tile.dart';
-// import '../widgets/horizontal_dot_tile/esys_flutter_share_plus.dart';
-
-// import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeScreen extends ConsumerStatefulWidget {
   final UserModel? qrData;
@@ -45,47 +43,13 @@ class QrCodeScreen extends ConsumerStatefulWidget {
 
 class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
   var random = Random();
-  // int _
-
-  // String generateMultiLinkURI(List<String> qrData) {
-  //   return qrData.map((link) => Uri.encodeComponent(link)).join(';');
-  // }
-
-  // String generateQRData(Map<String, dynamic> qrData) {
-  //   String firstName = qrData['firstName'] ?? '';
-  //   String lastName = qrData['lastName'] ?? '';
-  //   String profession = qrData['profession'] ?? '';
-  //   String phoneNumber = qrData['phoneNumber'] ?? '';
-  //   List<SocialLinkModel> social = (qrData['socials'] as List<SocialLinkModel>?)?.cast<SocialLinkModel>() ?? [];
-  //
-  //   String qrString = 'First Name: $firstName\n'
-  //       'Last Name: $lastName\n'
-  //       'Profession: $profession\n'
-  //       'Phone Number: $phoneNumber\n';
-  //
-  //   print('Hello data ====> $qrString ');
-  //   print('Hello socials ====> $social ');
-  //
-  //   if (social.isNotEmpty) {
-  //     qrString += 'Social:\n';
-  //     social.forEach((s) {
-  //       qrString += '$s\n';
-  //       print(' Hello Selected social ==> $qrString');
-  //     });
-  //   }
-  //
-  //   return qrString;
-  // }
 
   String generateQRData(UserModel userModel) {
-    String firstName = userModel.firstName;
-    String lastName = userModel.lastName;
+    String fullName = userModel.fullName;
     String profession = userModel.profession ?? '';
     String? phoneNumber =
         widget.isPhoneNumberSelectedToBeSent ? userModel.phoneNumber : null;
     String? email = widget.isEmailSelectedToBeSent ? userModel.email : null;
-    // String phoneNumber = userModel.phoneNumber;
-    // String email = userModel.email;
     String id = userModel.id;
     String image = userModel.image;
     List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
@@ -95,8 +59,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
             '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}')
         .join(',');
 
-    String userDataString =
-        '$firstName;$lastName;$phoneNumber;$profession;$email;$id';
+    String userDataString = '$fullName;$phoneNumber;$profession;$email;$id';
     if (image.isNotEmpty) {
       userDataString += ';$image';
     }
@@ -106,30 +69,12 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
     return qrString;
   }
 
-  // String generateQRData(UserModel userModel) {
-  //   String firstName = userModel.firstName ?? '';
-  //   String lastName = userModel.lastName ?? '';
-  //   String profession = userModel.profession ?? '';
-  //   String phoneNumber = userModel.phoneNumber ?? '';
-  //   String email = userModel.email ?? '';
-  //   String id = userModel.id ?? '';
-  //   List<SocialLinkModel> social = userModel.socialMediaLink ?? [];
-  //
-  //   String socialLinksString = social.map((link) => '${link.text},${link.imagePath},${link.conColor},${link.iconColor},${link.linkUrl}').join(',');
-  //
-  //   String qrString = '$firstName;$lastName;$phoneNumber;$profession;$email;$id;$socialLinksString';
-  //
-  //   return qrString;
-  // }
-
   void openSelectedLink(String encodedLinks, String chosenLink) {
     final decodedLinks = encodedLinks.split(';');
     final index = decodedLinks.indexOf(chosenLink);
     if (index >= 0 && index < decodedLinks.length) {
       _launchURL(decodedLinks[index]);
-    } else {
-      // Handle scenario where chosen link is not found (optional)
-    }
+    } else {}
   }
 
   Future<void> _launchURL(String url) async {
@@ -143,16 +88,15 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
   @override
   Widget build(BuildContext context) {
     final number = ref.watch(numberProvider);
-    print('Url link ====> ${widget.qrData!.firstName}');
+    print('Url link ====> ${widget.qrData!.fullName}');
 
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
+            ref.read(userProvider.notifier).toggleOffSelected();
             Navigator.pop(context);
           },
           icon: Icon(
@@ -392,7 +336,6 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                     );
                     ref.read(numberProvider.notifier).incrementNumber();
 
-                    // Compress the image and write it to the file.
                     final compressedImage =
                         await FlutterImageCompress.compressWithList(
                       qrImageBytes!.buffer.asUint8List(),
@@ -402,16 +345,6 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
                     );
                     await file.writeAsBytes(compressedImage, flush: true);
 
-                    // showDialog(context: context, builder: (context){
-                    //   return
-                    // });
-
-                    // infoSnackBar(
-                    //   context,
-                    //   'Qr Code saved to $downloadDirectoryPath',
-                    //   const Duration(seconds: 8),
-                    //   Colors.green,
-                    // );
                     Navigator.pop(context);
 
                     VxToast.show(

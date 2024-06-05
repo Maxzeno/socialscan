@@ -129,7 +129,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).brightness == Brightness.light
                             ? ProjectColors.mainPurple.withOpacity(0.6)
-                            : ProjectColors.lightishPurple,
+                            : Colors.purple.shade300,
                       ),
                     ),
                   ),

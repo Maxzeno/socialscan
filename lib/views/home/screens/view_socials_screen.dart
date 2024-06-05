@@ -3,18 +3,18 @@ import 'package:flutter_animator/animation/animation_preferences.dart';
 import 'package:flutter_animator/animation/animator_play_states.dart';
 import 'package:flutter_animator/widgets/attention_seekers/heart_beat.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socialscan/utils/button.dart';
+import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/view_model/river_pod/user_notifier.dart';
-import 'package:socialscan/views/home/screens/qr_code_screen.dart';
 import 'package:socialscan/views/home/screens/socials_page.dart';
 
 import '../../../models/social_link_model.dart';
 import '../../../models/user_model.dart';
-import '../../../utils/button.dart';
-import '../../../utils/colors.dart';
 import '../../../utils/lists/added_socials_list.dart';
 import '../../../utils/lists/selected_socials_to_send_list.dart';
 import '../../../utils/services/firebase_services.dart';
 import '../../../utils/strings.dart';
+import 'qr_code_screen.dart';
 
 class ViewSocialsScreen extends ConsumerStatefulWidget {
   const ViewSocialsScreen({super.key});
@@ -85,7 +85,7 @@ class _ViewSocialsScreenState extends ConsumerState<ViewSocialsScreen>
         title: Text(
           'Your Social Apps',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
             color: Theme.of(context).brightness == Brightness.light
                 ? Colors.black
@@ -541,6 +541,7 @@ class _ViewSocialsScreenState extends ConsumerState<ViewSocialsScreen>
                                                       builder: (_) =>
                                                           QrCodeScreen(
                                                         qrData: results,
+                                                        // context: context,
                                                         isEmailSelectedToBeSent:
                                                             isChecked,
                                                         isPhoneNumberSelectedToBeSent:

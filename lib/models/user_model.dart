@@ -4,8 +4,8 @@ import 'package:socialscan/models/social_link_model.dart';
 class UserModel {
   final String id;
   final String image;
-  final String firstName;
-  final String lastName;
+  final String fullName;
+  // final String lastName;
   final String phoneNumber;
   final String email;
   String? password;
@@ -13,8 +13,8 @@ class UserModel {
   final List<SocialLinkModel>? socialMediaLink;
 
   UserModel({
-    required this.firstName,
-    required this.lastName,
+    required this.fullName,
+    // required this.lastName,
     required this.phoneNumber,
     this.password,
     required this.profession,
@@ -25,8 +25,8 @@ class UserModel {
   });
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
+    data['fullName'] = fullName;
+    // data['lastName'] = lastName;
     data['email'] = email;
     data['password'] = password;
     data['phoneNumber'] = phoneNumber;
@@ -40,8 +40,8 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
+      'fullName': fullName,
+      // 'lastName': lastName,
       'phoneNumber': phoneNumber,
       'profession': profession,
       'email': email,
@@ -52,8 +52,8 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
+      fullName: json['fullName'] ?? '',
+      // lullName: json['lastName'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
       email: json['email'] ?? '',
       password: json['password'] ?? '',
@@ -70,8 +70,8 @@ class UserModel {
     var documentSnapShot = snapshot.data() as Map<String, dynamic>;
     print('User Document snapshot==========>$documentSnapShot<========');
     return UserModel(
-      firstName: documentSnapShot['firstName'] ?? '',
-      lastName: documentSnapShot['lastName'] ?? '',
+      fullName: documentSnapShot['fullName'] ?? '',
+      // fName: documentSnapShot['lastName'] ?? '',
       phoneNumber: documentSnapShot['phoneNumber'] ?? '',
       password: documentSnapShot['password'] ?? '',
       email: documentSnapShot['email'] ?? '',

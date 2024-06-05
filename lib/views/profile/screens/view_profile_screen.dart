@@ -59,8 +59,7 @@ class _ViewProfileScreenState extends ConsumerState<ViewProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FrostedGlassBox(
-                  title:
-                      '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
+                  title: '${userNotifier.userModel!.fullName}',
                   subTitle: userNotifier.userModel!.profession!,
                   theChild: Container(
                     height: 150,
@@ -73,7 +72,7 @@ class _ViewProfileScreenState extends ConsumerState<ViewProfileScreen> {
                             userNotifier.image == null
                         ? Center(
                             child: Text(
-                              userNotifier.userModel!.firstName
+                              userNotifier.userModel!.fullName
                                   .toString()
                                   .substring(0, 1),
                               style: const TextStyle(

@@ -201,10 +201,10 @@ class _AddNewSocialWidgetState extends ConsumerState<AddNewSocialWidget> {
                   onTap: () {},
                   hintText: 'Paste Link',
                   // width: 338,
-                  validator: (value){
-                    if(value!.isNotEmpty && validate.isURL(value)){
+                  validator: (value) {
+                    if (value!.isNotEmpty && validate.isURL(value)) {
                       return null;
-                    } else{
+                    } else {
                       return "Enter a valid link";
                     }
                   },

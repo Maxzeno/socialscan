@@ -12,8 +12,8 @@ import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
 
 List<UserModel> networkList = [
   UserModel(
-    firstName: "David",
-    lastName: "Ray",
+    fullName: "David Ray",
+    // lastName: "Ray",
     phoneNumber: "+2349072571890",
     profession: "Software Developer",
     email: "email@gmail.com",
@@ -47,8 +47,8 @@ List<UserModel> networkList = [
     ],
   ),
   UserModel(
-    firstName: "Mellisa",
-    lastName: "Degrassi",
+    fullName: "Mellisa Degrassi",
+    // lastName: "Degrassi",
     phoneNumber: "",
     profession: "Data Analyst",
     email: "mellisa@gmail.com",
@@ -74,8 +74,8 @@ List<UserModel> networkList = [
     ],
   ),
   UserModel(
-    firstName: "Henry",
-    lastName: "Lionel",
+    fullName: "Henry Lionel",
+    // lastName: "Lionel",
     phoneNumber: "",
     profession: "Scientist",
     email: "",

@@ -75,7 +75,7 @@ class ViewNetworkScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FrostedGlassBox(
-                title: '${user.firstName} ${user.lastName}',
+                title: '${user.fullName} ',
                 subTitle: user.profession!,
                 theChild: Stack(
                   children: [
@@ -89,7 +89,7 @@ class ViewNetworkScreen extends ConsumerWidget {
                       child: user.image.isEmpty
                           ? Center(
                               child: Text(
-                                user.firstName.toString().substring(0, 1),
+                                user.fullName.toString().substring(0, 1),
                                 style: const TextStyle(
                                   fontSize: 60,
                                   fontWeight: FontWeight.w500,
@@ -138,8 +138,7 @@ class ViewNetworkScreen extends ConsumerWidget {
                             ),
                 ),
               ),
-              user.phoneNumber == "" ||
-                                user.phoneNumber == "null"
+              user.phoneNumber == "" || user.phoneNumber == "null"
                   ? const SizedBox()
                   : Column(
                       children: [
@@ -200,13 +199,11 @@ class ViewNetworkScreen extends ConsumerWidget {
                                     : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
-                          
                           ],
                         ),
                       ],
                     ),
-              user.email == "" ||
-                                user.email == "null"
+              user.email == "" || user.email == "null"
                   ? const SizedBox()
                   : Column(
                       children: [
@@ -268,7 +265,6 @@ class ViewNetworkScreen extends ConsumerWidget {
                                     : ProjectColors.mainGray.withOpacity(0.8),
                               ),
                             ),
-                          
                           ],
                         ),
                       ],
@@ -302,7 +298,10 @@ class ViewNetworkScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: ProjectColors.midBlack.withOpacity(0.8),
+                              color: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? ProjectColors.midBlack.withOpacity(0.8)
+                                  : Colors.white,
                             ),
                           ),
                         ],
