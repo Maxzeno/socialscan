@@ -46,17 +46,18 @@ class PreviewScanLinkScreen extends StatelessWidget {
         // backgroundColor: Colors.white,
         elevation: 0.0,
         toolbarHeight: 70,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_outlined,
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.black
-                : Colors.white,
-          ),
-        ),
+        automaticallyImplyLeading: false,
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(
+        //     Icons.arrow_back_outlined,
+        //     color: Theme.of(context).brightness == Brightness.light
+        //         ? Colors.black
+        //         : Colors.white,
+        //   ),
+        // ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(20),
@@ -73,7 +74,9 @@ class PreviewScanLinkScreen extends StatelessWidget {
               child: Text(
                 "Back to home",
                 style: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.light ? ProjectColors.mainPurple : ProjectColors.lightishPurple,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? ProjectColors.mainPurple
+                      : ProjectColors.lightishPurple,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -99,7 +102,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FrostedGlassBox(
-                          title: '${user.firstName} ${user.lastName}',
+                          title: '${user.fullName}',
                           subTitle: user.profession!,
                           theChild: Container(
                             height: 150,
@@ -129,7 +132,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                   )
                                 : Center(
                                     child: Text(
-                                      user.firstName.substring(0, 1),
+                                      user.fullName.substring(0, 1),
                                       style: const TextStyle(
                                         fontSize: 60,
                                         fontWeight: FontWeight.w500,
@@ -154,8 +157,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                   ),
                           ),
                         ),
-                        user.phoneNumber == "" ||
-                                user.phoneNumber == "null"
+                        user.phoneNumber == "" || user.phoneNumber == "null"
                             ? const SizedBox()
                             : Column(
                                 children: [
@@ -179,52 +181,55 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              color: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? ProjectColors.midBlack
-                                        : ProjectColors.mainGray,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? ProjectColors.midBlack
+                                                  : ProjectColors.mainGray,
                                             ),
                                           ),
                                         ],
                                       ),
                                       GestureDetector(
-                              onTap: () async {
-                                await Clipboard.setData(
-                                  ClipboardData(
-                                    text: user.phoneNumber,
-                                  ),
-                                );
+                                        onTap: () async {
+                                          await Clipboard.setData(
+                                            ClipboardData(
+                                              text: user.phoneNumber,
+                                            ),
+                                          );
 
-                                VxToast.show(
-                                  context,
-                                  msg: 'Copied to clipboard.',
-                                  bgColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? ProjectColors.fadeBlack
-                                      : Colors.white.withOpacity(0.95),
-                                  textColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.white
-                                      : ProjectColors.midBlack,
-                                  showTime: 2000,
-                                );
-                              },
-                              child: Icon(
-                                Icons.copy_outlined,
-                                size: 24,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? Colors.grey.shade800
-                                    : ProjectColors.mainGray.withOpacity(0.8),
-                              ),
-                            ),
-                          
+                                          VxToast.show(
+                                            context,
+                                            msg: 'Copied to clipboard.',
+                                            bgColor:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? ProjectColors.fadeBlack
+                                                    : Colors.white
+                                                        .withOpacity(0.95),
+                                            textColor:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Colors.white
+                                                    : ProjectColors.midBlack,
+                                            showTime: 2000,
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.copy_outlined,
+                                          size: 24,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Colors.grey.shade800
+                                              : ProjectColors.mainGray
+                                                  .withOpacity(0.8),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
-                        user.email == "" ||
-                                user.email == "null"
+                        user.email == "" || user.email == "null"
                             ? const SizedBox()
                             : Column(
                                 children: [
@@ -248,47 +253,51 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
-                                              color: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? ProjectColors.midBlack
-                                        : ProjectColors.mainGray,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.light
+                                                  ? ProjectColors.midBlack
+                                                  : ProjectColors.mainGray,
                                             ),
                                           ),
                                         ],
                                       ),
                                       GestureDetector(
-                              onTap: () async {
-                                await Clipboard.setData(
-                                  ClipboardData(
-                                    text: user.email,
-                                  ),
-                                );
+                                        onTap: () async {
+                                          await Clipboard.setData(
+                                            ClipboardData(
+                                              text: user.email,
+                                            ),
+                                          );
 
-                                VxToast.show(
-                                  context,
-                                  msg: 'Copied to clipboard.',
-                                  bgColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? ProjectColors.fadeBlack
-                                      : Colors.white.withOpacity(0.95),
-                                  textColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.white
-                                      : ProjectColors.midBlack,
-                                  showTime: 2000,
-                                );
-                              },
-                              child: Icon(
-                                // onPressed: () {},
-                                Icons.copy_outlined,
-                                size: 24,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.light
-                                    ? Colors.grey.shade800
-                                    : ProjectColors.mainGray.withOpacity(0.8),
-                              ),
-                            ),
-                          
+                                          VxToast.show(
+                                            context,
+                                            msg: 'Copied to clipboard.',
+                                            bgColor:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? ProjectColors.fadeBlack
+                                                    : Colors.white
+                                                        .withOpacity(0.95),
+                                            textColor:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Colors.white
+                                                    : ProjectColors.midBlack,
+                                            showTime: 2000,
+                                          );
+                                        },
+                                        child: Icon(
+                                          // onPressed: () {},
+                                          Icons.copy_outlined,
+                                          size: 24,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Colors.grey.shade800
+                                              : ProjectColors.mainGray
+                                                  .withOpacity(0.8),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -329,8 +338,11 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
-                                        color: ProjectColors.midBlack
-                                            .withOpacity(0.8),
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? ProjectColors.midBlack
+                                                .withOpacity(0.8)
+                                            : Colors.white,
                                       ),
                                     ),
                                   ],
@@ -459,17 +471,18 @@ class PreviewScanLinkScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 7),
                                         GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             launchURL(link.linkUrl);
                                           },
                                           child: Icon(
                                             Icons.launch_outlined,
                                             size: 24,
-                                            color: Theme.of(context).brightness ==
-                                                    Brightness.light
-                                                ? Colors.grey.shade800
-                                                : ProjectColors.midBlack
-                                                    .withOpacity(0.8),
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Colors.grey.shade800
+                                                    : ProjectColors.midBlack
+                                                        .withOpacity(0.8),
                                           ),
                                         ),
                                       ],

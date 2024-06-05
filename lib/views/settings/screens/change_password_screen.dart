@@ -42,7 +42,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           },
           icon: Icon(
             Icons.arrow_back_outlined,
-            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
         ),
       ),
@@ -223,7 +225,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             _formKey.currentState!.save();
             FirebaseService()
                 .updatePassword(
-                  password: _enterNewPasswordController.text,
+                  currentPassword: _enterPasswordController.text,
+                  newPassword: _enterNewPasswordController.text,
                 )
                 .then(
                   (value) => infoSnackBar(

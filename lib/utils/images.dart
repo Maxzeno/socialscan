@@ -30,9 +30,9 @@ String fillSettingsIcon = '$iconPath/settings_fill.svg';
 String homepageImageDark = '$iconPath/homepage_image_darkmode.svg';
 String homepageImageLight = '$iconPath/homepage_image_lightmode.svg';
 String blocksImage = '$iconPath/blocks_image.svg';
+String dotsImage = '$iconPath/dots.svg';
 
 // lottie icons
 String lottiePath = 'assets/lottie';
 String morningAnimationIcon = '$lottiePath/morning_animation.json';
 String eveningAnimationIcon = '$lottiePath/evening_animation.json';
-

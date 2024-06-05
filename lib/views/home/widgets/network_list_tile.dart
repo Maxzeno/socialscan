@@ -52,7 +52,10 @@ class NetworkListTile extends StatelessWidget {
                         backgroundColor: ProjectColors.mainPurple,
                         child: Center(
                           child: Text(
-                            user.firstName.toString().substring(0, 1),
+                            user.fullName
+                                .split(' ')[0]
+                                .toString()
+                                .substring(0, 1),
                             style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w500,
@@ -74,7 +77,7 @@ class NetworkListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${user.firstName} ${user.lastName}',
+                        '${user.fullName} ',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,

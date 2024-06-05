@@ -26,6 +26,7 @@ class UserState {
   final bool isSignedIn;
   final List<SocialLinkModel> selectedSocials;
   final bool isGoogleAccount;
+  final bool isChecked;
   UserState({
     this.userModel,
     this.image,
@@ -34,6 +35,7 @@ class UserState {
     this.isSignedIn = false,
     this.selectedSocials = const [],
     this.isGoogleAccount = false,
+    this.isChecked = false,
     // this.selectedSocials = const [],
   });
 
@@ -45,6 +47,7 @@ class UserState {
     bool? isSignedIn,
     List<SocialLinkModel>? selectedSocials,
     bool? isGoogleAccount,
+    bool? isChecked,
   }) {
     return UserState(
       userModel: userModel ?? this.userModel,
@@ -54,6 +57,7 @@ class UserState {
       isSignedIn: isSignedIn ?? this.isSignedIn,
       selectedSocials: selectedSocialsToSendList ?? this.selectedSocials,
       isGoogleAccount: isGoogleAccount ?? this.isGoogleAccount,
+      isChecked: isChecked ?? this.isChecked,
     );
   }
 }
@@ -64,7 +68,7 @@ class UserNotifier extends StateNotifier<UserState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseService _authService = FirebaseService();
   // final countryPicker = const FlCountryCodePicker();
-  
+
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -118,8 +122,8 @@ class UserNotifier extends StateNotifier<UserState> {
       await Future.delayed(const Duration(seconds: 2));
       String res = await _authService.createUser(
         email: emailController.text,
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
+        fullName: firstNameController.text,
+        // lastName: lastNameController.text,
         password: passwordController.text,
         profession: professionController.text,
         context: context,
@@ -155,8 +159,8 @@ class UserNotifier extends StateNotifier<UserState> {
 
       await Future.delayed(const Duration(seconds: 2));
       String res = await _authService.signInWithGoogle(
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
+        fullName: firstNameController.text,
+        // lastName: lastNameController.text,
         context: context,
         profession: professionController.text,
         phoneNumber:
@@ -231,42 +235,41 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> selectCountryCode(BuildContext context) async {
     final countryPicker = FlCountryCodePicker(
-    // title: const Text("Select Country"),
-    searchBarTextStyle: const TextStyle(
-      fontSize: 14.0,
-      fontWeight: FontWeight.w500,
-          color: ProjectColors.midBlack,
-    ),
-    searchBarDecoration: InputDecoration(
-      border: InputBorder.none,
-      hintText: 'Search Country Code',
-      hintStyle: const TextStyle(
+      // title: const Text("Select Country"),
+      searchBarTextStyle: const TextStyle(
         fontSize: 14.0,
         fontWeight: FontWeight.w500,
-            color: Colors.black38,
+        color: ProjectColors.midBlack,
       ),
-      contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(7),
-        borderSide: const BorderSide(
-          width: 0,
-          color: ProjectColors.mainGray,
+      searchBarDecoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: 'Search Country Code',
+        hintStyle: const TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black38,
+        ),
+        contentPadding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7),
+          borderSide: const BorderSide(
+            width: 0,
+            color: ProjectColors.mainGray,
+          ),
+        ),
+        fillColor: Theme.of(context).brightness == Brightness.light
+            ? ProjectColors.mainGray
+            : ProjectColors.lightishPurple,
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7),
+          borderSide: const BorderSide(
+            width: 0,
+            color: ProjectColors.mainGray,
+          ),
         ),
       ),
-      fillColor: Theme.of(context).brightness == Brightness.light
-              ? ProjectColors.mainGray
-              : ProjectColors.lightishPurple,
-          filled: true,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(7),
-        borderSide: const BorderSide(
-          width: 0,
-          color: ProjectColors.mainGray,
-        ),
-      ),
-    ),
-  );
-
+    );
 
     final code = await countryPicker.showPicker(
       context: context,
@@ -317,10 +320,19 @@ class UserNotifier extends StateNotifier<UserState> {
 
     state = state.copyWith(selectedSocials: updatedSelectedSocials);
     print('Checking added lists ====> $selectedSocialsToSendList');
-
-    // Update the state using the provider's update method (e.g., ref.read(userProvider).update((state) => state.copyWith(selectedSocials: updatedSelectedSocials)))
   }
 
+  Future<void> toggleOffSelected() async {
+    final clear = selectedSocialsToSendList = [];
+
+    print('Before clearing: ${state.selectedSocials}');
+    state = state.copyWith(selectedSocials: clear);
+    print('After clearing: ${state.selectedSocials}');
+  }
+
+  // void toggleCheckbox() {
+  //   state = state.copyWith(isChecked: !state.isChecked);
+  // }
 // void selectSocialToQrCode(bool isSelected, dynamic data, int index) {
   //   if (isSelected) {
   //     state.selectedSocials.add(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/selected_count.dart';
+import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 
-class SocialMediaTile extends StatefulWidget {
+class SocialMediaTile extends ConsumerStatefulWidget {
   final String socialText;
   final String socialImage;
   final Color socialIconColor;
@@ -22,10 +24,10 @@ class SocialMediaTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SocialMediaTile> createState() => _SocialMediaTileState();
+  ConsumerState<SocialMediaTile> createState() => _SocialMediaTileState();
 }
 
-class _SocialMediaTileState extends State<SocialMediaTile> {
+class _SocialMediaTileState extends ConsumerState<SocialMediaTile> {
   bool _isChecked = false;
 
   // @override
@@ -45,7 +47,14 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+    final userState = ref.watch(userProvider);
+
+    final isChecked =
+        userState.selectedSocials.any((link) => link.text == widget.socialText);
+
     return Container(
       height: 140,
       width: 184,
@@ -101,16 +110,12 @@ class _SocialMediaTileState extends State<SocialMediaTile> {
             child: Transform.scale(
               scale: 1.11,
               child: Checkbox.adaptive(
-                value: _isChecked,
+                value: isChecked,
                 onChanged: (value) {
                   setState(() {
-                    _isChecked = value!;
+                    // _isChecked = value!;
                     widget.onSelected(value);
-
-                    // _onCheckboxSelected(_isChecked);
                   });
-
-                  print(selectedCount);
                 },
                 // onChanged: widget.onSelected,
                 activeColor: ProjectColors.mainPurple,
