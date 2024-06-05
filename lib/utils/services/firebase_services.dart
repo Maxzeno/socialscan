@@ -16,8 +16,6 @@ import '../strings.dart';
 class FirebaseService {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
-  // static GoogleSignIn googleSignIn = GoogleSignIn();
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   var user = auth.currentUser;
@@ -146,7 +144,8 @@ class FirebaseService {
   }
 
   Future<String> updatePassword({
-    required String password,
+    required String currentPassword,
+    required String newPassword,
   }) async {
     String res = 'Some error occurred';
     try {
@@ -156,9 +155,9 @@ class FirebaseService {
         return 'User not logged in';
       }
       var cred = EmailAuthProvider.credential(
-          email: currentUser.email!, password: password);
+          email: currentUser.email!, password: currentPassword);
       await currentUser.reauthenticateWithCredential(cred).then((value) {
-        currentUser.updatePassword(password);
+        currentUser.updatePassword(newPassword);
       }).catchError((error) {
         print(' checking password ${error.toString()}');
       });
@@ -166,7 +165,7 @@ class FirebaseService {
       print(' email ${currentUser.email}');
 
       await _firestore.collection('users').doc(currentUser.uid).update({
-        'password': password,
+        'password': newPassword,
       });
 
       DocumentSnapshot userDoc =
@@ -175,7 +174,7 @@ class FirebaseService {
       UserModel updatedUser =
           UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
 
-      updatedUser.password = password;
+      updatedUser.password = newPassword;
 
       await _firestore.collection('users').doc(currentUser.uid).update(
             updatedUser.toJson(),
@@ -296,8 +295,8 @@ class FirebaseService {
         }
         final selected = selectedSocialsToSendList;
         final userDetails = UserModel(
-          firstName: userDoc['firstName'],
-          lastName: userDoc['lastName'],
+          fullName: userDoc['fullName'],
+          // lastName: userDoc['lastName'],
           phoneNumber: userDoc['phoneNumber'],
           profession: userDoc['profession'],
           email: userDoc['email'],
@@ -317,8 +316,8 @@ class FirebaseService {
   }
 
   Future<String> updateProfile({
-    String? firstName,
-    String? lastName,
+    String? fullName,
+    // String? lastName,
     String? email,
     String? profession,
     String? phoneNumber,
@@ -333,8 +332,8 @@ class FirebaseService {
                 .uploadingImageToStorage('profilePic', image, false)
             : null;
         Map<String, dynamic> updatedFields = {
-          if (firstName != null && firstName.isNotEmpty) 'firstName': firstName,
-          if (lastName != null && lastName.isNotEmpty) 'lastName': lastName,
+          if (fullName != null && fullName.isNotEmpty) 'fullName': fullName,
+          // if (lastName != null && lastName.isNotEmpty) 'lastName': lastName,
           if (email != null && email.isNotEmpty) 'email': email,
           if (profession != null && profession.isNotEmpty)
             'profession': profession,
@@ -353,6 +352,7 @@ class FirebaseService {
       }
     } catch (error) {
       res = error.toString();
+      print('update error ===> $error');
     }
     return res;
   }
@@ -382,8 +382,8 @@ class FirebaseService {
   }
 
   Future<String> createUser({
-    required String firstName,
-    required String lastName,
+    required String fullName,
+    // required String lastName,
     required String phoneNumber,
     required String email,
     required String password,
@@ -392,8 +392,8 @@ class FirebaseService {
   }) async {
     String res = 'Some error occurred';
     try {
-      if (firstName.isNotEmpty ||
-          lastName.isNotEmpty ||
+      if (fullName.isNotEmpty ||
+          // lastName.isNotEmpty ||
           phoneNumber.isNotEmpty ||
           email.isNotEmpty ||
           password.isNotEmpty ||
@@ -404,8 +404,8 @@ class FirebaseService {
         UserModel userModel = UserModel(
           id: userCredential.user!.uid,
           image: '',
-          firstName: firstName,
-          lastName: lastName,
+          fullName: fullName,
+          // lastName: lastName,
           phoneNumber: phoneNumber,
           email: email,
           password: password,
@@ -466,9 +466,9 @@ class FirebaseService {
   }
 
   Future<String> signInWithGoogle({
-    required String? firstName,
+    required String? fullName,
     required BuildContext context,
-    required String? lastName,
+    // required String? lastName,
     required String? phoneNumber,
     required String profession,
   }) async {
@@ -497,8 +497,8 @@ class FirebaseService {
       if (firebaseUser != null) {
         UserModel userModel = UserModel(
           id: firebaseUser.uid,
-          firstName: firstName ?? '',
-          lastName: lastName ?? '',
+          fullName: fullName ?? '',
+          // lastName: lastName ?? '',
           email: firebaseUser.email ?? '',
           phoneNumber: phoneNumber ?? '',
           profession: profession,
@@ -559,56 +559,3 @@ String _getErrorMessage(String errorCode) {
   }
 }
 
-// Future<String> signInWithGoogle(BuildContext context) async {
-//   try {
-//     final GoogleSignInAccount? googleSignInAccount =
-//     await googleSignIn.signIn();
-//     if (googleSignInAccount != null) {
-//       final GoogleSignInAuthentication googleSignInAuthentication =
-//       await googleSignInAccount.authentication;
-//
-//       final AuthCredential credential = GoogleAuthProvider.credential(
-//         accessToken: googleSignInAuthentication.accessToken,
-//         idToken: googleSignInAuthentication.idToken,
-//       );
-//
-//       final UserCredential userCredential =
-//       await auth.signInWithCredential(credential);
-//       final User? user = userCredential.user;
-//
-//       if (user != null) {
-//         UserModel userModel = UserModel(
-//           id: user.uid,
-//           firstName: user.displayName ?? '',
-//           lastName: '',
-//           phoneNumber: '',
-//           email: user.email ?? '',
-//           password: '',
-//         );
-//
-//         await _firestore.collection('users').doc(user.uid).set(
-//           userModel.toJson(),
-//           SetOptions(merge: true), // Merge data if user already exists
-//         );
-//
-//         // Check if the user is signing in for the first time
-//         if (userCredential.additionalUserInfo?.isNewUser ?? false) {
-//           // Perform any additional actions for new users
-//         }
-//
-//         return 'Successful';
-//       } else {
-//         return 'Sign-in failed. Please try again.';
-//       }
-//     } else {
-//       return 'Sign-in canceled.';
-//     }
-//   } catch (error) {
-//     return 'An error occurred. Please try again later.';
-//   }
-// }
-//
-// void signOutGoogle() async {
-//   await googleSignIn.signOut();
-//   print("User Signed Out");
-// }

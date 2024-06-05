@@ -88,8 +88,8 @@ class UserProvider extends ChangeNotifier {
       await Future.delayed(const Duration(seconds: 2));
       String res = await _authService.createUser(
         email: emailController.text,
-        firstName: firstName.text,
-        lastName: lastName.text,
+        fullName: firstName.text,
+        // lastName: lastName.text,
         password: passwordController.text,
         profession: profession.text,
         context: context,
@@ -214,5 +214,4 @@ class UserProvider extends ChangeNotifier {
 //   }
 //   notifyListeners();
 // }
-
 }

@@ -12,12 +12,9 @@ import 'package:socialscan/views/home/screens/scan_qr_code.dart';
 import 'package:socialscan/views/home/screens/view_socials_screen.dart';
 
 import '../../../models/social_link_model.dart';
-import '../../../models/user_model.dart';
 import '../../../utils/button.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/images.dart';
-import '../../../utils/lists/added_socials_list.dart';
-import '../../../utils/services/firebase_services.dart';
 import '../../profile/screens/view_profile_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -86,7 +83,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final greeting = getGreeting();
     final greetingIcon = getLottieIcon();
 
-    
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -95,232 +91,243 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
         child: userState.userModel == null
             ? Center(
-                      child: HeartBeat(
-                        preferences: const AnimationPreferences(
-                          // duration: Duration(seconds: 2),
-                          autoPlay: AnimationPlayStates.Loop,
-                        ),
-                        child: Image.asset(
-                          'assets/images/socialscan_logo_png.png',
-                          height: 40,
-                        ),
-                      ),
-                    )
+                child: HeartBeat(
+                  preferences: const AnimationPreferences(
+                    // duration: Duration(seconds: 2),
+                    autoPlay: AnimationPlayStates.Loop,
+                  ),
+                  child: Image.asset(
+                    'assets/images/socialscan_logo_png.png',
+                    height: 40,
+                  ),
+                ),
+              )
             : Column(
-                      children: [
-                        const SizedBox(
-                          height: 35,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          // mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (_) =>
-                                            const ViewProfileScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    height: 42,
-                                    width: 42,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: ProjectColors.mainPurple,
-                                    ),
-                                    child: (userState
-                                                .userModel!.image.isEmpty) &&
-                                            userState.image == null
-                                        ? Center(
-                                            child: Text(
-                                              userState.userModel!.firstName
-                                                  .substring(0, 1),
-                                              style: const TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        : userState.image != null &&
-                                                userState.image!.isNotEmpty
-                                            ? ClipOval(
-                                                child: Image.memory(
-                                                  userState.image!,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                            : ClipOval(
-                                                child: Image.network(
-                                                  userState.userModel!.image,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                  ),
+                children: [
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (_) => const ViewProfileScreen(),
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      // helloDavid,
-                                      "$greeting, ${userState.userModel!.firstName}",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        // color: ProjectColors.midBlack,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? ProjectColors.bgBlack
-                                            : ProjectColors.mainGray,
+                              );
+                            },
+                            child: Container(
+                              height: 42,
+                              width: 42,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: ProjectColors.mainPurple,
+                              ),
+                              child: (userState.userModel!.image.isEmpty) &&
+                                      userState.image == null
+                                  ? Center(
+                                      child: Text(
+                                        userState.userModel!.fullName
+                                            .substring(0, 1),
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      "Lets keep you connected",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        // color: ProjectColors.midBlack,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? const Color(0xFF24212B)
-                                                .withOpacity(0.5)
-                                            : const Color(0xFFF4F4F4)
-                                                .withOpacity(0.5),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            LottieBuilder.asset(
-                              greetingIcon,
-                              frameRate: FrameRate.max,
-                              repeat: true,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              alignment: Alignment.centerRight,
-                              // controller: _animation,
-                            ),
-                          ],
-                        ),
-                        // const SizedBox(
-                        //   height: 30,
-                        // ),
-                        Expanded(
-                          child: Center(
-                            child: SvgPicture.asset(
-                              Theme.of(context).brightness == Brightness.light
-                                  ? homepageImageLight
-                                  : homepageImageDark,
+                                    )
+                                  : userState.image != null &&
+                                          userState.image!.isNotEmpty
+                                      ? ClipOval(
+                                          child: Image.memory(
+                                            userState.image!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : ClipOval(
+                                          child: Image.network(
+                                            userState.userModel!.image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                             ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            ButtonTile(
-                              width: screenWidth / 2,
-                              text: "Scan QR Code",
-                              boxRadius: 80,
-                              // icon: SvgPicture.asset(
-                              //   connectIcon,
-                              //   height: 24,
-                              //   width: 24,
-                              // ),
-                              onTap: () {
-                                // List<String> allLinks = extractLinkUrls(socialLinks);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const ScanQrCode(),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 50),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (_) => const ViewSocialsScreen(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 94,
-                                padding: const EdgeInsets.only(left: 25),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  gradient: LinearGradient.lerp(lg1, lg2, 0.2),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                // helloDavid,
+                                "$greeting, ${userState.userModel!.fullName.split(' ')[0]}",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  // color: ProjectColors.midBlack,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? ProjectColors.bgBlack
+                                      : ProjectColors.mainGray,
                                 ),
-                                child: Stack(
+                              ),
+                              Text(
+                                "Lets keep you connected",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  // color: ProjectColors.midBlack,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? const Color(0xFF24212B).withOpacity(0.5)
+                                      : const Color(0xFFF4F4F4)
+                                          .withOpacity(0.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      LottieBuilder.asset(
+                        greetingIcon,
+                        frameRate: FrameRate.max,
+                        repeat: true,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.centerRight,
+                        // controller: _animation,
+                      ),
+                    ],
+                  ),
+                  // const SizedBox(
+                  //   height: 30,
+                  // ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        SvgPicture.asset(
+                          dotsImage,
+                          // color: Colors.grey.shade50,
+                        ),
+                        Center(
+                          child: SvgPicture.asset(
+                            Theme.of(context).brightness == Brightness.light
+                                ? homepageImageLight
+                                : homepageImageDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      ButtonTile(
+                        width: screenWidth / 2,
+                        text: "Scan QR Code",
+                        boxRadius: 80,
+                        // icon: SvgPicture.asset(
+                        //   connectIcon,
+                        //   height: 24,
+                        //   width: 24,
+                        // ),
+                        onTap: () {
+                          // List<String> allLinks = extractLinkUrls(socialLinks);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ScanQrCode(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 50),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (_) => const ViewSocialsScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 94,
+                          padding: const EdgeInsets.only(left: 25),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            border: Border.all(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey
+                                    : Colors.transparent),
+                            gradient:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? LinearGradient.lerp(lg3, lg4, 0.2)
+                                    : LinearGradient.lerp(lg1, lg2, 0.2),
+                          ),
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Row(
                                   children: [
-                                    Center(
-                                      child: Row(
-                                        children: [
-                                          const Expanded(
-                                            child: Text(
-                                              "View your social apps",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                // color: ProjectColors.midBlack,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                width: 30,
-                                                height: 30,
-                                                margin: const EdgeInsets.only(
-                                                  right: 25,
-                                                ),
-                                                decoration: const BoxDecoration(
-                                                  color:
-                                                      ProjectColors.mainPurple,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: const Icon(
-                                                  Icons.chevron_right_rounded,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                    const Expanded(
+                                      child: Text(
+                                        "View your social apps",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          // color: ProjectColors.midBlack,
+                                          // color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 0,
-                                      child: SvgPicture.asset(
-                                        blocksImage,
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          margin: const EdgeInsets.only(
+                                            right: 25,
+                                          ),
+                                          decoration: const BoxDecoration(
+                                            color: ProjectColors.mainPurple,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.chevron_right_rounded,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            )
-                          ],
+                              Positioned(
+                                right: 0,
+                                child: SvgPicture.asset(
+                                  blocksImage,
+                                  color: Colors.grey.shade900,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  
-               
+                      )
+                    ],
+                  ),
+                ],
               ),
-      );
-  
+      ),
+    );
   }
 }

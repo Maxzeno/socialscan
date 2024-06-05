@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:socialscan/bottom_nav_screen.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
@@ -22,11 +21,12 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  String firstName = '';
-  String lastName = '';
-  String profession = '';
-  String phoneNumber = '';
-  String email = '';
+  String? fullName;
+  // String? lastName;
+  String? profession;
+  String? phoneNumber;
+  String? email;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final userNotifier = ref.watch(userProvider);
@@ -43,8 +43,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const BottomNav()));
+            Navigator.pop(context);
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => const BottomNav()));
           },
           icon: Icon(
             Icons.arrow_back_outlined,
@@ -65,8 +66,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FrostedGlassBox(
-                    title:
-                        '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
+                    title: '${userNotifier.userModel!.fullName} ',
                     subTitle: userNotifier.userModel!.profession!,
                     theChild: Stack(
                       children: [
@@ -81,7 +81,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   userNotifier.image == null
                               ? Center(
                                   child: Text(
-                                    userNotifier.userModel!.firstName
+                                    userNotifier.userModel!.fullName
                                         .toString()
                                         .substring(0, 1),
                                     style: const TextStyle(
@@ -160,12 +160,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   ReusableTextField(
                     // controller: nameController,
-                    initialValue:
-                        '${userNotifier.userModel!.firstName} ${userNotifier.userModel!.lastName}',
+                    initialValue: '${userNotifier.userModel!.fullName} ',
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
-                      firstName = val!;
+                      fullName = val;
                     },
                     onTap: () {},
                   ),
@@ -182,7 +181,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
-                      profession = val!;
+                      profession = val ?? '';
                     },
                     onTap: () {},
                   ),
@@ -199,7 +198,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
-                      phoneNumber = val!;
+                      phoneNumber = val ?? '';
                     },
                     onTap: () {},
                   ),
@@ -217,7 +216,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     obscure: false,
                     iconButton: null,
                     onSaved: (val) {
-                      email = val!;
+                      email = val ?? '';
                     },
                     onTap: () {},
                   ),
@@ -231,29 +230,41 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          _formKey.currentState!.save();
-          FirebaseService()
-              .updateProfile(
-                  firstName: firstName,
-                  lastName: lastName,
-                  profession: profession,
-                  phoneNumber: phoneNumber,
-                  email: email,
-                  image: userNotifier.image!)
-              .then(
-                (value) => infoSnackBar(context, 'Profile Updated Successful',
-                    const Duration(milliseconds: 400), Colors.green),
-              );
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          color: Colors.transparent,
-          child: ButtonTile(text: save, boxRadius: 8),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+        color: Colors.transparent,
+        child: ButtonTile(
+          loading: isLoading,
+          text: save,
+          boxRadius: 8,
+          onTap: () {
+            _formKey.currentState?.save();
+            setState(() {
+              isLoading = true;
+            });
+
+            FirebaseService()
+                .updateProfile(
+                    fullName: fullName,
+                    // lastName: 'j',
+                    profession: profession,
+                    phoneNumber: phoneNumber,
+                    email: email,
+                    image: userNotifier.image)
+                .then((value) {
+              infoSnackBar(context, 'Profile Updated Successfully',
+                  const Duration(milliseconds: 400), Colors.green);
+              setState(() {
+                isLoading = false;
+              });
+            }).catchError((error) {
+              infoSnackBar(context, 'Failed to update profile: $error',
+                  const Duration(milliseconds: 400), Colors.red);
+            });
+          },
         ),
       ),
     );

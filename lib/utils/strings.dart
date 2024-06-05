@@ -66,34 +66,34 @@ UserModel parseQRData(String qrData) {
   print("Scanned QR Data: $qrData");
   List<String> userData = qrData.split(';');
   print('Users ===> $userData');
-  if (userData.length < 6) {
+  if (userData.length < 5) {
     throw Exception('Invalid QR data format');
   }
-  String firstName = userData[0];
-  String lastName = userData[1];
-  String phoneNumber = userData[2];
-  String profession = userData[3];
-  String email = userData[4];
-  String id = userData[5];
+  String fullName = userData[0];
+  // String lastName = userData[1];
+  String phoneNumber = userData[1];
+  String profession = userData[2];
+  String email = userData[3];
+  String id = userData[4];
   String image = '';
   List<SocialLinkModel> socialLinks = [];
 
-  if (userData.length > 6) {
-    if (userData[6].startsWith('https')) {
-      image = userData[6];
+  if (userData.length > 5) {
+    if (userData[5].startsWith('https')) {
+      image = userData[5];
     } else {
-      socialLinks = parseSocialLinks(userData[6]);
+      socialLinks = parseSocialLinks(userData[5]);
     }
   }
 
-  if (userData.length > 7) {
-    socialLinks = parseSocialLinks(userData[7]);
+  if (userData.length > 6) {
+    socialLinks = parseSocialLinks(userData[6]);
   }
 
   return UserModel(
     id: id,
-    firstName: firstName,
-    lastName: lastName,
+    fullName: fullName,
+    // lastName: lastName,
     phoneNumber: phoneNumber,
     profession: profession,
     email: email,
