@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:socialscan/models/network_model.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/info_snackbar.dart';
@@ -187,7 +188,7 @@ class FirebaseService {
     return res;
   }
 
-  Stream<List<UserModel>> getAllNetworkUsers() {
+  Stream<List<NetWorkModel>> getAllNetworkUsers() {
     try {
       User? currentUser = auth.currentUser;
       if (currentUser == null) {
@@ -199,7 +200,7 @@ class FirebaseService {
           firestore.collection('users').doc(currentUser.uid);
 
       return currentUserDoc.collection('network').snapshots().map((snapshot) {
-        return snapshot.docs.map((doc) => UserModel.fromSnap(doc)).toList();
+        return snapshot.docs.map((doc) => NetWorkModel.fromSnap(doc)).toList();
       });
     } catch (error) {
       print("Error fetching network users: $error");
@@ -230,8 +231,13 @@ class FirebaseService {
         print('Owner with ID $ownerId not found in Firestore');
         return;
       }
+      final dateTime = DateTime.now();
 
-      await networkCollection.add(ownerData.toJson());
+      print('Date time to string ====> $dateTime');
+      final network = NetWorkModel(userModel: ownerData, dateTime: dateTime);
+      print('Checking for network ===> $network');
+      final networkData = network.toJson(); // Use toJson() to convert to Map
+      await networkCollection.add(networkData);
 
       print('Successfully added scanned user to your network');
     } catch (error) {
@@ -558,4 +564,3 @@ String _getErrorMessage(String errorCode) {
       return 'An error occurred. Please try again later.';
   }
 }
-
