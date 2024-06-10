@@ -36,3 +36,8 @@ String dotsImage = '$iconPath/dots.svg';
 String lottiePath = 'assets/lottie';
 String morningAnimationIcon = '$lottiePath/morning_animation.json';
 String eveningAnimationIcon = '$lottiePath/evening_animation.json';
+
+
+// rive animations
+String rivePath = 'assets/rive';
+String socialscanHomepageAnimation = '$rivePath/socialscan_homepage_animation_transbg.riv';
