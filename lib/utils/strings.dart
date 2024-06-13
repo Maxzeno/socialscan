@@ -152,31 +152,18 @@ String formatTimestampToDay(DateTime timestamp) {
     return 'Today';
   }
 
-  var weeksAgo = (daysDifference ~/ 7).clamp(0, 4);
-  final monthsAgo = (daysDifference ~/ 30).clamp(1, 12);
-
-  if (daysDifference % 7 == 6) {
-    weeksAgo += 1;
+  if (daysDifference == 1) {
+    return 'Yesterday';
   }
+
+  final weeksAgo = daysDifference ~/ 7;
+  final monthsAgo = daysDifference ~/ 30;
 
   if (weeksAgo > 0 && weeksAgo <= 4) {
     return '$weeksAgo week${weeksAgo > 1 ? 's' : ''} ago';
   } else if (monthsAgo > 0) {
     return '$monthsAgo month${monthsAgo > 1 ? 's' : ''} ago';
   } else {
-    final weekdayOffset = today.weekday - 1;
-    final timestampWeekday =
-        (timestamp.weekday + daysDifference - weekdayOffset) % 7;
-    final days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ];
-    final dayOfWeek = days[timestampWeekday];
-    return dayOfWeek;
+    return '$daysDifference day${daysDifference > 1 ? 's' : ''} ago';
   }
 }

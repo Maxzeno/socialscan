@@ -98,20 +98,7 @@ class FirebaseService {
     }
   }
 
-// TODO: Here
-  // void addUserToFirebase(UserModel userModel) async {
-  //   User? currentUser = auth.currentUser;
-  //   await _firestore
-  //       .collection('users')
-  //       .doc(currentUser?.uid)
-  //         .collection('socialMediaLinks');
-  // }
 
-  // void addUserToList(UserModel userModel) {
-  //   extractedModelLinks.add(userModel);
-  //   addUserToFirebase(userModel);
-  //   print("Extracted Model Links: $extractedModelLinks");
-  // }
 
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
