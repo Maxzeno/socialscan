@@ -178,7 +178,7 @@ class NetworkPage extends StatelessWidget {
                     print('Network data ====> $results');
 
                     return results!.isEmpty
-                        ? const Text('No Connection')
+                        ? const Text("There's nothing here")
                         : Column(
                             children: [
                               TextTileWidget(
