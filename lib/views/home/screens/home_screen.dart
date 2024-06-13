@@ -5,10 +5,8 @@ import 'package:flutter_animator/animation/animation_preferences.dart';
 import 'package:flutter_animator/animation/animator_play_states.dart';
 import 'package:flutter_animator/widgets/attention_seekers/heart_beat.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart';
-import 'package:socialscan/utils/home_social_apps_linear_gradients.dart';
 import 'package:socialscan/view_model/river_pod/user_notifier.dart';
 import 'package:socialscan/views/home/screens/scan_qr_code.dart';
 import 'package:socialscan/views/home/screens/view_socials_screen.dart';
@@ -349,13 +347,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),
-                            image: Theme.of(context).brightness ==
-                                        Brightness.light ? null : const DecorationImage(
-                              image: AssetImage(
-                                "assets/images/view_social_with_dot.png",
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                            image:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? null
+                                    : const DecorationImage(
+                                        image: AssetImage(
+                                          "assets/images/view_social_with_dot.png",
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
                             border: Border.all(
                                 color: Theme.of(context).brightness ==
                                         Brightness.light
