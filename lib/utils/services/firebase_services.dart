@@ -98,8 +98,6 @@ class FirebaseService {
     }
   }
 
-
-
   Stream<List<SocialLinkModel>> getAllSocialMediaLinks() {
     try {
       User? currentUser = auth.currentUser;
@@ -218,6 +216,17 @@ class FirebaseService {
         print('Owner with ID $ownerId not found in Firestore');
         return;
       }
+
+      // Check if the user is already in the network
+      QuerySnapshot existingNetworkSnapshot = await networkCollection
+          .where('userModel.id', isEqualTo: ownerId)
+          .get();
+
+      if (existingNetworkSnapshot.docs.isNotEmpty) {
+        print('User with ID $ownerId is already in the network');
+        return;
+      }
+
       final dateTime = DateTime.now();
 
       print('Date time to string ====> $dateTime');
