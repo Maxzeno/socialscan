@@ -22,7 +22,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeProvider);
+    final themeState = ref.watch(themeProvider);
     ref.listen<ConnectivityStatus>(connectivityProvider,
         (previousState, newState) {
       switch (newState) {
@@ -49,6 +49,17 @@ class MyApp extends ConsumerWidget {
           break;
       }
     });
+    ThemeMode getThemeMode(ThemeModeEnum themeModeEnum) {
+      switch (themeModeEnum) {
+        case ThemeModeEnum.light:
+          return ThemeMode.light;
+        case ThemeModeEnum.dark:
+          return ThemeMode.dark;
+        case ThemeModeEnum.system:
+        default:
+          return ThemeMode.system;
+      }
+    }
 
     return MaterialApp(
       title: 'Social Scan',
@@ -57,8 +68,7 @@ class MyApp extends ConsumerWidget {
       // Use light theme
       darkTheme: darkTheme,
       // Use dark theme
-      themeMode:
-          themeMode == ThemeModeEnum.light ? ThemeMode.light : ThemeMode.dark,
+      themeMode: getThemeMode(themeState),
       home: const SplashScreen(),
     );
   }

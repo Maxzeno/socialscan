@@ -95,6 +95,7 @@ class GeneralOptions extends ConsumerStatefulWidget {
 class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
   bool? isGoogleAccount;
 
+  bool isDeviceTheme = false;
   bool isCheckedDarkTheme = false;
   bool isCheckedLightTheme = false;
   @override
@@ -110,6 +111,12 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
     final userNotifier = ref.read(userProvider.notifier);
     final userState = ref.watch(userProvider);
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // setState(() {
+    //   isDeviceTheme = themeState == ThemeModeEnum.system;
+    //   isCheckedLightTheme = themeState == ThemeModeEnum.light;
+    //   isCheckedDarkTheme = themeState == ThemeModeEnum.dark;
+    // });
     // final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -188,7 +195,7 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                 ),
                 builder: (context) {
                   return SizedBox(
-                    height: screenHeight * 0.18,
+                    height: screenHeight * 0.25,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: Column(
@@ -196,17 +203,19 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                         children: [
                           ListTile(
                             onTap: () {
-                              setState(() {
-                                isCheckedLightTheme = true;
-                                isCheckedDarkTheme = false;
-                                // isCheckedLightTheme = !isCheckedLightTheme;
-                                // if (isCheckedLightTheme) {
-                                //   isCheckedDarkTheme = false;
-                                // }
-                              });
-                              themeNotifier.toggleTheme();
+                              // setState(() {
+                              //   isDeviceTheme = true;
+                              //   isCheckedDarkTheme = false;
+                              //   isCheckedLightTheme = false;
+                              //   // isCheckedLightTheme = !isCheckedLightTheme;
+                              //   // if (isCheckedLightTheme) {
+                              //   //   isCheckedDarkTheme = false;
+                              //   // }
+                              // });
+                              themeNotifier.toggleTheme(ThemeModeEnum.system);
+                              setState(() {});
                               Navigator.pop(context);
-                              print('Light');
+                              print('Device setting');
                             },
                             leading: Stack(
                               alignment: Alignment.center,
@@ -216,7 +225,7 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                   height: 25,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Theme.of(context).cardColor,
+                                      color: const Color(0xFF7E7E7E),
                                     ),
                                     borderRadius: BorderRadius.circular(50),
                                   ),
@@ -229,7 +238,98 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                   child: Transform.scale(
                                     scale: 0.8,
                                     child: Checkbox.adaptive(
-                                      value: isCheckedLightTheme,
+                                      value: themeState == ThemeModeEnum.system,
+                                      activeColor: ProjectColors.mainPurple,
+                                      checkColor: ProjectColors.mainPurple,
+                                      fillColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.disabled)) {
+                                          return const Color(0xFFE5E5E5);
+                                        }
+                                        return themeState ==
+                                                ThemeModeEnum.system
+                                            ? ProjectColors
+                                                .mainPurple // Fill color for selected light theme
+                                            : Colors.transparent;
+                                      }),
+                                      side: const BorderSide(
+                                        color: Color(0xFFE5E5E5),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      onChanged: (value) {
+                                        // _isChecked = value!;
+                                        // _selectedCheckbox = value! ? 1 : 0;
+                                        // setState(() {
+                                        //   isCheckedLightTheme = true;
+                                        //   isCheckedDarkTheme = false;
+                                        //   // isCheckedLightTheme = !isCheckedLightTheme;
+                                        //   // if (isCheckedLightTheme) {
+                                        //   //   isCheckedDarkTheme = false;
+                                        //   // }
+                                        // });
+                                        // themeNotifier.toggleTheme();
+                                        // Navigator.pop(context);
+                                        // print('Light');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            title: const Text(
+                              "Device Theme",
+                              style: TextStyle(
+                                // color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              // setState(() {
+                              //   isCheckedLightTheme = true;
+                              //   isCheckedDarkTheme = false;
+                              //   isDeviceTheme = false;
+                              //   // isCheckedLightTheme = !isCheckedLightTheme;
+                              //   // if (isCheckedLightTheme) {
+                              //   //   isCheckedDarkTheme = false;
+                              //   // }
+                              // });
+                              themeNotifier.toggleTheme(ThemeModeEnum.light);
+                              setState(() {});
+                              Navigator.pop(context);
+                              print('Light');
+                            },
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color(0xFF7E7E7E),
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Transform.scale(
+                                    scale: 0.8,
+                                    child: Checkbox.adaptive(
+                                      value: themeState == ThemeModeEnum.light,
                                       activeColor: ProjectColors.mainPurple,
                                       checkColor: ProjectColors.mainPurple,
                                       fillColor: MaterialStateProperty
@@ -284,16 +384,18 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                           ),
                           ListTile(
                             onTap: () {
-                              setState(() {
-                                // isCheckedDarkTheme = value!;
-                                // // isCheckedDarkTheme = !isCheckedDarkTheme;
-                                // if (isCheckedDarkTheme) {
-                                //   isCheckedLightTheme = false;
-                                // }
-                                isCheckedDarkTheme = true;
-                                isCheckedLightTheme = false;
-                              });
-                              themeNotifier.toggleTheme();
+                              // setState(() {
+                              //   // isCheckedDarkTheme = value!;
+                              //   // // isCheckedDarkTheme = !isCheckedDarkTheme;
+                              //   // if (isCheckedDarkTheme) {
+                              //   //   isCheckedLightTheme = false;
+                              //   // }
+                              //   isCheckedDarkTheme = true;
+                              //   isCheckedLightTheme = false;
+                              //   isDeviceTheme = false;
+                              // });
+                              themeNotifier.toggleTheme(ThemeModeEnum.dark);
+                              setState(() {});
                               Navigator.pop(context);
 
                               print('Dark');
@@ -319,7 +421,7 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                   child: Transform.scale(
                                     scale: 0.8,
                                     child: Checkbox.adaptive(
-                                      value: isCheckedDarkTheme,
+                                      value: themeState == ThemeModeEnum.dark,
                                       activeColor: ProjectColors.mainPurple,
                                       checkColor: ProjectColors.mainPurple,
                                       fillColor: MaterialStateProperty
@@ -329,10 +431,10 @@ class _GeneralOptionsState extends ConsumerState<GeneralOptions> {
                                             .contains(MaterialState.disabled)) {
                                           return const Color(0xFFE5E5E5);
                                         }
-                                        return themeState == ThemeModeEnum.light
-                                            ? Colors
-                                                .transparent // Transparent for light theme
-                                            : ProjectColors.mainPurple;
+                                        return themeState == ThemeModeEnum.dark
+                                            ? ProjectColors
+                                                .mainPurple // Transparent for light theme
+                                            : Colors.transparent;
                                       }),
                                       side: const BorderSide(
                                         color: Color(0xFFE5E5E5),
