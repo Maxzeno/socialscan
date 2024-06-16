@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/images.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/utils/textfield.dart';
+import 'package:socialscan/views/auth/screens/forgot_password_screen.dart';
 import 'package:socialscan/views/auth/screens/sign_up_screen.dart';
 
 import '../../../utils/colors.dart';
@@ -81,13 +83,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               const SizedBox(
                 height: 8,
               ),
-              Text(
-                forgotPassword,
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? ProjectColors.mainPurple.withOpacity(0.6)
-                      : ProjectColors.lightishPurple,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  forgotPassword,
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? ProjectColors.mainPurple.withOpacity(0.6)
+                        : ProjectColors.lightishPurple,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -110,6 +122,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     dontHaveAnAccount,
                     style: const TextStyle(
                       fontSize: 14,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   const SizedBox(
@@ -126,7 +139,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       signUp,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         color: Theme.of(context).brightness == Brightness.light
                             ? ProjectColors.mainPurple.withOpacity(0.6)
                             : Colors.purple.shade300,
@@ -139,23 +152,29 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 height: 100,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    width: 108,
-                    child: Divider(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? ProjectColors.midBlack.withOpacity(0.4)
-                          : ProjectColors.mainGray,
+                  Expanded(
+                    child: SizedBox(
+                      // width: 108,
+                      child: Divider(
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? ProjectColors.midBlack.withOpacity(0.4)
+                            : ProjectColors.mainGray,
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 12),
                   Text(orContinueWith),
-                  SizedBox(
-                    width: 108,
-                    child: Divider(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? ProjectColors.midBlack.withOpacity(0.4)
-                          : ProjectColors.mainGray,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: SizedBox(
+                      // width: 108,
+                      child: Divider(
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? ProjectColors.midBlack.withOpacity(0.4)
+                            : ProjectColors.mainGray,
+                      ),
                     ),
                   ),
                 ],

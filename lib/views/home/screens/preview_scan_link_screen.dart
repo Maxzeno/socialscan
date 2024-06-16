@@ -102,7 +102,7 @@ class PreviewScanLinkScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FrostedGlassBox(
-                          title: '${user.fullName}',
+                          title: user.fullName,
                           subTitle: user.profession!,
                           theChild: Container(
                             height: 150,

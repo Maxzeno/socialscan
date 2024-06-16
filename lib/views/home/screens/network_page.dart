@@ -166,18 +166,18 @@ class NetworkPage extends StatelessWidget {
                     final results = snapshot.data;
 
                     if (results!.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Text('No connection'),
                       );
                     }
                     final networkTime =
-                        formatTimestampToDay(results!.first.dateTime);
+                        formatTimestampToDay(results.first.dateTime);
 
-                    print('Time ===> ${results!.first.dateTime}');
+                    print('Time ===> ${results.first.dateTime}');
                     print('Hello network');
                     print('Network data ====> $results');
 
-                    return results!.isEmpty
+                    return results.isEmpty
                         ? const Text("There's nothing here")
                         : Column(
                             children: [

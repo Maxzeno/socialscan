@@ -59,7 +59,7 @@ class _ViewProfileScreenState extends ConsumerState<ViewProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FrostedGlassBox(
-                  title: '${userNotifier.userModel!.fullName}',
+                  title: userNotifier.userModel!.fullName,
                   subTitle: userNotifier.userModel!.profession!,
                   theChild: Container(
                     height: 150,
