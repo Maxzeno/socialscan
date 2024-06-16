@@ -28,7 +28,7 @@ class SocialMediaTile extends ConsumerStatefulWidget {
 }
 
 class _SocialMediaTileState extends ConsumerState<SocialMediaTile> {
-  bool _isChecked = false;
+  final bool _isChecked = false;
 
   // @override
   // void initState() {

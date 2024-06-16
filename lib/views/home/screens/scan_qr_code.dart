@@ -58,9 +58,9 @@ class _ScanQrCodeState extends State<ScanQrCode> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_outlined,
-            color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+            color: Colors.white,
           ),
         ),
         // titleSpacing: 10,

@@ -256,7 +256,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
                           // width: double.infinity,
