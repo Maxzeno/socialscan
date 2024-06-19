@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
@@ -242,7 +243,29 @@ class _SocialListsWidgetState extends ConsumerState<SocialListsWidget> {
                 },
               );
             } else {
-              return const Center();
+              return Skeletonizer(
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 300,
+                    childAspectRatio: 2.3 / 2.1,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return SocialMediaTile(
+                      socialImage: "assets/images/sslogo.png",
+                      socialIconColor: Colors.grey.withOpacity(0.3),
+                      conColor: Colors.grey.withOpacity(0.3),
+                      socialText: "Instagram",
+                      isSocialChecked: false,
+                      onSelected: (value) {},
+                    );
+                  },
+                ),
+              );
             }
           },
         ),

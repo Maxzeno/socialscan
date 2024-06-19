@@ -34,10 +34,12 @@ String dotsImage = '$iconPath/dots.svg';
 
 // lottie icons
 String lottiePath = 'assets/lottie';
-String morningAnimationIcon = '$lottiePath/morning_animation2.json';
+String morningAnimationIcon = '$lottiePath/morning_animation.json';
+// String morningAnimationIcon = '$lottiePath/morning_animation2.json';
 String eveningAnimationIcon = '$lottiePath/evening_animation.json';
 
 
 // rive animations
 String rivePath = 'assets/rive';
 String socialscanHomepageAnimation = '$rivePath/socialscan_homepage_animation_transbg.riv';
+String socialscanHomepageLightModeAnimation = '$rivePath/socialscan_homepage_animation_lightmode_transbg.riv';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animator/animation/animation_preferences.dart';
-import 'package:flutter_animator/animation/animator_play_states.dart';
-import 'package:flutter_animator/widgets/attention_seekers/heart_beat.dart';
+// import 'package:flutter_animator/animation/animation_preferences.dart';
+// import 'package:flutter_animator/animation/animator_play_states.dart';
+// import 'package:flutter_animator/widgets/attention_seekers/heart_beat.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
@@ -12,6 +12,7 @@ import 'package:socialscan/utils/services/firebase_services.dart';
 import 'package:socialscan/utils/strings.dart';
 import 'package:socialscan/views/home/widgets/network_list_tile.dart';
 import 'package:socialscan/views/home/widgets/text_tile_widget.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../models/network_model.dart';
 
@@ -145,121 +146,163 @@ class NetworkPage extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              // TextTileWidget(
-              //   text: today,
-              //   icon: SvgPicture.asset(
-              //     searchIcon,
-              //     height: 21,
-              //     width: 21,
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 18,
-              // ),
-              // networkLists(3),
-              StreamBuilder(
-                stream: FirebaseService().getAllNetworkUsers(),
-                builder: (context, AsyncSnapshot<List<NetWorkModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    final results = snapshot.data;
+          child: StreamBuilder(
+            stream: FirebaseService().getAllNetworkUsers(),
+            builder: (context, AsyncSnapshot<List<NetWorkModel>> snapshot) {
+              if (snapshot.hasData) {
+                final results = snapshot.data;
 
-                    if (results!.isEmpty) {
-                      return const Center(
-                        child: Text('No connection'),
+                if (results!.isEmpty) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 200,
+                    child: const Center(
+                      child: Text("There's nothing here."),
+                    ),
+                  );
+                }
+                final networkTime =
+                    formatTimestampToDay(results.first.dateTime);
+
+                print('Time ===> ${results.first.dateTime}');
+                print('Hello network');
+                print('Network data ====> $results');
+
+                return results.isEmpty
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height - 200,
+                        child: const Center(
+                          child: Text("There's nothing here."),
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          TextTileWidget(
+                            text: networkTime ?? '',
+                            icon: SvgPicture.asset(
+                              searchIcon,
+                              height: 21,
+                              width: 21,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: results.length,
+                            itemBuilder: (context, index) {
+                              final data = results[index];
+                              print('This data $data');
+                              // final List data = List.generate(networkList.length, (index){
+                              //   return NetworkListTile();
+                              // });
+                              return NetworkListTile(
+                                user: data.userModel,
+                                socialMediaList:
+                                    data.userModel.socialMediaLink!,
+                              );
+                            },
+                            separatorBuilder: (context, child) =>
+                                const SizedBox(
+                              height: 8,
+                            ),
+                          ),
+                        ],
                       );
-                    }
-                    final networkTime =
-                        formatTimestampToDay(results.first.dateTime);
+              } else {
+                // return SizedBox(
+                //   height: MediaQuery.of(context).size.height - 200,
+                //   child: Center(
+                //     child: HeartBeat(
+                //       preferences: const AnimationPreferences(
+                //         // duration: Duration(seconds: 2),
+                //         autoPlay: AnimationPlayStates.Loop,
+                //       ),
+                //       child: Image.asset(
+                //         socialIcon,
+                //         height: 30,
+                //       ),
+                //     ),
+                //   ),
+                // );
 
-                    print('Time ===> ${results.first.dateTime}');
-                    print('Hello network');
-                    print('Network data ====> $results');
-
-                    return results.isEmpty
-                        ? const Text("There's nothing here")
-                        : Column(
-                            children: [
-                              TextTileWidget(
-                                text: networkTime ?? '',
-                                icon: SvgPicture.asset(
-                                  searchIcon,
-                                  height: 21,
-                                  width: 21,
+                return Skeletonizer(
+                  child: ListView.separated(
+                    itemCount: 3,
+                    shrinkWrap: true,
+                    separatorBuilder: (context, child) => const SizedBox(
+                      height: 8,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          TextTileWidget(
+                            text: 'Today',
+                            icon: SvgPicture.asset(
+                              searchIcon,
+                              height: 21,
+                              width: 21,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              return NetworkListTile(
+                                user: UserModel(
+                                  fullName: "Henry Unegbu",
+                                  phoneNumber: "",
+                                  profession: "Scientist",
+                                  email: "",
+                                  id: "",
+                                  image: profileImage3,
+                                  socialMediaLink: [],
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 18,
-                              ),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: results.length,
-                                itemBuilder: (context, index) {
-                                  final data = results[index];
-                                  print('This data $data');
-                                  // final List data = List.generate(networkList.length, (index){
-                                  //   return NetworkListTile();
-                                  // });
-                                  return NetworkListTile(
-                                    user: data.userModel,
-                                    socialMediaList:
-                                        data.userModel.socialMediaLink!,
-                                  );
-                                },
-                                separatorBuilder: (context, child) =>
-                                    const SizedBox(
-                                  height: 10,
-                                ),
-                              ),
-                            ],
-                          );
-                  } else {
-                    return Center(
-                      child: HeartBeat(
-                        preferences: const AnimationPreferences(
-                          // duration: Duration(seconds: 2),
-                          autoPlay: AnimationPlayStates.Loop,
-                        ),
-                        child: Image.asset(
-                          'assets/images/socialscan_logo_png.png',
-                          height: 40,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-
-              // StreamBuilder<QuerySnapshot>(
-              //   stream:
-              //       FirebaseFirestore.instance.collection('users').snapshots(),
-              //   builder: (BuildContext context,
-              //       AsyncSnapshot<QuerySnapshot> snapshot) {
-              //     if (snapshot.hasError) {
-              //       return const Text('Something went wrong');
-              //     }
-
-              //     if (snapshot.connectionState == ConnectionState.waiting) {
-              //       return const Text("Loading");
-              //     }
-
-              //     return ListView(
-              //       shrinkWrap: true,
-              //       children:
-              //           snapshot.data!.docs.map((DocumentSnapshot document) {
-              //         Map<String, dynamic> data =
-              //             document.data()! as Map<String, dynamic>;
-              //         return ListTile(
-              //           title: Text(data['firstName'] + ' ' + data['lastName']),
-              //           subtitle: Text(data['email']),
-              //         );
-              //       }).toList(),
-              //     );
-              //   },
-              // ),
-            ],
+                                socialMediaList: const [
+                                  // SocialLinkModel(
+                                  //   text: 'GitHub',
+                                  //   imagePath: "",
+                                  //   id: "0",
+                                  //   conColor: Colors.transparent,
+                                  //   iconColor: Colors.transparent,
+                                  //   linkUrl: 'https://github.com/Henryikenna',
+                                  // ),
+                                  // SocialLinkModel(
+                                  //   text: 'LinkedIn',
+                                  //   imagePath: "",
+                                  //   id: "1",
+                                  //   conColor: Colors.transparent,
+                                  //   iconColor: Colors.transparent,
+                                  //   linkUrl: '',
+                                  // ),
+                                  // SocialLinkModel(
+                                  //   text: 'WhatsApp',
+                                  //   imagePath: "",
+                                  //   id: "2",
+                                  //   conColor: Colors.transparent,
+                                  //   iconColor: Colors.transparent,
+                                  //   linkUrl: '',
+                                  // ),
+                                ],
+                              );
+                            },
+                            separatorBuilder: (context, child) =>
+                                const SizedBox(
+                              height: 8,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
