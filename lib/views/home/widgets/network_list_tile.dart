@@ -26,11 +26,11 @@ class NetworkListTile extends StatelessWidget {
         }));
       },
       child: Container(
-        // height: 65,
+        height: 74,
         width: double.infinity,
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
+          horizontal: 21,
+          // vertical: 12,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -74,6 +74,7 @@ class NetworkListTile extends StatelessWidget {
                 SizedBox(
                   width: 140,
                   child: Column(
+          mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
