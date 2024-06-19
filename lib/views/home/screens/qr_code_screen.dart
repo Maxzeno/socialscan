@@ -14,6 +14,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:socialscan/utils/button.dart';
 import 'package:socialscan/utils/colors.dart';
+import 'package:socialscan/utils/url.dart';
 import 'package:url_launcher/url_launcher.dart';
 import "package:velocity_x/velocity_x.dart";
 
@@ -66,7 +67,7 @@ class _QrCodeScreenState extends ConsumerState<QrCodeScreen> {
 
     String qrString = '$userDataString;$socialLinksString';
 
-    return qrString;
+    return dumpQrUrl(qrString);
   }
 
   void openSelectedLink(String encodedLinks, String chosenLink) {

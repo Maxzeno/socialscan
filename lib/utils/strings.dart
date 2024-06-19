@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socialscan/models/social_link_model.dart';
 import 'package:socialscan/models/user_model.dart';
+import 'package:socialscan/utils/url.dart';
 
 String createAnAccount = 'Create\nan Account';
 String email = 'Email';
@@ -63,6 +64,7 @@ String month = 'January 16';
 // final List<SocialLinkModel> socialLinks = [];
 
 UserModel parseQRData(String qrData) {
+  qrData = parseQrUrl(qrData);
   print("Scanned QR Data: $qrData");
   List<String> userData = qrData.split(';');
   print('Users ===> $userData');
