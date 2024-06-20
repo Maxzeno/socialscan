@@ -7,7 +7,7 @@ String dumpQrUrl(data) {
 String parseQrUrl(String url) {
   List<String> data = url.split(qrDomain);
   if (data.isEmpty) {
-    return ";;;";
+    return ";;;;";
   }
-  return data.last;
+  return Uri.decodeComponent(data.last);
 }

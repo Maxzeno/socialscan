@@ -36,17 +36,19 @@ class _BottomNavState extends ConsumerState<BottomNav> {
     final qrUrlNavProviderProvider = ref.watch(qrUrlNavProvider);
     print('qrUrlNavProviderProvider: $qrUrlNavProviderProvider');
 
-    UserModel user = parseQRData(qrUrlNavProviderProvider);
+    if (qrUrlNavProviderProvider.isNotEmpty) {
+      UserModel user = parseQRData(qrUrlNavProviderProvider);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PreviewScanLinkScreen(
-          data: [user],
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PreviewScanLinkScreen(
+            data: [user],
+          ),
         ),
-      ),
-    );
-    ref.invalidate(qrUrlNavProvider);
+      );
+      ref.invalidate(qrUrlNavProvider);
+    }
   }
 
   @override
