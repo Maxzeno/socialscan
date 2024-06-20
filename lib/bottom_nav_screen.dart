@@ -1,25 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:socialscan/models/user_model.dart';
 import 'package:socialscan/utils/colors.dart';
 import 'package:socialscan/utils/images.dart';
+import 'package:socialscan/utils/strings.dart';
+import 'package:socialscan/view_model/qr_url_nav.dart';
 import 'package:socialscan/views/home/screens/home_screen.dart';
 import 'package:socialscan/views/home/screens/network_page.dart';
+import 'package:socialscan/views/home/screens/preview_scan_link_screen.dart';
 import 'package:socialscan/views/settings/screens/settings_screen.dart';
 
-class BottomNav extends StatefulWidget {
-  const BottomNav({Key? key}) : super(key: key);
+class BottomNav extends ConsumerStatefulWidget {
+  const BottomNav({super.key});
 
   @override
-  State<BottomNav> createState() => _BottomNavState();
+  ConsumerState<BottomNav> createState() => _BottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> {
+class _BottomNavState extends ConsumerState<BottomNav> {
   int _currentIndex = 0;
   List pages = [
     const HomeScreen(),
     const NetworkPage(),
     const SettingScreen(),
   ];
+
+  @override
+  void initState() {
+    navQrPreview();
+    super.initState();
+  }
+
+  navQrPreview() {
+    final qrUrlNavProviderProvider = ref.watch(qrUrlNavProvider);
+    print('qrUrlNavProviderProvider: $qrUrlNavProviderProvider');
+
+    UserModel user = parseQRData(qrUrlNavProviderProvider);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PreviewScanLinkScreen(
+          data: [user],
+        ),
+      ),
+    );
+    ref.invalidate(qrUrlNavProvider);
+  }
 
   @override
   Widget build(BuildContext context) {
